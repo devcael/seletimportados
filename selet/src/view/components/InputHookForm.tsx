@@ -1,33 +1,9 @@
 "use client"
+import { type } from "os";
 import { Input, InputWithLabelProps } from "./inputs"
 import { useEffect } from "react";
 import { useForm, RegisterOptions } from "react-hook-form";
-import { styled } from "styled-components";
-
-type Aligment = {
-    mainAxisAlignment?: string;
-    crossAxisAlignment?: string;
-}
-
-
-const Column = styled.div<Aligment>`
-    display: flex;
-    width: 100%;
-    align-items: ${props => (props.mainAxisAlignment ?? 'center')};
-    justify-content: ${props => (props.crossAxisAlignment ?? "center")};
-    flex-direction: column;
-    
-`;
-
-const Row = styled.div<Aligment>`
-    display: flex;
-    width: 100%;
-    align-items: ${props => (props.mainAxisAlignment ?? 'center')};
-    justify-content: ${props => (props.crossAxisAlignment ?? "center")};
-    flex-direction: row;
-    
-`;
-
+import { Column } from "../components/column";
 
 
 function InputHookForm(props: InputWithLabelProps) {
@@ -42,7 +18,7 @@ function InputHookForm(props: InputWithLabelProps) {
     return (
 
         <Column mainAxisAlignment="start">
-            <h4>{props.label}</h4>
+            {props.label != null ? <h4>{props.label}</h4> : ""}
             <Input></Input>
         </Column>
 

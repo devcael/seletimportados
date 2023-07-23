@@ -2,7 +2,7 @@
 import { styled } from "styled-components";
 
 type InputWithLabelProps = {
-  label: string;
+  label?: string;
   hintText?: string;
   hookFormObject?: string;
 };
