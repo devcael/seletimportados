@@ -1,42 +1,21 @@
 "use client"
-import "../view/styles/home.css"
-import "../view/styles/fonts.css"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import "@view/styles/home.css"
+import "@view/styles/fonts.css"
+import { Inter } from "next/font/google";
+import SalesTable from "@view/components/sales-table";
+const inter = Inter({ subsets: ['latin'] })
 
-
-function NavBar() {
-  return (
-    <div className="menu-container">
-      <div id="logo-container"></div>
-      <div className="session-title">
-        Menu
-      </div>
-      <ul className="session-container">
-        <li className="menu-item">Dashboard</li>
-        <li className="menu-item">Clientes</li>
-        <li className="menu-item">Fornecedores</li>
-        <li className="menu-item">Produtos</li>
-        <li className="menu-item">Financeiro</li>
-      </ul>
-      <div className="session-title">
-        Configurações
-      </div>
-      <ul className="session-container">
-        <li className="menu-item">Configurações</li>
-      </ul>
-      <button id="logout-button">
-        <h3>LOGOUT</h3>
-        <FontAwesomeIcon icon={faRightFromBracket} />
-      </button>
-    </div>
-  );
-}
 
 export default function Home() {
+
+  const list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , 0, 0, 0, 0];
+
   return (
-    <body>
-      <NavBar></NavBar>
+    <body className={inter.className}>
+      <div id="table-container" className="blue-table-scroll">
+        <SalesTable></SalesTable>
+      </div>
+
     </body>
   )
 }
