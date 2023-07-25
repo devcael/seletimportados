@@ -1,4 +1,10 @@
+"use client"
 import "@view/components/css/blue.table.css"
+import styled from "styled-components";
+
+const NameColumn = styled.div`
+  
+`;
 
 export default function SalesTable() {
 
@@ -6,17 +12,16 @@ export default function SalesTable() {
 
   return (
     <table className="blue-table">
-      <thead className="table-blue-header">
-        <tr>
-          <th >N°</th>
-          <th >Cliente</th>
-          <th >Status</th>
-          <th >Data</th>
-          <th >Total</th>
-        </tr>
-      </thead>
-      {list.map(() => (
-        <tr >
+      <tr className="table-blue-header">
+        <th >N°</th>
+        <th >Cliente</th>
+        <th >Status</th>
+        <th >Data</th>
+        <th >Total</th>
+      </tr>
+
+      {list.map((item, i) => (
+        <tr key={i}>
           <td className="name-column">1</td>
           <td className="name-column">Micael de Santana Peraira</td>
           <td className="name-column">VENDIDO</td>

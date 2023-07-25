@@ -8,14 +8,11 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 
-  const list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , 0, 0, 0, 0];
-
   return (
     <body className={inter.className}>
       <div id="table-container" className="blue-table-scroll">
-        <SalesTable></SalesTable>
+        <SalesTable />
       </div>
-
     </body>
   )
 }

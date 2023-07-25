@@ -1,8 +1,10 @@
+"use client"
 import Link from "next/link";
 import "./css/navbar_style.css"
-
+import { usePathname } from 'next/navigation'
 
 type MenuItemsType = {
+  id: number;
   href: string;
   icon: string;
   label: string;
@@ -10,24 +12,29 @@ type MenuItemsType = {
 
 var menuItems: MenuItemsType[] = [
   {
+    id: 0,
     href: "/dashboard",
     icon: "fa-solid fa-house-chimney",
     label: "Dashboard",
   },
   {
+    id: 1,
     href: "/clientes",
     icon: "fa-solid fa-users",
     label: "Clientes",
   },
   {
+    id: 2,
     href: "/fornecedores",
     icon: "fa-solid fa-building-user",
     label: "Fornecedores",
   }, {
+    id: 3,
     href: "/produtos",
     icon: "fa-solid fa-cubes",
     label: "Produtos",
   }, {
+    id: 4,
     href: "/financeiro",
     icon: "fa-solid fa-money-bills",
     label: "Financeiro",
@@ -37,6 +44,7 @@ var menuItems: MenuItemsType[] = [
 
 var configItems: MenuItemsType[] = [
   {
+    id: 0,
     href: "/configuracao",
     icon: "fa fa-gear",
     label: "Configurações",
@@ -46,8 +54,10 @@ var configItems: MenuItemsType[] = [
 
 function NavBar() {
 
+  const currPath = usePathname()
 
-  var currPath: string = window.location.pathname;
+  const listOfMenuItems = menuItems.map((item, index) => <Link key={index} href={item.href}><li key={item.id} className={currPath == item.href ? "menu-item menu-item-selected" : "menu-item"}><i className={item.icon}></i>{item.label}</li></Link>);
+
 
   return (
     <div className="menu-container">
@@ -57,27 +67,10 @@ function NavBar() {
       <div className="session-title">
         Menu
       </div>
-      <ul className="session-container">
-        {
-          menuItems.map((item: MenuItemsType, index: number) => {
-            var isActive: boolean = currPath == item.href;
-            return (<Link href={item.href}><li key={index} className={isActive ? "menu-item menu-item-selected" : "menu-item"}><i className={item.icon}></i>{item.label}</li></Link>);
-
-          })
-        }
-      </ul>
+      <ul className="session-container" key={0}>{listOfMenuItems}</ul>
       <div className="session-title">
         Configurações
       </div>
-      <ul className="session-container">
-        {
-          configItems.map((item: MenuItemsType, index: number) => {
-            var isActive: boolean = currPath == item.href;
-            return (<Link href={item.href}><li key={index} className={isActive ? "menu-item menu-item-selected" : "menu-item"}><i className={item.icon}></i>{item.label}</li></Link>);
-
-          })
-        }
-      </ul>
       <Link href="/login">
         <button type="submit" id="logout-button">
           <h4>LOGOUT</h4>
