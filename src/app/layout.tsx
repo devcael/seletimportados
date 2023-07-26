@@ -1,7 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import "../view/styles/common.css";
+import "@styles/common.css";
 
 const inter = Inter({ subsets: ['latin'] })
 import StyledComponentsRegistry from './Registry'

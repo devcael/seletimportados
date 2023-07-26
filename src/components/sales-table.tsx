@@ -1,5 +1,5 @@
 "use client"
-import "@view/components/css/blue.table.css"
+import "@components/css/blue.table.css"
 import styled from "styled-components";
 
 const NameColumn = styled.div`

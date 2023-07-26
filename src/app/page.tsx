@@ -1,8 +1,8 @@
 "use client"
-import "@view/styles/home.css"
-import "@view/styles/fonts.css"
+import "@styles/home.css"
+import "@styles/fonts.css"
 import { Inter } from "next/font/google";
-import SalesTable from "@view/components/sales-table";
+import SalesTable from "@components/sales-table";
 const inter = Inter({ subsets: ['latin'] })
 
 

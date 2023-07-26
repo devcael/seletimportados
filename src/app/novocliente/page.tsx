@@ -1,7 +1,7 @@
 "use client"
-import "../../view/styles/home.css"
-import "../../view/styles/fonts.css"
-import { Input } from "../../view/components/inputs"
+import "@styles/home.css"
+import "@styles/fonts.css"
+import { Input } from "@components/inputs"
 import { Inter } from 'next/font/google'
 import { SubmitHandler, useForm } from "react-hook-form"
 
