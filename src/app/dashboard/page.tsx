@@ -2,10 +2,12 @@
 import "@styles/dashboard.css"
 import "@styles/fonts.css"
 import "@styles/common.css"
+import Link from "next/link";
 import NavBar from "@components/navbar";
 import { Inter } from "next/font/google";
 import styled from "styled-components";
-import { DivColumn, DivRow } from "@components/Directions";
+import { DivColumn, DivRow } from "@/components/styled-components/directions";
+import { ListGenerate } from "@/core/util/list-generate";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,7 +15,7 @@ const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 88vw;
+  width: calc(100vw - var(--navbar-width));
   height: 100vh;
 `
 
@@ -33,18 +35,12 @@ const AppBar = styled.div`
   margin-bottom: 10px;
 `
 
-const Body = styled(DivColumn)`
-  justify-content: start;
-  flex-grow: 1;
-  padding: 0px 20px;
-`
-
 const ResumeSession = styled(DivRow)`
   justify-content: space-between;
   width: 100%;
   gap: 15px;
   height: 120px;
-  padding: 15px 0px;
+  padding: 15px 20px;
 `
 
 
@@ -82,13 +78,28 @@ const LabelSpan = styled.span<{ color: string, size: string }>`
 const ActionsSession = styled.section`
   display: flex;
   width: 100%;
-  height: 100px;
-  background-color: teal;
+  gap: 15px;
+  overflow-x: scroll;
+  padding: 10px;
+
+  &::-webkit-scrollbar{
+    height: 5px;
+  }
+  
+  &::-webkit-scrollbar-thumb{
+    background: transparent;
+    border-radius: 50px;
+  }
+
+  &:hover::-webkit-scrollbar-thumb{
+      background: var(--gray-color);
+  }
+
 `
 
 const TitleH1 = styled.h1``
 
-const ActionButton = styled.button`
+const ActionButton = styled.div`
   width: 250px;
   padding: 15px;
   border: none;
@@ -104,13 +115,14 @@ const ActionButton = styled.button`
   
 `
 
-function listGenerate(length: number): number[] {
-  var list: number[] = [0];
-  for (let i = 0; i < length; i++) {
-    list.push(i);
-  }
-  return list;
-}
+
+const TableFiltersContainer = styled.div`
+  width: 100%;
+  height: 100px; 
+  background-color: red;
+  padding: 10px 0px;
+`
+
 
 export default function Home() {
 
@@ -122,31 +134,31 @@ export default function Home() {
       <BodyContainer>
         <AppBar>
         </AppBar>
-        <Body>
-          <ResumeSession>
-            {listGenerate(4).map((item, index) => (<ResumeCard className="row">
-              <IconWrapper key={index} className="row">
-                <i className="fa-solid fa-money-bill"></i>
-              </IconWrapper>
-              <ResumeLabel className="column">
-                <LabelSpan color={"grey"} size={"15px"} >Micael</LabelSpan>
-                <LabelSpan color={"black"} size={"22px"} ><strong>R$200.00</strong></LabelSpan>
-              </ResumeLabel>
-            </ResumeCard>))}
-          </ResumeSession>
-          <DivRow style={{ justifyContent: "start", width: "100%" }}>
-            <TitleH1>O que você gostaria de fazer?</TitleH1>
-          </DivRow>
-          <ActionsSession >
-            {/*listGenerate(100).map((item, index) => (
+        <ResumeSession>
+          {ListGenerate<string>(30, (index) => index.toString()).map((item, index) => (<ResumeCard key={index} className="row">
+            <IconWrapper key={index} className="row">
+              <i className="fa-solid fa-money-bill"></i>
+            </IconWrapper>
+            <ResumeLabel className="column">
+              <LabelSpan color={"grey"} size={"15px"} >Micael</LabelSpan>
+              <LabelSpan color={"black"} size={"22px"} ><strong>R$200.00</strong></LabelSpan>
+            </ResumeLabel>
+          </ResumeCard>))}
+        </ResumeSession>
+        <DivRow style={{ paddingLeft: "20px", margin: "15px 0px", justifyContent: "start", width: "100%" }}>
+          <TitleH1>O que você gostaria de fazer?</TitleH1>
+        </DivRow>
+        <ActionsSession style={{ paddingLeft: "20px" }}>
+          {ListGenerate<string>(30, (index) => index.toString()).map((item, index) => (
+            <Link href={"/clientes"} key={index}>
               <ActionButton key={index} className="column" >
                 <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
-                <strong>Gerar Orçamento asd asd asd asdasdasdas a dasd asdasd</strong>
+                <strong>Gerar Orçamento</strong>
               </ActionButton>
-            ))*/}
-
-          </ActionsSession>
-        </Body>
+            </Link>
+          ))}
+        </ActionsSession>
+        <TableFiltersContainer></TableFiltersContainer>
       </BodyContainer >
     </body >
   )

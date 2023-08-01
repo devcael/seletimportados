@@ -1,9 +1,9 @@
 "use client"
 import { type } from "os";
-import { Input, InputWithLabelProps } from "./inputs"
+import { Input, InputWithLabelProps } from "./styled-components/inputs"
 import { useEffect } from "react";
 import { useForm, RegisterOptions } from "react-hook-form";
-import { Column } from "../components/column";
+import { Column } from "./styled-components/column";
 
 
 function InputHookForm(props: InputWithLabelProps) {

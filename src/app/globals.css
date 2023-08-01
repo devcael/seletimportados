@@ -15,6 +15,7 @@
 
   --sm-margin: 10px;
   --md-margin: 15px;
+  --navbar-width: 250px;
 
   --primary-glow: conic-gradient(from 180deg at 50% 50%,
       #16abff33 0deg,
