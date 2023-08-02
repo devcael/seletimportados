@@ -1,15 +1,13 @@
 "use client"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "@styles/dashboard.css"
-import "@styles/fonts.css"
-import "@styles/common.css"
 import Link from "next/link";
+import "@styles/fonts.css"
 import NavBar from "@components/navbar";
 import { Inter } from "next/font/google";
 import styled from "styled-components";
 import { DivColumn, DivRow } from "@/components/styled-components/directions";
-import { ListGenerate } from "@/core/util/list-generate";
-
+import '../globals.css'
+import { ListGenerate } from '@/core/util/list-generate';
 const inter = Inter({ subsets: ['latin'] })
 
 const BodyContainer = styled.div`
@@ -36,26 +34,29 @@ const AppBar = styled.div`
   margin-bottom: 10px;
 `
 
-const ResumeSession = styled(DivRow)`
+const ResumeSession = styled.div`
+  display: flex;
   justify-content: space-between;
   width: 100%;
-  gap: 15px;
+  gap: 35px;
   height: 120px;
-  padding: 15px 20px;
+  padding: 15px 30px;
 `
 
 
-const ResumeCard = styled(DivRow)`
+const ResumeCard = styled.div`
   position: relative;
+  display: flex;
+  flex-grow: 1;
   justify-content: start;
   padding: 15px;
-  flex: 1;
   height: 100%;
-  background-color: #ffffff;
+  background-color: white;
   border-radius: 10px;
 `
 
 const IconWrapper = styled.div`
+  display: flex;
   position: relative;
   width: fit-content;
   padding: 20px;
@@ -68,8 +69,11 @@ const IconWrapper = styled.div`
 
 
 const ResumeLabel = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: start;
-  margin: 15px;
+  margin: 0px 15px;
 `
 const LabelSpan = styled.span<{ color: string, size: string }>`
   color: ${props => props.color};
@@ -101,6 +105,8 @@ const ActionsSession = styled.section`
 const TitleH1 = styled.h1``
 
 const ActionButton = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 250px;
   padding: 15px;
   border: none;
@@ -124,57 +130,58 @@ const TableFiltersContainer = styled.div`
   padding: 10px 0px;
 `
 
+function CardResume(props: { label: string, value: string }) {
+  return (<ResumeCard>
+    <IconWrapper  >
+      <i className="fa-solid fa-money-bill"></i>
+    </IconWrapper>
+    <ResumeLabel >
+      <LabelSpan color={"grey"} size={"15px"} >{props.label}</LabelSpan>
+      <LabelSpan color={"black"} size={"22px"} ><strong>{props.value}</strong></LabelSpan>
+    </ResumeLabel>
+  </ResumeCard>);
+}
+
 
 export default function Home() {
 
   const arrayCount = [0, 0, 0, 0];
 
   return (
-    <body className={inter.className}>
+    <div style={{ width: "100vw", height: "100vh", display: "flex" }}>
       <NavBar></NavBar>
       <BodyContainer>
         <AppBar>
         </AppBar>
         <ResumeSession>
-          {ListGenerate<string>(30, (index) => index.toString()).map((item, index) => (<ResumeCard key={index} className="row">
-            <IconWrapper key={index} className="row">
-              <i className="fa-solid fa-money-bill"></i>
-            </IconWrapper>
-            <ResumeLabel className="column">
-              <LabelSpan color={"grey"} size={"15px"} >Micael</LabelSpan>
-              <LabelSpan color={"black"} size={"22px"} ><strong>R$200.00</strong></LabelSpan>
-            </ResumeLabel>
-          </ResumeCard>))}
+          <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
+          <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
+          <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
+          <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
         </ResumeSession>
         <DivRow style={{ paddingLeft: "20px", margin: "15px 0px", justifyContent: "start", width: "100%" }}>
           <TitleH1>O que você gostaria de fazer?</TitleH1>
         </DivRow>
         <ActionsSession style={{ paddingLeft: "20px" }}>
           <Link href={"/clientes"} >
-            <ActionButton className="column" >
+            <ActionButton  >
               <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
               <strong>Criar venda</strong>
             </ActionButton>
           </Link>
           <Link href={"/clientes"} >
-            <ActionButton className="column" >
+            <ActionButton >
               <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
               <strong>Gerar Orçamento</strong>
             </ActionButton>
           </Link>
         </ActionsSession>
-        <TableFiltersContainer></TableFiltersContainer>
-        <button type="button" className="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+        <TableFiltersContainer>
+          <h2>Filtros</h2>
+        </TableFiltersContainer>
 
-        <div className="modal fade bd-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              ...
-            </div>
-          </div>
-        </div>
 
       </BodyContainer >
-    </body >
+    </div>
   )
 }

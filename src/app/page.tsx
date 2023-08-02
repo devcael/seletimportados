@@ -1,18 +1,10 @@
 "use client"
-import { InputHookForm } from '@/components/InputHookForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './globals.css'
-import "@styles/fonts.css"
-import "@styles/teste.css"
-import { Inter } from "next/font/google";
 import styled from "styled-components";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons';
+import NavBar from '@/components/navbar';
+import './globals.css'
+import '@styles/fonts.css'
 
-
-import { Button, Divider, Form, Grid, Segment } from 'semantic-ui-react';
-import Link from 'next/link';
-const inter = Inter({ subsets: ['latin'] })
 
 const Body = styled.div`
     width: 100vw;
@@ -94,6 +86,7 @@ export default function Home() {
 
   return (
     <div style={{ width: "100vw", height: "100vh", display: "flex", alignItems: "start", justifyContent: "start" }} >
+
       <CustomImg width={100} className="fullwidth-img" src="login_background.png" alt="" />
       <LoginContainer>
         <div style={{ width: 100, borderRadius: 5, height: "100px", overflow: "hidden", position: "relative" }}>
@@ -112,17 +105,7 @@ export default function Home() {
           <h3>BEM VINDOS</h3>
           <p>GERENCIADOR DE VENDAS</p>
         </div>
-        <div className="input-group mb-3" style={{ height: "60px", maxWidth: "500px" }}>
-          <span className="input-group-text" id="basic-addon1" style={{ padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "center" }}><i className="fa-solid fa-user"></i></span>
-          <input type="text" className="form-control" placeholder="Digite seu usuario" aria-label="Username" aria-hidden="true" aria-describedby="basic-addon1" />
-        </div>
-        <div className="input-group mb-3" style={{ height: "60px", maxWidth: "500px" }}>
-          <span className="input-group-text" id="basic-addon1" style={{ padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "center" }}><i className="fa-solid fa-lock"></i></span>
-          <input type="password" className="form-control" placeholder="Digite sua senha" aria-label="Username" aria-hidden="true" aria-describedby="basic-addon1" />
-        </div>
-
         <LoginButton href="/dashboard">LOGIN</LoginButton>
-
       </LoginContainer>
     </div>
   )
