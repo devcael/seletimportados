@@ -11,6 +11,7 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 
 import { Button, Divider, Form, Grid, Segment } from 'semantic-ui-react';
+import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] })
 
 const Body = styled.div`
@@ -71,13 +72,16 @@ const IconWrapper = styled.div`
   align-items: center;
 `
 
-const LoginButton = styled.button`
+const LoginButton = styled.a`
   width: 100%;
   max-width: 500px;
   background: var(--blue-ascent);
   padding: 10px 0px;
   border: none;
   border-radius: 5px;
+  text-align: center;
+  color: white;
+  font-weight: 500;
 `
 
 function InputWithLabel() {
@@ -116,7 +120,9 @@ export default function Home() {
           <span className="input-group-text" id="basic-addon1" style={{ padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "center" }}><i className="fa-solid fa-lock"></i></span>
           <input type="password" className="form-control" placeholder="Digite sua senha" aria-label="Username" aria-hidden="true" aria-describedby="basic-addon1" />
         </div>
-        <LoginButton>LOGIN</LoginButton>
+
+        <LoginButton href="/dashboard">LOGIN</LoginButton>
+
       </LoginContainer>
     </div>
   )

@@ -71,7 +71,7 @@ function NavBar() {
       <div className="session-title">
         Configurações
       </div>
-      <Link href="/login">
+      <Link href="/">
         <button type="submit" id="logout-button">
           <h4>LOGOUT</h4>
           <i className="fa fa-arrow-right-from-bracket fa-lg"></i>

@@ -1,4 +1,5 @@
 "use client"
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "@styles/dashboard.css"
 import "@styles/fonts.css"
 import "@styles/common.css"
@@ -149,16 +150,30 @@ export default function Home() {
           <TitleH1>O que você gostaria de fazer?</TitleH1>
         </DivRow>
         <ActionsSession style={{ paddingLeft: "20px" }}>
-          {ListGenerate<string>(30, (index) => index.toString()).map((item, index) => (
-            <Link href={"/clientes"} key={index}>
-              <ActionButton key={index} className="column" >
-                <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
-                <strong>Gerar Orçamento</strong>
-              </ActionButton>
-            </Link>
-          ))}
+          <Link href={"/clientes"} >
+            <ActionButton className="column" >
+              <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
+              <strong>Criar venda</strong>
+            </ActionButton>
+          </Link>
+          <Link href={"/clientes"} >
+            <ActionButton className="column" >
+              <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
+              <strong>Gerar Orçamento</strong>
+            </ActionButton>
+          </Link>
         </ActionsSession>
         <TableFiltersContainer></TableFiltersContainer>
+        <button type="button" className="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+
+        <div className="modal fade bd-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              ...
+            </div>
+          </div>
+        </div>
+
       </BodyContainer >
     </body >
   )
