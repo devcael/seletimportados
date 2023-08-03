@@ -3,7 +3,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from "styled-components";
 import NavBar from '@/components/navbar';
 import './globals.css'
+
 import '@styles/fonts.css'
+import SimpleInputWithLabel from '@/components/simple-input-with-label';
+import { useForm } from 'react-hook-form';
+import { redirect, useRouter } from 'next/navigation';
+import User from '@/core/models/user_model';
+import { UserController } from '@/core/controllers/user_controller';
+import { METHODS } from 'http';
 
 
 const Body = styled.div`
@@ -64,7 +71,7 @@ const IconWrapper = styled.div`
   align-items: center;
 `
 
-const LoginButton = styled.a`
+const LoginButton = styled.input`
   width: 100%;
   max-width: 500px;
   background: var(--blue-ascent);
@@ -76,13 +83,60 @@ const LoginButton = styled.a`
   font-weight: 500;
 `
 
-function InputWithLabel() {
-  return (<div></div>)
+const Ptag = styled.p`
+  margin: 0;
+  padding: 0;
+`
+
+type LoginFormType = {
+  username: string;
+  password: string;
 }
 
 
 
+
 export default function Home() {
+  const router = useRouter();
+
+  const { register, formState: { errors }, handleSubmit } = useForm<LoginFormType>();
+  const onSubmit = async (data: LoginFormType) => {
+
+    var user: string = data.username;
+    var password: string = data.password;
+
+
+    try {
+
+      let response: Response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nome: user, senha: password }),
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (response.status == 200) {
+
+        document.cookie = 'authenticated=true; path=/';
+
+        router.replace('/dashboard');
+
+      } else {
+
+        alert("Usuario não encontrado")
+
+      }
+    } catch (error) {
+      alert(`Erro ao tentar fazer login: ${error}`)
+    }
+
+
+  };
 
   return (
     <div style={{ width: "100vw", height: "100vh", display: "flex", alignItems: "start", justifyContent: "start" }} >
@@ -105,7 +159,19 @@ export default function Home() {
           <h3>BEM VINDOS</h3>
           <p>GERENCIADOR DE VENDAS</p>
         </div>
-        <LoginButton href="/dashboard">LOGIN</LoginButton>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", margin: "0px", maxWidth: "500px", padding: "0px", display: "flex", flexDirection: "column", gap: "5px", justifyContent: "center", alignItems: "start" }} >
+
+          <SimpleInputWithLabel register={register("username", { required: true })} type='text' label='Usuario' description='Digite seu usuario aqui...'></SimpleInputWithLabel>
+          {errors.username?.type === 'required' && <p style={{ color: "red" }} role="alert">Por favor, digite seu usuario</p>}
+
+
+          <SimpleInputWithLabel register={register("password", { required: true })} type='password' label='Senha' description='Digite sua senha aqui...'></SimpleInputWithLabel>
+          {errors.password?.type === 'required' && <p style={{ color: "red" }} role="alert">Por favor, digite sua senha</p>}
+
+          <LoginButton type='submit' onClick={() => console.log("Cael")
+          }></LoginButton>
+        </form>
+
       </LoginContainer>
     </div>
   )

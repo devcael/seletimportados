@@ -7,7 +7,8 @@ import { Inter } from "next/font/google";
 import styled from "styled-components";
 import { DivColumn, DivRow } from "@/components/styled-components/directions";
 import '../globals.css'
-import { ListGenerate } from '@/core/util/list-generate';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 const inter = Inter({ subsets: ['latin'] })
 
 const BodyContainer = styled.div`
@@ -145,7 +146,15 @@ function CardResume(props: { label: string, value: string }) {
 
 export default function Home() {
 
-  const arrayCount = [0, 0, 0, 0];
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const authenticated = document.cookie.includes('authenticated=true');
+    if (!authenticated) {
+      router.push('/');
+    }
+  }, []);
 
   return (
     <div style={{ width: "100vw", height: "100vh", display: "flex" }}>
@@ -179,8 +188,6 @@ export default function Home() {
         <TableFiltersContainer>
           <h2>Filtros</h2>
         </TableFiltersContainer>
-
-
       </BodyContainer >
     </div>
   )
