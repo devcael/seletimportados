@@ -114,7 +114,9 @@ const SessionContainer = styled.ul`
     padding: 0;
 `
 
-const MenuItemActivated = styled.li<{ props: boolean }>`
+
+
+const MenuItemActivated = styled.li<{ activated: number }>`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -123,8 +125,8 @@ const MenuItemActivated = styled.li<{ props: boolean }>`
     border-radius: 8px;
     padding: 13px 10px;
     cursor: pointer;
-    color: ${props => props.props == true ? "white" : ""};
-    background: ${props => props.props == true ? "linear-gradient(90deg, rgba(217,217,217,0.20) 0%, rgba(217,217,217,0.05) 35%, rgba(217,217,217,0.03) 46%, rgba(217,217,217,0.05) 57%, rgba(217,217,217,0.20) 100%)" : ""};
+    color: ${props => props.activated ? "white" : ""};
+    background: ${props => props.activated ? "linear-gradient(90deg, rgba(217,217,217,0.20) 0%, rgba(217,217,217,0.05) 35%, rgba(217,217,217,0.03) 46%, rgba(217,217,217,0.05) 57%, rgba(217,217,217,0.20) 100%)" : ""};
     &:hover{
       color: white;
     }
@@ -136,7 +138,13 @@ function NavBar() {
 
   const currPath = usePathname()
 
-  const listOfMenuItems = menuItems.map((item, index) => <Link href={item.href}><MenuItemActivated key={item.id} props={currPath == item.href}><i className={item.icon}></i>{item.label}</MenuItemActivated></Link>);
+  const listOfMenuItems = menuItems.map((item, index) => {
+
+    const activated: boolean = currPath == item.href;
+
+    return (<Link key={index} href={item.href}>  <MenuItemActivated activated={activated ? 1 : 0} ><i className={item.icon}></i>{item.label}</MenuItemActivated> </Link>);
+
+  });
 
   return (
     <MenuContainer >
