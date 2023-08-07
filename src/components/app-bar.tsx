@@ -16,4 +16,11 @@ const AppBar = styled.div`
   margin-bottom: 10px;
 `
 
-export default AppBar;
+const Leading = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 10px 0px;
+  gap: 15px;
+`;
+
+export { AppBar, Leading };

@@ -1,36 +1,26 @@
 import styled from "styled-components"
 
 const TableContainer = styled.div`
-    width: 70vw;
-    height: 500px;
+    width: 100%;
+    height: 600px;
     border-radius: 10px;
+    overflow: hidden;
     overflow-y: auto;
+    background-color: white;
+    margin: 10px 0px;
+    border: 1px solid var(--gray-color);
     
   &::-webkit-scrollbar {
-    display: hidden;
+    display: none;
     width: 0.2rem;
     height: 0.5rem;
   }
 
-  &:hover::-webkit-scrollbar {
-      display: block;
-  }
-
-  &:hover::-webkit-scrollbar-thumb {
-      visibility: visible;
-  }
-
-  &::-webkit-scrollbar-thumb {
-      border-radius: .2rem;
-      background-color: var(--blue-table-header);
-      visibility: hidden;
-  }
     
 `
 
 const Table = styled.table`
   width: 100%;
-  height: 500px;
   border-collapse: collapse;
   table-layout: fixed;
 `
@@ -50,7 +40,7 @@ const TableHeaderBlue = styled.th`
 `
 
 const TableData = styled.td`
-  height: 100px;
+  padding: 10px 10px;
 `
 
 const TableHead = styled.thead`

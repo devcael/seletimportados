@@ -9,9 +9,9 @@ import { DivColumn, DivRow } from "@/components/styled-components/directions";
 import '../globals.css'
 import { Leading } from '@/components/app-bar';
 import { BtnAscent, BtnWithBorder } from '@/components/buttons';
-import TableFilterProducts from './components/filter-table-clientes';
+import TableFilterFornecedores from './components/filter-table-fornecedores';
 import { TableContainer } from '@/components/styled-components/table-data-styles';
-import ProductsTable from './components/clientes-table';
+import FornecedoresTable from './components/fornecedores-table';
 const inter = Inter({ subsets: ['latin'] })
 
 const BodyContainer = styled.div`
@@ -41,26 +41,25 @@ const AppBar = styled.div`
 
 export default function Home() {
 
-  const arrayCount = [0, 0, 0, 0];
+    const arrayCount = [0, 0, 0, 0];
 
-  return (
-    <main style={{ width: "100vw", height: "100vh", display: "flex" }}>
-      <NavBar></NavBar>
-      <BodyContainer>
-        <AppBar>
-          <h2>Clientes</h2>
-          <Leading>
-            <BtnWithBorder>Link cadastro cliente</BtnWithBorder>
-            <BtnAscent>Novo Produto</BtnAscent>
-          </Leading>
-        </AppBar>
-        <TableFilterProducts />
-        <div style={{ width: "100%", padding: "0px 15px" }}>
-          <TableContainer>
-            <ProductsTable></ProductsTable>
-          </TableContainer>
-        </div>
-      </BodyContainer >
-    </main>
-  )
+    return (
+        <main style={{ width: "100vw", height: "100vh", display: "flex" }}>
+            <NavBar></NavBar>
+            <BodyContainer>
+                <AppBar>
+                    <h2>Fornecedores</h2>
+                    <Leading>
+                        <BtnAscent>Novo Fornecedor</BtnAscent>
+                    </Leading>
+                </AppBar>
+                <TableFilterFornecedores />
+                <div style={{ width: "100%", padding: "0px 15px" }}>
+                    <TableContainer>
+                        <FornecedoresTable></FornecedoresTable>
+                    </TableContainer>
+                </div>
+            </BodyContainer >
+        </main>
+    )
 }

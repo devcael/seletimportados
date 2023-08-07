@@ -8,16 +8,12 @@ import '../globals.css'
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { AppBar, Leading } from '@/components/app-bar';
-import TableFilterProducts from './components/filter-table-products';
 import { BtnAscent } from '@/components/buttons';
-import ProductsTable from './components/products-table';
 
 const BodyContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  display: inline;
   width: calc(100vw - var(--navbar-width));
-  height: 100vh;
+  overflow-y: scroll;
 `
 
 
@@ -55,34 +51,29 @@ const TableContainer = styled.div`
 
 export default function Home() {
 
-  const router = useRouter();
+    const router = useRouter();
 
-  useEffect(() => {
-    const authenticated = document.cookie.includes('authenticated=true');
-    if (!authenticated) {
-      router.replace('/');
-    }
-  }, []);
+    useEffect(() => {
+        const authenticated = document.cookie.includes('authenticated=true');
+        if (!authenticated) {
+            router.replace('/');
+        }
+    }, []);
 
-  return (
-    <main style={{ width: "100vw", height: "100vh", display: "flex" }}>
-      <NavBar />
-      <BodyContainer>
-        <AppBar>
-          <h2>Produtos</h2>
-          <Leading>
-            <BtnAscent>Novo Produto</BtnAscent>
-          </Leading>
-        </AppBar>
-        <TableFilterProducts />
-        <div style={{ width: "100%", padding: "0px 15px" }}>
-          <TableContainer>
-            <ProductsTable></ProductsTable>
-          </TableContainer>
-        </div>
+    return (
+        <main style={{ width: "100vw", height: "100vh", display: "flex" }}>
+            <NavBar />
+            <BodyContainer>
+                <AppBar>
+                    <h2>Financeiro</h2>
+                    <Leading>
+                        <BtnAscent style={{ background: "red" }}>Nova Despesa</BtnAscent>
+                        <BtnAscent style={{ background: "teal" }}>Nova Receita</BtnAscent>
+                    </Leading>
+                </AppBar>
 
-      </BodyContainer >
+            </BodyContainer >
 
-    </main>
-  )
+        </main>
+    )
 } 

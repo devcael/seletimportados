@@ -33,9 +33,6 @@ const InputForm = styled.input`
   padding: 12px 5px;
 `
 
-const TitleH5 = styled.h5`
-  
-`
 
 const CustomImg = styled.img`
   width: 40vw;
@@ -138,6 +135,7 @@ export default function Home() {
 
   };
 
+
   return (
     <div style={{ width: "100vw", height: "100vh", display: "flex", alignItems: "start", justifyContent: "start" }} >
 
@@ -171,7 +169,6 @@ export default function Home() {
           <LoginButton type='submit' onClick={() => console.log("Cael")
           }></LoginButton>
         </form>
-
       </LoginContainer>
     </div>
   )
