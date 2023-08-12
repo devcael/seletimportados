@@ -14,33 +14,37 @@ type ProdutoAttributes = {
 };
 
 
-class Produto extends Model {
+class ProdutoModel extends Model {
     public id!: number;
     public nome!: string;
-    public ean?: string | null;
+    public ean!: string | null;
     public preco!: number;
     public custo!: number;
     public id_fornecedor!: number;
     public id_moeda_custo!: number;
     public id_moeda_preco!: number;
-    public ativo?: boolean | null;
+    public ativo!: number | null;
+    public data_de_cadastro!: Date | null;
+    public estoque!: number | null;
+    public marca!: string | null;
 
 }
 
-Produto.init(
+ProdutoModel.init(
     {
         id: {
             type: DataTypes.INTEGER,
-            primaryKey: true,
             autoIncrement: true,
+            primaryKey: true,
         },
         nome: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(255),
             allowNull: false,
         },
         ean: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(25),
             allowNull: true,
+            defaultValue: null,
         },
         preco: {
             type: DataTypes.DECIMAL(10, 2),
@@ -63,16 +67,33 @@ Produto.init(
             allowNull: false,
         },
         ativo: {
-            type: DataTypes.BOOLEAN,
+            type: DataTypes.TINYINT,
             allowNull: true,
+            defaultValue: null,
         },
+        data_de_cadastro: {
+            type: DataTypes.DATE,
+            allowNull: true,
+            defaultValue: null,
+        },
+        estoque: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: null,
+        },
+        marca: {
+            type: DataTypes.STRING(255),
+            allowNull: true,
+            defaultValue: null,
+        },
+
     },
     {
         sequelize,
-        modelName: 'Produto',
+        modelName: 'ProdutoModel',
         tableName: 'produtos',
         timestamps: false
     }
 );
 
-export default Produto;
+export default ProdutoModel;

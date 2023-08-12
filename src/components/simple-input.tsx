@@ -6,7 +6,7 @@ type SimpleInputProps = {
     label?: string;
     inputType: string;
 
-    register: object;
+    register?: object;
 }
 
 const Input = styled.input`
@@ -29,7 +29,7 @@ const InputContainer = styled.div`
 export default function SimpleInput(props: SimpleInputProps) {
     return (
         <InputContainer>
-            {props.label != null ? <strong><p>{props.label ?? ""}</p></strong> : ""}
+            {props.label != null ? <p>{props.label ?? ""}</p> : ""}
             <Input type={props.inputType} placeholder={props.placeHolder ?? ""} {...props.register}></Input>
         </InputContainer>
     );

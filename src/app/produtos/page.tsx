@@ -6,11 +6,13 @@ import { Inter } from "next/font/google";
 import styled from "styled-components";
 import '../globals.css'
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AppBar, Leading } from '@/components/app-bar';
 import TableFilterProducts from './components/filter-table-products';
 import { BtnAscent } from '@/components/buttons';
 import ProductsTable from './components/products-table';
+import Modal from 'react-modal';
+import ModalCadastroDeProdutos from './components/modal-cadastro-produtos';
 
 const BodyContainer = styled.div`
   display: flex;
@@ -37,23 +39,41 @@ const TableContainer = styled.div`
     height: 0.5rem;
   }
 
-  /* &:hover::-webkit-scrollbar {
-      display: block;
-  }
-
-  &:hover::-webkit-scrollbar-thumb {
-      visibility: none;
-  }
-
-  &::-webkit-scrollbar-thumb {
-      border-radius: .2rem;
-      background-color: var(--blue-table-header);
-      visibility: hidden;
-  } */
     
 `
 
 export default function Home() {
+
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+
+  const modalStyles = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.6)'
+    },
+    content: {
+      padding: '0px',
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)'
+    }
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
 
   const router = useRouter();
 
@@ -71,7 +91,7 @@ export default function Home() {
         <AppBar>
           <h2>Produtos</h2>
           <Leading>
-            <BtnAscent>Novo Produto</BtnAscent>
+            <BtnAscent onClick={openModal}>Novo Produto</BtnAscent>
           </Leading>
         </AppBar>
         <TableFilterProducts />
@@ -80,8 +100,20 @@ export default function Home() {
             <ProductsTable></ProductsTable>
           </TableContainer>
         </div>
-
       </BodyContainer >
+
+      <div>
+        <Modal
+          shouldCloseOnEsc={true}
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={modalStyles}
+          contentLabel="Example Modal"
+        >
+          <ModalCadastroDeProdutos />
+        </Modal>
+      </div>
 
     </main>
   )

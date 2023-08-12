@@ -9,10 +9,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         let body = req.body;
 
         try {
+
+
             let createProduct = await ProdutosController.createNewProduct(body);
             res.status(200).json(createProduct);
         } catch (error) {
-            res.status(500).json({ message: "Erro ao criar novo produto" });
+            res.status(500).json({ message: "Erro ao criar novo produto: " + error + ' Body: ' + JSON.stringify(body) });
         }
 
     }

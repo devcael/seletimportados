@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import styled from "styled-components";
 
 const BtnWithBorder = styled.button`
@@ -19,5 +20,14 @@ const BtnAscent = styled.button`
     font-weight: 800;
     cursor: pointer;
 `
+
+function ButtonWithIcon(props: { icon: ReactNode, color?: string }) {
+    return (
+        <BtnAscent style={{ color: `${props.color ?? ''}` }}>
+            {props.icon}
+        </BtnAscent>
+    )
+
+}
 
 export { BtnWithBorder, BtnAscent }

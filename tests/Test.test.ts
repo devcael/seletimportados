@@ -1,14 +1,9 @@
+import ProdutoUseCase from "@/domain/usecases/produto_usecase";
 import { describe } from "node:test";
 
 describe(() => {
-    it("Teste", () => {
-
-        let obj: object = { nome: "Micael" };
-
-
-        let style: object = { width: "100px", ...obj };
-
-        console.log(style);
+    it("Teste", async () => {
+        await ProdutoUseCase.getAllProdutos();
 
     })
 })
