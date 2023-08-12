@@ -6,7 +6,7 @@ class VendaModel extends Model {
     public data!: Date;
     public hora!: string;
     public totalvenda!: number;
-    public situacao!: string | null;
+    public situacao!: 'ABERTA' | 'PENDENTE' | 'FINALIZADA' | null;
     public id_usuario!: number;
     public id_cliente!: number;
     public desconto!: number | null;
@@ -14,6 +14,7 @@ class VendaModel extends Model {
     public subtotal!: number;
     public totalcomdescontoeacrescimo!: number | null;
     public tipo!: 'VENDA' | 'ORCAMENTO' | null;
+    public nome!: string;
 }
 
 VendaModel.init(
@@ -36,7 +37,7 @@ VendaModel.init(
             allowNull: false,
         },
         situacao: {
-            type: DataTypes.STRING(255),
+            type: DataTypes.ENUM('ABERTA', 'PENDENTE', 'FINALIZADA'),
             allowNull: true,
         },
         id_usuario: {

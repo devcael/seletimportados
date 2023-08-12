@@ -5,8 +5,6 @@ class TiposDePagamentoModel extends Model {
     public idtiposdepagamento!: number;
     public tipo!: 'AP' | 'AV';
     public nome_tipo!: string;
-
-
 }
 
 TiposDePagamentoModel.init(

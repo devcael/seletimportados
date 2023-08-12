@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../settings/database";
+import MoedaConversaoModel from "./moeda_conversao_model";
 
 type ProdutoAttributes = {
     id: number;
@@ -27,6 +28,7 @@ class ProdutoModel extends Model {
     public data_de_cadastro!: Date | null;
     public estoque!: number | null;
     public marca!: string | null;
+
 
 }
 

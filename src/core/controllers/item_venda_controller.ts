@@ -17,7 +17,8 @@ const ItemsVendaController = {
     async findAllByIdVenda(id_venda: number): Promise<ItemsVendaModel[] | null> {
         return await sequelize.query(`SELECT * FROM items_venda WHERE id_venda = ${id_venda}`, {
             model: ItemsVendaModel,
-            mapToModel: true
+            mapToModel: true,
+
         });
     },
 
