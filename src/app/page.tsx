@@ -155,7 +155,7 @@ export default function Home() {
         </IconWrapper>
         <div style={{ textAlign: "center", margin: "10px 0px" }}>
           <h3>BEM VINDOS</h3>
-          <p>GERENCIADOR DE VENDAS</p>
+          <p>GERENCIADOR DE VENDAS {process.env.NEXT_PUBLIC_API_URL}</p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", margin: "0px", maxWidth: "500px", padding: "0px", display: "flex", flexDirection: "column", gap: "5px", justifyContent: "center", alignItems: "start" }} >
 

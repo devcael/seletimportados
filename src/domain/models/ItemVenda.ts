@@ -54,4 +54,52 @@ export default class ItemVenda {
         this.id_venda = id_venda;
     }
 
+    static fromJson(json: any): ItemVenda {
+        return new ItemVenda(
+            json.id_itens_venda,
+            json.id_produto,
+            json.nome_produto,
+            json.preco_produto,
+            json.custo_produto,
+            json.quantidade,
+            json.acrescimo,
+            json.desconto,
+            json.produto,
+            null,
+            json.valortotal,
+            json.id_moeda_custo_produto,
+            json.taxa_moeda_custo_produto,
+            json.id_moeda_preco_produto,
+            json.taxa_moeda_preco_produto,
+            json.id_venda
+        );
+    }
+
+    toJson(props: { sendId: boolean }): any {
+        return {
+            id_itens_venda: props.sendId ? this.id_itens_venda : null,
+            id_produto: this.id_produto,
+            nome_produto: this.nome_produto,
+            preco_produto: this.preco_produto,
+            custo_produto: this.custo_produto,
+            quantidade: this.quantidade,
+            acrescimo: this.acrescimo,
+            desconto: this.desconto,
+            valortotal: this.valortotal,
+            id_moeda_custo_produto: this.produto.moeda_custo.id_taxa,
+            taxa_moeda_custo_produto: this.produto.moeda_custo.taxa_de_conversao_real,
+            id_moeda_preco_produto: this.produto.moeda_preco.id_taxa,
+            taxa_moeda_preco_produto: this.produto.moeda_preco.taxa_de_conversao_real,
+            id_venda: this.id_venda,
+        };
+    }
+
+    setImei(imei: Imei | null) {
+        this.imei = imei;
+    }
+
+    setProduto(produto: Produto) {
+        this.produto = produto;
+    }
+
 }

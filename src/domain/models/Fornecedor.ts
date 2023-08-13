@@ -1,4 +1,4 @@
-class Fornecedor {
+export default class Fornecedor {
     public id: number;
     public nome: string;
     public cpfcnpj: string | null;

@@ -9,4 +9,13 @@ export default class MoedaConversao {
         this.taxa_de_conversao_real = taxa_de_conversao_real;
         this.simbolo = simbolo;
     }
+
+    static fromJSON(json: any): MoedaConversao {
+        return new MoedaConversao(
+            json.id_taxa,
+            json.nome_da_moeda,
+            json.taxa_de_conversao_real,
+            json.simbolo
+        );
+    }
 }

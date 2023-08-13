@@ -4,7 +4,7 @@ import sequelize from '../settings/database';
 const ProdutosController = {
 
 
-    async getUserById(id: number): Promise<ProdutoModel | null> {
+    async getProdutoByID(id: number): Promise<ProdutoModel | null> {
         return await ProdutoModel.findByPk(id);
     },
 
