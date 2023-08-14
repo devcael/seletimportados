@@ -11,8 +11,12 @@ import { Leading } from '@/components/app-bar';
 import { BtnAscent, BtnWithBorder } from '@/components/buttons';
 import TableFilterProducts from './components/filter-table-clientes';
 import { TableContainer } from '@/components/styled-components/table-data-styles';
-import ProductsTable from './components/clientes-table';
+import ClientesTable from './components/clientes-table';
+import { ClientesProvider } from '@/provider/clientes_provider';
+import useModal from '@/hooks/useModal';
+import ModalCadastroDeClientes from './components/modal-cadastro-fornecedores';
 const inter = Inter({ subsets: ['latin'] })
+import Modal from 'react-modal';
 
 const BodyContainer = styled.div`
   display: flex;
@@ -41,26 +45,41 @@ const AppBar = styled.div`
 
 export default function Home() {
 
+  const { modalIsOpen, openModal, closeModal, modalStyles } = useModal();
   const arrayCount = [0, 0, 0, 0];
 
   return (
-    <main style={{ width: "100vw", height: "100vh", display: "flex" }}>
-      <NavBar></NavBar>
-      <BodyContainer>
-        <AppBar>
-          <h2>Clientes</h2>
-          <Leading>
-            <BtnWithBorder>Link cadastro cliente</BtnWithBorder>
-            <BtnAscent>Novo Produto</BtnAscent>
-          </Leading>
-        </AppBar>
-        <TableFilterProducts />
-        <div style={{ width: "100%", padding: "0px 15px" }}>
-          <TableContainer>
-            <ProductsTable></ProductsTable>
-          </TableContainer>
+    <ClientesProvider>
+      <main style={{ width: "100vw", height: "100vh", display: "flex" }}>
+        <NavBar></NavBar>
+        <BodyContainer>
+          <AppBar>
+            <h2>Clientes</h2>
+            <Leading>
+              <BtnWithBorder>Link cadastro cliente</BtnWithBorder>
+              <BtnAscent onClick={openModal}>Novo Cliente</BtnAscent>
+            </Leading>
+          </AppBar>
+          <TableFilterProducts />
+          <div style={{ width: "100%", padding: "0px 15px" }}>
+            <TableContainer>
+              <ClientesTable></ClientesTable>
+            </TableContainer>
+          </div>
+        </BodyContainer >
+        <div>
+          <Modal
+            shouldCloseOnEsc={true}
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={modalStyles}
+            ariaHideApp={false}
+            contentLabel="Example Modal"
+          >
+            <ModalCadastroDeClientes onRequestClose={closeModal} cliente={null} />
+          </Modal>
         </div>
-      </BodyContainer >
-    </main>
+      </main>
+    </ClientesProvider>
   )
 }

@@ -30,4 +30,42 @@ export default class Fornecedor {
         this.pais = pais;
         this.crt = crt;
     }
+
+    static fromJson(json: any): Fornecedor {
+        return new Fornecedor(
+            json.id,
+            json.nome,
+            json.cpfcnpj,
+            json.telefone,
+            json.email,
+            json.tipo,
+            json.endereco,
+            json.cep,
+            json.numero,
+            json.complemento,
+            json.cidade,
+            json.estado,
+            json.pais,
+            json.crt
+        );
+    }
+
+    toJson(params: { sendId: boolean }): any {
+        return {
+            id: params.sendId ? this.id : null,
+            nome: this.nome,
+            cpfcnpj: this.cpfcnpj,
+            telefone: this.telefone,
+            email: this.email,
+            tipo: this.tipo,
+            endereco: this.endereco,
+            cep: this.cep,
+            numero: this.numero,
+            complemento: this.complemento,
+            cidade: this.cidade,
+            estado: this.estado,
+            pais: this.pais,
+            crt: this.crt
+        };
+    }
 }

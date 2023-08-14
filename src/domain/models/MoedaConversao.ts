@@ -18,4 +18,13 @@ export default class MoedaConversao {
             json.simbolo
         );
     }
+
+    toJson(params: { sendId: boolean }): any {
+        return {
+            id_taxa: params.sendId ? this.id_taxa : null,
+            nome_da_moeda: this.nome_da_moeda,
+            taxa_de_conversao_real: this.taxa_de_conversao_real,
+            simbolo: this.simbolo,
+        };
+    }
 }

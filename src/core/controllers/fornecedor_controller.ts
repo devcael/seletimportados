@@ -15,7 +15,10 @@ const FornecedoresController = {
     },
 
     async buscarFornecedoresPaginados(currPage: number, pageSize: number, searchName: string): Promise<{ fornecedores: FornecedorModel[]; totalCount: number; currPage: number }> {
-        const fornecedores = await sequelize.query(`SELECT * FROM fornecedor WHERE nome LIKE "%${searchName}%" LIMIT ${pageSize} OFFSET ${currPage};`, {
+
+        let offset = currPage * pageSize;
+
+        const fornecedores = await sequelize.query(`SELECT * FROM fornecedor WHERE nome LIKE "%${searchName}%" LIMIT ${pageSize} OFFSET ${offset};`, {
             model: FornecedorModel,
             mapToModel: true
         });

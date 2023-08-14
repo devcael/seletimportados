@@ -19,12 +19,21 @@ const Input = styled.input`
 `
 
 function SimpleInputWithLabel(props: { label: string, description: string, type: string, register?: {} }) {
-    return (
-        <div style={{ width: "100%", margin: "0px", padding: "0px" }}>
-            <p style={{ margin: "0px", padding: "0px" }}>{props.label}</p>
-            <Input {...props.register} type={props.type} placeholder={props.description}></Input>
-        </div>
-    )
+  return (
+    <div style={{ width: "100%", margin: "0px", padding: "0px" }}>
+      <p style={{ margin: "0px", padding: "0px" }}>{props.label}</p>
+      <Input {...props.register} type={props.type} placeholder={props.description}></Input>
+    </div>
+  )
 }
 
-export default SimpleInputWithLabel;
+function SimpleDropDownWithLabel(props: { label: string, description: string, type: string, register?: {} }) {
+  return (
+    <div style={{ width: "100%", margin: "0px", padding: "0px" }}>
+      <p style={{ margin: "0px", padding: "0px" }}>{props.label}</p>
+      <Input {...props.register} type={props.type} placeholder={props.description}></Input>
+    </div>
+  )
+}
+
+export { SimpleInputWithLabel, SimpleDropDownWithLabel };

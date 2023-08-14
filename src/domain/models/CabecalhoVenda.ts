@@ -3,14 +3,14 @@ export default class CabecalhoVenda {
     data: string;
     hora: string;
     totalvenda: string;
-    situacao: string | null;
+    situacao: 'ABERTA' | 'PENDENTE' | 'FINALIZADA' | null;
     id_usuario: number;
     id_cliente: number;
     desconto: string | null;
     acrescimo: string | null;
     subtotal: string;
     totalcomdescontoeacrescimo: string;
-    tipo: string;
+    tipo: 'VENDA' | 'ORCAMENTO' | null;
     nome: string;
 
     constructor(
@@ -18,14 +18,14 @@ export default class CabecalhoVenda {
         data: string,
         hora: string,
         totalvenda: string,
-        situacao: string,
+        situacao: 'ABERTA' | 'PENDENTE' | 'FINALIZADA' | null,
         id_usuario: number,
         id_cliente: number,
         desconto: string,
         acrescimo: string,
         subtotal: string,
         totalcomdescontoeacrescimo: string,
-        tipo: string,
+        tipo: 'VENDA' | 'ORCAMENTO' | null,
         nome: string
     ) {
         this.id = id;

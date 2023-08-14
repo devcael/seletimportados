@@ -2,14 +2,14 @@ import Clientes from "./Clientes";
 import ItemVenda from "./ItemVenda";
 import PagamentoVenda from "./PagamentoVenda";
 
-class Venda {
+export default class Venda {
     public id: number;
     public data: Date;
     public hora: string;
     public totalvenda: number;
     public situacao: 'ABERTA' | 'PENDENTE' | 'FINALIZADA' | null;
-    public id_usuario: Usuario;
-    public id_cliente: Clientes;
+    public id_usuario: number;
+    public id_cliente: Clientes | null;
     public desconto: number | null;
     public acrescimo: number | null;
     public subtotal: number;
@@ -24,8 +24,8 @@ class Venda {
         hora: string,
         totalvenda: number,
         situacao: 'ABERTA' | 'PENDENTE' | 'FINALIZADA' | null,
-        id_usuario: Usuario,
-        id_cliente: Clientes,
+        id_usuario: number,
+        id_cliente: Clientes | null,
         desconto: number | null,
         acrescimo: number | null,
         subtotal: number,

@@ -26,4 +26,38 @@ export default class Clientes {
         this.cidade = cidade;
         this.estado = estado;
     }
+
+    static fromJson(json: any): Clientes {
+        return new Clientes(
+            json.id,
+            json.nome,
+            json.cpfcnpj,
+            json.telefone,
+            json.email,
+            json.tipo,
+            json.endereco,
+            json.cep,
+            json.numero,
+            json.complemento,
+            json.cidade,
+            json.estado
+        );
+    }
+
+    toJson(params: { sendId: boolean }): any {
+        return {
+            id: params.sendId ? this.id : null,
+            nome: this.nome,
+            cpfcnpj: this.cpfcnpj,
+            telefone: this.telefone,
+            email: this.email,
+            tipo: this.tipo,
+            endereco: this.endereco,
+            cep: this.cep,
+            numero: this.numero,
+            complemento: this.complemento,
+            cidade: this.cidade,
+            estado: this.estado
+        };
+    }
 }

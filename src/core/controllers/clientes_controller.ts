@@ -15,7 +15,10 @@ const ClientesController = {
     },
 
     async buscarClientesPaginados(currPage: number, pageSize: number, searchName: string): Promise<{ clientes: ClienteModel[]; totalCount: number; currPage: number }> {
-        const clientes = await sequelize.query(`SELECT * FROM clientes WHERE nome LIKE "%${searchName}%" LIMIT ${pageSize} OFFSET ${currPage};`, {
+
+        let offset = currPage * pageSize;
+
+        const clientes = await sequelize.query(`SELECT * FROM clientes WHERE nome LIKE "%${searchName}%" LIMIT ${pageSize} OFFSET ${offset};`, {
             model: ClienteModel,
             mapToModel: true
         });

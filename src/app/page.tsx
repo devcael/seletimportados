@@ -5,7 +5,7 @@ import NavBar from '@/components/navbar';
 import './globals.css'
 
 import '@styles/fonts.css'
-import SimpleInputWithLabel from '@/components/simple-input-with-label';
+import { SimpleInputWithLabel } from '@/components/simple-input-with-label';
 import { useForm } from 'react-hook-form';
 import { redirect, useRouter } from 'next/navigation';
 import User from '@/core/models/user_model';

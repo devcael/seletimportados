@@ -18,7 +18,9 @@ const ProdutosController = {
 
     async buscarProdutosPaginados(currPage: number, pageSize: number, searchName: string): Promise<{ produtos: ProdutoModel[]; totalCount: number, currPage: number }> {
 
-        const produtos = await sequelize.query(`SELECT * FROM produtos WHERE nome LIKE "%${searchName}%" LIMIT ${pageSize} OFFSET ${currPage};`, {
+        let offset = currPage * pageSize;
+
+        const produtos = await sequelize.query(`SELECT * FROM produtos WHERE nome LIKE "%${searchName}%" LIMIT ${pageSize} OFFSET ${offset};`, {
             model: ProdutoModel,
             mapToModel: true // pass true here if you have any mapped fields
         });

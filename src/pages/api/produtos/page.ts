@@ -11,6 +11,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (req.method === 'GET') {
 
+
+
         let { produtos, totalCount, currPage } = await ProdutosController.buscarProdutosPaginados(Number(page), Number(pageSize), String(search));
 
         if (produtos != null) {

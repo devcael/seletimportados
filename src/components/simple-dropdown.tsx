@@ -1,3 +1,4 @@
+import { log } from "console";
 import styled from "styled-components"
 
 const SimpleSelection = styled.select`
@@ -9,26 +10,29 @@ const SimpleSelection = styled.select`
 `
 const SimpleSelectionOp = styled.option``
 
-type OptionProps<T> = {
-    value: T;
+export type OptionProps = {
+    value: string;
     label: string;
 }
 
-export default function DropDown<T>(props: {
-    items: OptionProps<T>[]
-    onChange?: (value: T) => void
+export default function DropDown(props: {
+    items: OptionProps[]
+    onChange?: (value: string) => void
 }) {
 
-    function handleChanges(value: T) {
-        if (props.onChange != null) {
-            props.onChange(value);
-        }
-    }
 
-    return (<SimpleSelection >
-        {props.items.map((option: OptionProps<T>, index) => {
-            return <SimpleSelectionOp key={index} onClick={() => console.log("Teset")
-            } value={option.label}>{option.label}</SimpleSelectionOp>
+    const handleSelectChange = (event: any) => {
+        const selectedValue = event.target.value;
+
+        if (props.onChange != null) {
+            props.onChange(selectedValue);
+        }
+    };
+
+
+    return (<SimpleSelection onChange={handleSelectChange} >
+        {props.items.map((option: OptionProps, index) => {
+            return <SimpleSelectionOp key={index} value={option.value}>{option.label}</SimpleSelectionOp>
         })}
     </SimpleSelection>)
 }

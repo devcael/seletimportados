@@ -35,7 +35,7 @@ export default class ItemVendaUseCase {
 
     }
 
-    static async getAllByIdVenda(id_venda: number) {
+    static async getAllByIdVenda(id_venda: number): Promise<ItemVenda[]> {
         try {
             let url: string = "/itemvenda/findAllItemsVendaByIdVenda";
 
@@ -70,6 +70,7 @@ export default class ItemVendaUseCase {
 
             console.log(listOfItems.length);
 
+            return listOfItems;
 
 
         } catch (error) {

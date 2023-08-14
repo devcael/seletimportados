@@ -51,15 +51,21 @@ const Input = styled.input`
 
 
 
-export default function InputWithIcon(props: { inputIcon: ReactNode, placeHolder?: string }) {
-    return (
-        <Wrapper>
-            <Input placeholder={props.placeHolder ?? ""}></Input>
-            <InputIcon>{props.inputIcon}</InputIcon>
-        </Wrapper>
-    )
+export default function InputWithIcon(props: { inputIcon: ReactNode, placeHolder?: string, onChange?: (value: string) => void }) {
+
+  const handleInputChange = (event: any) => {
+    const newValue = event.target.value;
+    props.onChange?.(newValue);
+  };
+
+  return (
+    <Wrapper>
+      <Input onChange={handleInputChange} placeholder={props.placeHolder ?? ""}></Input>
+      <InputIcon>{props.inputIcon}</InputIcon>
+    </Wrapper>
+  )
 }
 
 export {
-    Icon
+  Icon
 }

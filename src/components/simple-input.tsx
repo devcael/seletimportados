@@ -1,13 +1,27 @@
-import { UseFormRegisterReturn } from "react-hook-form";
+import Utils from "@/domain/services/Utils";
+import { ChangeEvent, use, useEffect, useState } from "react";
+import { UseFormRegisterReturn, useForm, Controller } from "react-hook-form";
 import styled from "styled-components";
+import DropDown, { OptionProps } from "./simple-dropdown";
 
 type SimpleInputProps = {
     placeHolder?: string;
     label?: string;
     inputType: string;
-
     register?: object;
+    defaultValue?: string;
+    formatterFunction?: (value: string) => string;
+    onInput?: (input: HTMLInputElement) => void;
+    onChange?: (value: string) => void;
 }
+
+type SimpleDropDownProps = {
+    label?: string;
+    items: OptionProps[]
+    onChange?: (value: string) => void;
+}
+
+
 
 const Input = styled.input`
     width: 100%;
@@ -26,11 +40,94 @@ const InputContainer = styled.div`
     flex-grow: 1;
 `
 
-export default function SimpleInput(props: SimpleInputProps) {
+
+const StyledInput = styled.input`
+  padding: 8px;
+  font-size: 16px;
+`;
+
+
+function InputWithLabelAndFormatter(props: SimpleInputProps) {
+    const { control, handleSubmit } = useForm();
+
+    function formatador(valor: string): string {
+        if (!valor) return "";
+        if (props.formatterFunction != undefined || props.formatterFunction != null) {
+            return props.formatterFunction(valor);
+        }
+        return valor;
+    }
+
+
+    return (
+
+        <Controller
+            name="valor"
+            control={control}
+            defaultValue={props.defaultValue ?? "0.00"}
+            render={({ field }) => (
+
+                <InputContainer>
+                    {props.label != null ? <p>{props.label ?? ""}</p> : ""}
+                    <Input
+                        {...field}
+                        value={formatador(field.value)}
+                        onChange={(e) => {
+                            const valor = e.target.value.replace(/[^\d]/g, '');
+                            field.onChange(valor);
+                            props.onChange?.(formatador(e.target.value));
+
+                        }}
+                        type={props.inputType}
+                        placeholder={props.placeHolder ?? ""}
+                        {...props.register} />
+                </InputContainer>
+            )}
+        />
+    );
+}
+
+
+
+
+
+function SimpleInput(props: SimpleInputProps) {
+
+    const [inputValue, setInputValue] = useState(props.defaultValue ?? "");
+
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.value);
+        setInputValue(event.target.value);
+        const newValue = event.target.value;
+        props.onChange?.(newValue);
+    };
+
+
     return (
         <InputContainer>
             {props.label != null ? <p>{props.label ?? ""}</p> : ""}
-            <Input type={props.inputType} placeholder={props.placeHolder ?? ""} {...props.register}></Input>
+            <Input onChange={handleInputChange} type={props.inputType} placeholder={props.placeHolder ?? ""} {...props.register} ></Input>
         </InputContainer>
     );
+}
+
+function SimpleDropdown(props: SimpleDropDownProps) {
+
+    const handleInputChange = (value: string) => {
+        props.onChange?.(value);
+    };
+
+
+    return (
+        <InputContainer>
+            {props.label != null ? <p>{props.label ?? ""}</p> : ""}
+            <DropDown items={props.items} onChange={handleInputChange} />
+        </InputContainer>
+    );
+}
+
+export {
+    SimpleInput, SimpleDropdown,
+    InputWithLabelAndFormatter
 }

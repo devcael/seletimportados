@@ -6,13 +6,17 @@ import { Inter } from "next/font/google";
 import styled from "styled-components";
 import '../globals.css'
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { AppBar, Leading } from '@/components/app-bar';
 import TableFilterProducts from './components/filter-table-products';
 import { BtnAscent } from '@/components/buttons';
 import ProductsTable from './components/products-table';
 import Modal from 'react-modal';
 import ModalCadastroDeProdutos from './components/modal-cadastro-produtos';
+import Produto from '@/domain/models/Produto';
+import { ProductProvider } from '../../provider/produto_provider';
+import usePaginatedData from '@/hooks/useProdutoPaginationData';
+import useMoedasFetcher from '@/hooks/useMoedasFetch';
 
 const BodyContainer = styled.div`
   display: flex;
@@ -42,11 +46,12 @@ const TableContainer = styled.div`
     
 `
 
+
 export default function Home() {
 
+  const { moedas } = useMoedasFetcher();
 
   const [modalIsOpen, setIsOpen] = useState(false);
-
 
   const modalStyles = {
     overlay: {
@@ -85,36 +90,43 @@ export default function Home() {
   }, []);
 
   return (
-    <main style={{ width: "100vw", height: "100vh", display: "flex" }}>
-      <NavBar />
-      <BodyContainer>
-        <AppBar>
-          <h2>Produtos</h2>
-          <Leading>
-            <BtnAscent onClick={openModal}>Novo Produto</BtnAscent>
-          </Leading>
-        </AppBar>
-        <TableFilterProducts />
-        <div style={{ width: "100%", padding: "0px 15px" }}>
-          <TableContainer>
-            <ProductsTable></ProductsTable>
-          </TableContainer>
+    <ProductProvider>
+      <main style={{ width: "100vw", height: "100vh", display: "flex" }}>
+
+        <NavBar />
+        <BodyContainer>
+          <AppBar>
+            <h2>Produtos</h2>
+            <Leading>
+              <BtnAscent onClick={openModal}>Novo Produto</BtnAscent>
+            </Leading>
+          </AppBar>
+          <TableFilterProducts />
+          <div style={{ width: "100%", padding: "0px 15px" }}>
+            <TableContainer>
+              <ProductsTable
+
+              ></ProductsTable>
+            </TableContainer>
+          </div>
+        </BodyContainer >
+
+        <div>
+          <Modal
+            shouldCloseOnEsc={true}
+            isOpen={modalIsOpen}
+            onAfterOpen={afterOpenModal}
+            onRequestClose={closeModal}
+            style={modalStyles}
+            ariaHideApp={false}
+            contentLabel="Example Modal"
+          >
+            <ModalCadastroDeProdutos moedas={moedas} onRequestClose={closeModal} produto={null} />
+          </Modal>
         </div>
-      </BodyContainer >
 
-      <div>
-        <Modal
-          shouldCloseOnEsc={true}
-          isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
-          onRequestClose={closeModal}
-          style={modalStyles}
-          contentLabel="Example Modal"
-        >
-          <ModalCadastroDeProdutos />
-        </Modal>
-      </div>
-
-    </main>
+      </main>
+    </ProductProvider>
   )
-} 
+}
+

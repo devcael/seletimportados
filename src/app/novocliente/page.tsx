@@ -6,7 +6,7 @@ import '../globals.css'
 import styled from 'styled-components';
 import { InputHookForm } from '@/components/InputHookForm';
 import { useForm } from 'react-hook-form';
-import SimpleInput from '@/components/simple-input';
+import { SimpleInput } from '@/components/simple-input';
 const inter = Inter({ subsets: ['latin'] })
 
 const Container = styled.div`
