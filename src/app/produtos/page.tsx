@@ -24,6 +24,7 @@ const BodyContainer = styled.div`
   flex-grow: 1;
   width: calc(100vw - var(--navbar-width));
   height: 100vh;
+    overflow-y: scroll;
 `
 
 

@@ -20,7 +20,8 @@ export default class ItemVenda {
     public taxa_moeda_preco_produto: number;
     public id_venda: number;
 
-    constructor(id_itens_venda: number,
+    constructor(props: {
+        id_itens_venda: number,
         id_produto: number,
         nome_produto: string,
         preco_produto: number,
@@ -35,50 +36,55 @@ export default class ItemVenda {
         taxa_moeda_custo_produto: number,
         id_moeda_preco_produto: number,
         taxa_moeda_preco_produto: number,
-        id_venda: number) {
-        this.id_itens_venda = id_itens_venda;
-        this.id_produto = id_produto;
-        this.produto = produto;
-        this.imei = imei;
-        this.nome_produto = nome_produto;
-        this.preco_produto = preco_produto;
-        this.custo_produto = custo_produto;
-        this.quantidade = quantidade;
-        this.acrescimo = acrescimo;
-        this.desconto = desconto;
-        this.valortotal = valortotal;
-        this.id_moeda_custo_produto = id_moeda_custo_produto;
-        this.taxa_moeda_custo_produto = taxa_moeda_custo_produto;
-        this.id_moeda_preco_produto = id_moeda_preco_produto;
-        this.taxa_moeda_preco_produto = taxa_moeda_preco_produto;
-        this.id_venda = id_venda;
+        id_venda: number
+    }) {
+        this.id_itens_venda = props.id_itens_venda;
+        this.id_produto = props.id_produto;
+        this.produto = props.produto;
+        this.imei = props.imei;
+        this.nome_produto = props.nome_produto;
+        this.preco_produto = props.preco_produto;
+        this.custo_produto = props.custo_produto;
+        this.quantidade = props.quantidade;
+        this.acrescimo = props.acrescimo;
+        this.desconto = props.desconto;
+        this.valortotal = props.valortotal;
+        this.id_moeda_custo_produto = props.id_moeda_custo_produto;
+        this.taxa_moeda_custo_produto = props.taxa_moeda_custo_produto;
+        this.id_moeda_preco_produto = props.id_moeda_preco_produto;
+        this.taxa_moeda_preco_produto = props.taxa_moeda_preco_produto;
+        this.id_venda = props.id_venda;
+        this.calcularValorTotal();
     }
 
-    static fromJson(json: any): ItemVenda {
-        return new ItemVenda(
-            json.id_itens_venda,
-            json.id_produto,
-            json.nome_produto,
-            json.preco_produto,
-            json.custo_produto,
-            json.quantidade,
-            json.acrescimo,
-            json.desconto,
-            json.produto,
-            null,
-            json.valortotal,
-            json.id_moeda_custo_produto,
-            json.taxa_moeda_custo_produto,
-            json.id_moeda_preco_produto,
-            json.taxa_moeda_preco_produto,
-            json.id_venda
-        );
+    static fromJSON(json: any): ItemVenda {
+        return new ItemVenda({
+            id_itens_venda: json.id_itens_venda,
+            id_produto: json.id_produto,
+            produto: json.produto,
+            imei: json.imei,
+            nome_produto: json.nome_produto,
+            preco_produto: json.preco_produto,
+            custo_produto: json.custo_produto,
+            quantidade: json.quantidade,
+            acrescimo: json.acrescimo,
+            desconto: json.desconto,
+            valortotal: json.valortotal,
+            id_moeda_custo_produto: json.id_moeda_custo_produto,
+            taxa_moeda_custo_produto: json.taxa_moeda_custo_produto,
+            id_moeda_preco_produto: json.id_moeda_preco_produto,
+            taxa_moeda_preco_produto: json.taxa_moeda_preco_produto,
+            id_venda: json.id_venda
+        });
     }
+
 
     toJson(props: { sendId: boolean }): any {
         return {
             id_itens_venda: props.sendId ? this.id_itens_venda : null,
             id_produto: this.id_produto,
+            produto: this.produto,
+            imei: this.imei,
             nome_produto: this.nome_produto,
             preco_produto: this.preco_produto,
             custo_produto: this.custo_produto,
@@ -86,11 +92,11 @@ export default class ItemVenda {
             acrescimo: this.acrescimo,
             desconto: this.desconto,
             valortotal: this.valortotal,
-            id_moeda_custo_produto: this.produto.moeda_custo.id_taxa,
-            taxa_moeda_custo_produto: this.produto.moeda_custo.taxa_de_conversao_real,
-            id_moeda_preco_produto: this.produto.moeda_preco.id_taxa,
-            taxa_moeda_preco_produto: this.produto.moeda_preco.taxa_de_conversao_real,
-            id_venda: this.id_venda,
+            id_moeda_custo_produto: this.id_moeda_custo_produto,
+            taxa_moeda_custo_produto: this.taxa_moeda_custo_produto,
+            id_moeda_preco_produto: this.id_moeda_preco_produto,
+            taxa_moeda_preco_produto: this.taxa_moeda_preco_produto,
+            id_venda: this.id_venda
         };
     }
 
@@ -100,6 +106,24 @@ export default class ItemVenda {
 
     setProduto(produto: Produto) {
         this.produto = produto;
+    }
+    public alterarQuantidade(novaQuantidade: number) {
+        this.quantidade = novaQuantidade;
+        this.calcularValorTotal();
+    }
+
+    public alterarAcrescimo(novoAcrescimo: number) {
+        this.acrescimo = novoAcrescimo;
+        this.calcularValorTotal();
+    }
+
+    public alterarDesconto(novoDesconto: number) {
+        this.desconto = novoDesconto;
+        this.calcularValorTotal();
+    }
+
+    private calcularValorTotal(): number {
+        return this.valortotal = (this.quantidade * this.preco_produto) + (this.acrescimo ?? 0.00) - (this.desconto ?? 0.00);
     }
 
 }

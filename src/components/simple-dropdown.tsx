@@ -8,14 +8,20 @@ const SimpleSelection = styled.select`
     color: black;
     border: 1px solid  var(--gray-color);
 `
-const SimpleSelectionOp = styled.option``
+const SimpleSelectionOp = styled.option`
+    height: 30px;
+    padding: 30px;
+`
 
 export type OptionProps = {
     value: string;
     label: string;
+
 }
 
 export default function DropDown(props: {
+
+    style?: object
     items: OptionProps[]
     onChange?: (value: string) => void
 }) {
@@ -30,7 +36,7 @@ export default function DropDown(props: {
     };
 
 
-    return (<SimpleSelection onChange={handleSelectChange} >
+    return (<SimpleSelection style={props.style ?? {}} onChange={handleSelectChange} >
         {props.items.map((option: OptionProps, index) => {
             return <SimpleSelectionOp key={index} value={option.value}>{option.label}</SimpleSelectionOp>
         })}

@@ -22,7 +22,7 @@ const TableContainer = styled.div`
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  overflow: scroll;
 `
 
 const TableRow = styled.tr`
@@ -33,7 +33,6 @@ const TableHeaderBlue = styled.th`
     background-color: var(--blue-table-header);
     color: var(--blue-ascent);
     text-align: left;
-    font-size: 14px;
     padding: 9px;
     top: 0;
     left: 0;
@@ -48,6 +47,7 @@ const TableHead = styled.thead`
 `
 
 const TableBody = styled.tbody`
+  font-size: calc(var(--scale-fonts) * 20px);
   tr:nth-child(even) {
     background-color: #f2f2f2
   }  

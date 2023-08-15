@@ -6,6 +6,8 @@ import DropDown, { OptionProps } from "./simple-dropdown";
 
 type SimpleInputProps = {
     placeHolder?: string;
+    style?: object;
+    readonly?: boolean;
     label?: string;
     inputType: string;
     register?: object;
@@ -18,6 +20,8 @@ type SimpleInputProps = {
 type SimpleDropDownProps = {
     label?: string;
     items: OptionProps[]
+
+    style?: object;
     onChange?: (value: string) => void;
 }
 
@@ -70,6 +74,7 @@ function InputWithLabelAndFormatter(props: SimpleInputProps) {
                 <InputContainer>
                     {props.label != null ? <p>{props.label ?? ""}</p> : ""}
                     <Input
+                        readOnly={props.readonly ?? false}
                         {...field}
                         value={formatador(field.value)}
                         onChange={(e) => {
@@ -107,7 +112,7 @@ function SimpleInput(props: SimpleInputProps) {
     return (
         <InputContainer>
             {props.label != null ? <p>{props.label ?? ""}</p> : ""}
-            <Input onChange={handleInputChange} type={props.inputType} placeholder={props.placeHolder ?? ""} {...props.register} ></Input>
+            <Input readOnly={props.readonly ?? false} style={props.style ?? {}} onChange={handleInputChange} type={props.inputType} placeholder={props.placeHolder ?? ""} {...props.register} ></Input>
         </InputContainer>
     );
 }
@@ -122,7 +127,7 @@ function SimpleDropdown(props: SimpleDropDownProps) {
     return (
         <InputContainer>
             {props.label != null ? <p>{props.label ?? ""}</p> : ""}
-            <DropDown items={props.items} onChange={handleInputChange} />
+            <DropDown style={props.style ?? {}} items={props.items} onChange={handleInputChange} />
         </InputContainer>
     );
 }

@@ -34,12 +34,12 @@ var menuItems: MenuItemsType[] = [
     href: "/produtos",
     icon: "fa-solid fa-cubes",
     label: "Produtos",
-  }, {
+  }, /* {
     id: 4,
     href: "/financeiro",
     icon: "fa-solid fa-money-bills",
     label: "Financeiro",
-  },
+  }, */
 ]
 
 
@@ -155,9 +155,9 @@ function NavBar() {
         Menu
       </SessionTitle>
       <SessionContainer>{listOfMenuItems}</SessionContainer>
-      <SessionTitle>
+      {/* <SessionTitle>
         Configurações
-      </SessionTitle>
+      </SessionTitle> */}
       <Link href="/">
         <LogOutButton >
           LOGOUT

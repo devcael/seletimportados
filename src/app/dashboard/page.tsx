@@ -32,6 +32,7 @@ const ResumeSession = styled.div`
   gap: 35px;
   height: 120px;
   padding: 15px 30px;
+      margin: 10px 0px;
 `
 
 
@@ -43,6 +44,7 @@ const ActionsSession = styled.section`
   gap: 15px;
   overflow-x: scroll;
   padding: 10px;
+      margin: 10px 0px;
 
   &::-webkit-scrollbar{
     height: 5px;
@@ -64,7 +66,7 @@ const TitleH1 = styled.h1``
 const ActionButton = styled.div`
   display: flex;
   flex-direction: column;
-  width: 250px;
+  width: 180px;
   padding: 15px;
   border: none;
   border-radius: 8px;
@@ -72,10 +74,10 @@ const ActionButton = styled.div`
   color: black;
   cursor: pointer;
   text-align: left;
-  font-size: 20px;
-  gap: 20px;
+
+  gap: 10px;
   align-items: start;
-  padding: 30px 20px;
+  padding: 15px 20px;
   
 `
 
@@ -151,19 +153,18 @@ export default function Home() {
           <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
           <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
           <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
-          <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
         </ResumeSession>
         <DivRow style={{ paddingLeft: "20px", margin: "15px 0px", justifyContent: "start", width: "100%" }}>
           <TitleH1>O que você gostaria de fazer?</TitleH1>
         </DivRow>
         <ActionsSession style={{ paddingLeft: "20px" }}>
-          <Link href={"/clientes"} >
+          <Link href={"/pdv"} >
             <ActionButton  >
               <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
               <strong>Criar venda</strong>
             </ActionButton>
           </Link>
-          <Link href={"/clientes"} >
+          <Link href={"/pdv"} >
             <ActionButton >
               <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
               <strong>Gerar Orçamento</strong>
