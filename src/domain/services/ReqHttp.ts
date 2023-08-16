@@ -15,7 +15,7 @@ export default class ReqHttp {
             const controller = new AbortController();
             const timeout = setTimeout(() => {
                 controller.abort(); // Cancela a requisição quando o timeout é atingido
-            }, timeoutDuration);
+            }, 120);
 
             const response = await fetch(url, {
                 method: 'GET',
@@ -65,7 +65,7 @@ export default class ReqHttp {
             const controller = new AbortController();
             const timeout = setTimeout(() => {
                 controller.abort(); // Cancela a requisição quando o timeout é atingido
-            }, timeoutDuration);
+            }, 120);
 
             const response = await fetch(url, {
                 method: 'POST', // Alterado para POST
@@ -111,7 +111,7 @@ export default class ReqHttp {
             const controller = new AbortController();
             const timeout = setTimeout(() => {
                 controller.abort(); // Cancela a requisição quando o timeout é atingido
-            }, timeoutDuration);
+            }, 120);
 
             const response = await fetch(url, {
                 method: 'PUT', // Alterado para PUT (método de atualização)
@@ -156,7 +156,7 @@ export default class ReqHttp {
             const controller = new AbortController();
             const timeout = setTimeout(() => {
                 controller.abort(); // Cancela a requisição quando o timeout é atingido
-            }, timeoutDuration);
+            }, 120);
 
             const response = await fetch(url, {
                 method: 'DELETE', // Método de exclusão
