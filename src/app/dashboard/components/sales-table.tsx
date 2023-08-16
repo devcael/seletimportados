@@ -1,5 +1,7 @@
 import { BtnAscent } from "@/components/buttons";
 import { DivColumn } from "@/components/styled-components/directions"
+import CabecalhoVenda from "@/domain/models/CabecalhoVenda";
+import { useVendaContext } from "@/provider/venda_prodiver";
 import {
     TableData,
     TableHead,
@@ -8,11 +10,32 @@ import {
     Table,
     TableRow
 } from "@components/styled-components/table-data-styles";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 
 
 export default function SalesTable() {
+
+    const { vendaData } = useVendaContext();
+
+    let listOfSales = (): React.ReactNode[] => {
+        return vendaData.data.map((venda: CabecalhoVenda, index: number) => {
+            return <TableRow key={index}>
+                <TableData ><strong>{venda.id}</strong></TableData>
+                <TableData><strong>{venda?.nome}</strong></TableData>
+                <TableData >{venda.situacao}</TableData>
+                <TableData >{venda.data}</TableData>
+                <TableData><strong>{venda.totalvenda}</strong></TableData>
+                <TableData style={{ display: "flex", justifyContent: "end" }} ><BtnAscent>Editar</BtnAscent></TableData>
+            </TableRow>
+        });
+    }
+
+    useEffect(() => {
+        console.log("cabecalhosVenda", vendaData.data)
+    }, [vendaData]);
+
 
     return (
         <Table>
@@ -27,14 +50,7 @@ export default function SalesTable() {
                 </TableRow>
             </TableHead>
             <TableBody>
-                <TableRow>
-                    <TableData ><strong>2</strong></TableData>
-                    <TableData><strong>Micael de Santana Prerira</strong></TableData>
-                    <TableData >FINALIZADO</TableData>
-                    <TableData >23/11/2003</TableData>
-                    <TableData><strong>R$20.000,00</strong></TableData>
-                    <TableData style={{ display: "flex", justifyContent: "end" }} ><BtnAscent>Editar</BtnAscent></TableData>
-                </TableRow>
+                {listOfSales()}
             </TableBody>
         </Table>);
 }

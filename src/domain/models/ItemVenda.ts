@@ -100,6 +100,11 @@ export default class ItemVenda {
         };
     }
 
+
+    public setIdVenda(id_venda: number) {
+        this.id_venda = id_venda;
+    }
+
     setImei(imei: Imei | null) {
         this.imei = imei;
     }
@@ -122,7 +127,7 @@ export default class ItemVenda {
         this.calcularValorTotal();
     }
 
-    private calcularValorTotal(): number {
+    public calcularValorTotal(): number {
         return this.valortotal = (this.quantidade * this.preco_produto) + (this.acrescimo ?? 0.00) - (this.desconto ?? 0.00);
     }
 

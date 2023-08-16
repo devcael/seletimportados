@@ -17,6 +17,7 @@ import useModal from '@/hooks/useModal';
 import ModalCadastroDeClientes from './components/modal-cadastro-fornecedores';
 const inter = Inter({ subsets: ['latin'] })
 import Modal from 'react-modal';
+import { useRouter } from 'next/navigation';
 
 const BodyContainer = styled.div`
   display: flex;
@@ -45,6 +46,7 @@ const AppBar = styled.div`
 
 
 export default function Home() {
+  const router = useRouter();
 
   const { modalIsOpen, openModal, closeModal, modalStyles } = useModal();
   const arrayCount = [0, 0, 0, 0];
@@ -57,7 +59,7 @@ export default function Home() {
           <AppBar>
             <h2>Clientes</h2>
             <Leading>
-              <BtnWithBorder>Link cadastro cliente</BtnWithBorder>
+              <BtnWithBorder onClick={() => router.replace("/novocliente")}>Link cadastro cliente</BtnWithBorder>
               <BtnAscent onClick={openModal}>Novo Cliente</BtnAscent>
             </Leading>
           </AppBar>

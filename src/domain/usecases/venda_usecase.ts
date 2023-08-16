@@ -75,22 +75,27 @@ export default class VendaUseCase {
                 secondsTimeout,
             });
 
-            let listOfVendasJson: Array<any> = response.body;
+            let listOfVendasJson = response.body;
 
             console.log('listOfVendasJson', listOfVendasJson);
 
 
             let listOfCabecalhoVendas: CabecalhoVenda[] = [];
 
-            for (let index = 0; index < listOfVendasJson.length; index++) {
-                const currVenda = listOfVendasJson[index];
+            for (let index = 0; index < listOfVendasJson.vendas.length; index++) {
+                const currVenda = listOfVendasJson.vendas[index];
 
-                let currCabecalho = CabecalhoVenda.fromJson(currVenda);
+                try {
+                    let currCabecalho = CabecalhoVenda.fromJson(currVenda);
 
-                console.log(currCabecalho);
+
+                    listOfCabecalhoVendas.push(currCabecalho);
+                } catch (error) {
+                    console.log("Erro ao converter o cabecalho: ", error);
+
+                }
 
 
-                listOfCabecalhoVendas.push(currCabecalho);
             }
 
             return listOfCabecalhoVendas;
@@ -101,19 +106,22 @@ export default class VendaUseCase {
     }
 
 
-    static async createVenda(cabecalho: CabecalhoVenda) {
+    static async createVenda(cabecalho: CabecalhoVenda): Promise<CabecalhoVenda> {
 
         try {
             const path = '/venda/create';
             const secondsTimeout = 15;
 
-            await ReqHttp.post({
+            let cabecalhoVenda = await ReqHttp.post({
                 path,
                 body: cabecalho.toJson({ sendId: false }),
                 secondsTimeout,
             });
 
-            return true;
+            let novoCabecalho: CabecalhoVenda = CabecalhoVenda.fromJson(cabecalhoVenda.body);
+
+
+            return novoCabecalho;
         } catch (error) {
             console.error('Erro ao enviar o item venda:', error);
             throw error;

@@ -7,6 +7,9 @@ import styled from 'styled-components';
 import { InputHookForm } from '@/components/InputHookForm';
 import { useForm } from 'react-hook-form';
 import { SimpleInput } from '@/components/simple-input';
+import ClientesUseCase from '@/domain/usecases/clientes_use_case';
+import Clientes from '@/domain/models/Clientes';
+import { useState } from 'react';
 const inter = Inter({ subsets: ['latin'] })
 
 const Container = styled.div`
@@ -76,91 +79,122 @@ const Form = styled.form`
     
 `
 
+type ClientesProps = {
+    nome: string;
+    cpfcnpj: string | null;
+    telefone: string | null;
+    email: string | null;
+    endereco: string | null;
+    cep: string | null;
+    numero: string | null;
+    complemento: string | null;
+    cidade: string | null;
+    estado: string | null;
+}
+
 
 export default function NewCliente() {
+    const [reResult, setResult] = useState<boolean | null>(null);
     const {
         register,
         formState: { errors },
         handleSubmit,
-    } = useForm()
-    const onSubmit = (data: object) => console.log(data)
+    } = useForm<ClientesProps>()
+    const onSubmit = async (data: object) => {
+
+        const clienteJson = {
+
+            tipo: 'PF',
+            ...data
+        };
+
+        const cliente = Clientes.fromJson(clienteJson);
+        try {
+            await ClientesUseCase.criarNovoCliente(cliente);
+            setResult(true);
+        } catch (error) {
+            console.log(error);
+            setResult(false);
+        }
+    }
+
+
 
     return (
         <Main>
-            <Container>
-                <Form onSubmit={handleSubmit(onSubmit)}>
-                    <WellCome>
-                        <h2>Formulario de novo cliente</h2>
-                        <p>Nossas boas-vindas! Este é um espaço seguro para você compartilhar seus dados conosco</p>
-                    </WellCome>
-                    <SessionTitle>
-                        <h2>Dados Básicos</h2>
-                        <p>Informações básicas sobre a sua pessoa</p>
-                    </SessionTitle>
-                    <SimpleInput
-                        inputType='text'
-                        label='Nome completo (*)'
-                        register={register("nomecompleto", { required: true })}
-                    />
-                    <SimpleInput
-                        inputType='text'
-                        label='Empresa (Opcional)'
-                        register={register("empresa", { required: false })}
-                    />
-                    <SimpleInput
-                        inputType='text'
-                        label='Email (Opcional)'
-                        register={register("email", { required: false })}
-                    />
-                    <SimpleInput
-                        inputType='text'
-                        label='Telefone (Opcional)'
-                        register={register("email", { required: false })}
-                    />
-                    <SessionTitle>
-                        <h2>Dados Para Documentos</h2>
-                        <p>Informações usadas para elaborar propostas, e outros documentos</p>
-                    </SessionTitle>
-                    <SimpleInput
-                        inputType='text'
-                        label='CPF/CNPJ'
-                        register={register("email", { required: false })}
-                    />
-                    <SimpleInput
-                        inputType='text'
-                        label='CEP'
-                        register={register("email", { required: false })}
-                    />
-                    <SimpleInput
-                        inputType='text'
-                        label='Endereço'
-                        register={register("email", { required: false })}
-                    />
-                    <InputContinerRow>
-                        <SimpleInput
-                            inputType='text'
-                            label='Número'
-                            register={register("email", { required: false })}
-                        /> <SimpleInput
-                            inputType='text'
-                            label='Complemento ( Opcional )'
-                            register={register("email", { required: false })}
-                        />
-                    </InputContinerRow>
-                    <InputContinerRow>
-                        <SimpleInput
-                            inputType='text'
-                            label='Cidade'
-                            register={register("email", { required: false })}
-                        /> <SimpleInput
-                            inputType='text'
-                            label='Estado'
-                            register={register("email", { required: false })}
-                        />
-                    </InputContinerRow>
-                    <SubmitInput type="submit" value={"Enviar Dados"} />
-                </Form>
-            </Container>
+            {
+                reResult == null ?
+                    <Container>
+                        <Form onSubmit={handleSubmit(onSubmit)}>
+                            <WellCome>
+                                <h2>Formulario de novo cliente</h2>
+                                <p>Nossas boas-vindas! Este é um espaço seguro para você compartilhar seus dados conosco</p>
+                            </WellCome>
+                            <SessionTitle>
+                                <h2>Dados Básicos</h2>
+                                <p>Informações básicas sobre a sua pessoa</p>
+                            </SessionTitle>
+                            <SimpleInput
+                                inputType='text'
+                                label='Nome completo (*)'
+                                register={register("nome", { required: true })}
+                            />
+
+                            <SimpleInput
+                                inputType='text'
+                                label='Email (Opcional)'
+                                register={register("email", { required: false })}
+                            />
+                            <SimpleInput
+                                inputType='text'
+                                label='Telefone (Opcional)'
+                                register={register("telefone", { required: false })}
+                            />
+                            <SessionTitle>
+                                <h2>Dados Para Documentos</h2>
+                                <p>Informações usadas para elaborar propostas, e outros documentos</p>
+                            </SessionTitle>
+                            <SimpleInput
+                                inputType='text'
+                                label='CPF/CNPJ'
+                                register={register("cpfcnpj", { required: false })}
+                            />
+                            <SimpleInput
+                                inputType='text'
+                                label='CEP'
+                                register={register("cep", { required: false })}
+                            />
+                            <SimpleInput
+                                inputType='text'
+                                label='Endereço'
+                                register={register("endereco", { required: false })}
+                            />
+                            <InputContinerRow>
+                                <SimpleInput
+                                    inputType='text'
+                                    label='Número'
+                                    register={register("numero", { required: false })}
+                                /> <SimpleInput
+                                    inputType='text'
+                                    label='Complemento ( Opcional )'
+                                    register={register("complemento", { required: false })}
+                                />
+                            </InputContinerRow>
+                            <InputContinerRow>
+                                <SimpleInput
+                                    inputType='text'
+                                    label='Cidade'
+                                    register={register("cidade", { required: false })}
+                                /> <SimpleInput
+                                    inputType='text'
+                                    label='Estado'
+                                    register={register("estado", { required: false })}
+                                />
+                            </InputContinerRow>
+                            <SubmitInput type="submit" value={"Enviar Dados"} />
+                        </Form>
+                    </Container> : reResult == false ? <h1>Erro ao enviar dados</h1> : <h1>Dados enviados com sucesso</h1>
+            }
         </Main>
     )
 }

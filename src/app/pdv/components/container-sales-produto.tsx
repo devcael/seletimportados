@@ -1,7 +1,7 @@
 import { BtnAscent } from "@/components/buttons";
 import EmptyListContainer from "@/components/empty_list";
 import { Form, SessionRow } from "@/components/modal-components";
-import { SimpleInput } from "@/components/simple-input";
+import { InputWithLabelAndFormatter, SimpleInput } from "@/components/simple-input";
 import { LoadingSpinnerWithLabel } from "@/components/simple_loading_container";
 import Produto from "@/domain/models/Produto";
 import AppUtil from "@/domain/services/Utils";
@@ -13,6 +13,9 @@ import { styled } from "styled-components";
 import { useCriarVendaContext } from "../CriarVenda";
 import ItemVenda from "@/domain/models/ItemVenda";
 import { useGerenciadorVendaContext } from "../GerenciadorDeVendas";
+import handler from "@/pages/api/login";
+import AppFormatters from "@/domain/services/Formatters";
+import StrUtil from "@/domain/services/StrUtils";
 
 
 const Container = styled.div`
@@ -30,6 +33,7 @@ const ListProdutoContainer = styled.ul`
     border-radius: 5px;
     overflow-y: scroll;
     padding: 0px;
+    max-height: 300px;
     &::-webkit-scrollbar {
         display: none;
     }
@@ -60,17 +64,30 @@ const ProdutoItemLabel = styled.span`
 
 export default function ContainerProduto() {
 
-    const { adicionarItemVenda } = useGerenciadorVendaContext();
-
-    const { data, loading, fetchData, page, search, setPage, setSearch } = usePaginatedData(0, 100);
     const {
         register,
         formState: { errors },
         handleSubmit,
-        setValue
+        setValue,
+        watch
     } = useForm({
         mode: "onBlur",
     })
+
+    const { adicionarItemVenda } = useGerenciadorVendaContext();
+
+    const { data, loading, fetchData, page, search, setPage, setSearch } = usePaginatedData(0, 100);
+
+    const [total, setTotal] = useState<number>(0.0);
+    const [totalDesconto, setTotalDesconto] = useState<number>(0.0);
+    const [totalAcrescimo, setTotalAcrescimo] = useState<number>(0.0);
+
+    const watchQuantidade: string = watch('quantidade', "1");
+    const watchDesconto = watch('desconto', "0");
+    const watchAcrescimo = watch('acrescimo', "0");
+
+
+
     const [produto, setProduto] = useState<Produto | null>(null);
 
     const delayedSearch = useDelayedFunctionCall(300);
@@ -99,8 +116,8 @@ export default function ContainerProduto() {
             preco_produto: produto?.preco ?? 0.0,
             custo_produto: produto?.custo ?? 0.0,
             quantidade: data.quantidade ?? 1.0,
-            acrescimo: data.acrescimo ?? 1.0,
-            desconto: data.desconto ?? 0.0,
+            acrescimo: AppFormatters.removeRealFormatter(data.totalAcrescimo) ?? 0.0,
+            desconto: AppFormatters.removeRealFormatter(data.totalDesconto) ?? 0.0,
             valortotal: data.total ?? 0.0,
             id_moeda_custo_produto: produto?.moeda_custo.id_taxa ?? 0,
             taxa_moeda_custo_produto: produto?.moeda_custo.taxa_de_conversao_real ?? 0.0,
@@ -109,21 +126,58 @@ export default function ContainerProduto() {
             id_venda: 2
         });
 
+        console.log("Novo Item: ", novoItem)
+
         adicionarItemVenda(novoItem);
     };
+
+    const handlerSetQuantidade = (value: string, desconto: number, acrescimo: number) => {
+
+
+        let qnt: number = Number(value);
+        let precoProduto: number = Number(produto?.preco ?? 0.0)
+
+        console.log("Quantidade: ", qnt, precoProduto, qnt * precoProduto);
+
+        let total: number = qnt * precoProduto;
+
+        let totalComDescontoEAcrescimo = total;
+        setTotal(totalComDescontoEAcrescimo);
+
+    };
+    const handlerSetDesconto = (value: string, total: number, quantidadeDoProduto: number) => {
+        let valor: number = Number(value);
+
+        let valorTotalPorcentagem: number = AppUtil.calculatePercentageValue({ value: total, percentage: valor });
+
+        setTotalDesconto(valorTotalPorcentagem * quantidadeDoProduto);
+    };
+
+    const handlerSetAcrescimo = (value: string, total: number, quantidadeDoProduto: number) => {
+        let valor: number = Number(value);
+
+        let valorTotalPorcentagem: number = AppUtil.calculatePercentageValue({ value: total, percentage: valor });
+
+        setTotalAcrescimo(valorTotalPorcentagem * quantidadeDoProduto);
+    }
+
+
 
 
 
     useEffect(() => {
+        handlerSetQuantidade(watchQuantidade, totalAcrescimo, totalDesconto);
+        handlerSetAcrescimo(watchAcrescimo, produto?.preco ?? 0.00, Number(watchQuantidade));
+        handlerSetDesconto(watchDesconto, produto?.preco ?? 0.00, Number(watchQuantidade));
         setValue("nome", produto?.nome ?? "", { shouldValidate: true });
         setValue("preco", produto?.preco ?? "", { shouldValidate: true });
-        setValue("quantidade", "1.0", { shouldValidate: true });
-        setValue("total", produto?.preco ?? "", { shouldValidate: true });
-        setValue("desconto", "0.0", { shouldValidate: true });
-        setValue("acrescimo", "0.0" ?? "", { shouldValidate: true });
-    }, [produto]);
-
-
+        setValue("quantidade", watchQuantidade, { shouldValidate: true });
+        setValue("total", StrUtil.formatadorComSufixoComGarantiaDeDecimal((total + totalAcrescimo - totalDesconto).toString()), { shouldValidate: true });
+        setValue("desconto", watchDesconto, { shouldValidate: true });
+        setValue("acrescimo", watchAcrescimo, { shouldValidate: true });
+        setValue("totalDesconto", StrUtil.formatadorComSufixoComGarantiaDeDecimal(totalDesconto.toString()), { shouldValidate: true });
+        setValue("totalAcrescimo", StrUtil.formatadorComSufixoComGarantiaDeDecimal(totalAcrescimo.toString()), { shouldValidate: true });
+    }, [produto, total, totalAcrescimo, totalDesconto, watchQuantidade, watchDesconto, watchAcrescimo]);
 
 
 
@@ -151,18 +205,27 @@ export default function ContainerProduto() {
             </ListProdutoContainer>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <SessionRow>
-                    <SimpleInput register={register("nome", { required: true })} style={{ padding: "15px", flexGrow: "5" }} inputType="text" label="Produto" />
+                    <SimpleInput readonly={true} register={register("nome", { required: true })} inputType="text" label="Produto" />
 
-                    <SimpleInput register={register("preco")} style={{ padding: "15px" }} inputType="text" label="Valor Unitario" />
+                    <SimpleInput readonly={true} register={register("preco")} inputType="text" label="Valor Unitario" />
                 </SessionRow>
                 <SessionRow>
-                    <SimpleInput register={register("quantidade")} style={{ padding: "15px" }} inputType="text" label="Quantidade" />
-                    <SimpleInput register={register("desconto")} style={{ padding: "15px" }} inputType="text" label="Desconto" />
-
-                    <SimpleInput register={register("acrescimo")} style={{ padding: "15px" }} inputType="text" label="Acrescimo" />
+                    <SimpleInput register={register("quantidade")} inputType="number" label="Quantidade" />
+                    <SimpleInput register={register("desconto")} inputType="text" label="Desconto (%)" />
+                    <SimpleInput register={register("acrescimo")} inputType="text" label="Acrescimo (%)" />
                 </SessionRow>
                 <SessionRow>
-                    <SimpleInput register={register("total")} style={{ padding: "15px" }} inputType="text" label="Total" />
+                    <SimpleInput readonly={true} register={register("totalDesconto")} inputType="text" label="Desconto Em Reais" />
+                    <SimpleInput readonly={true} register={register("totalAcrescimo")} inputType="text" label="Acrescimo Em Reais" />
+                </SessionRow>
+                <SessionRow>
+                    <InputWithLabelAndFormatter
+                        inputType='text'
+                        readonly={true}
+                        label="Total"
+                        formatterFunction={(value) => StrUtil.formatadorComSufixoComGarantiaDeDecimal(value)}
+                        register={register("total")}
+                    />
                 </SessionRow>
                 <BtnAscent type="submit" style={{ padding: "10px", fontSize: "15px", margin: "10px 0px" }}>Adicionar</BtnAscent>
             </Form>

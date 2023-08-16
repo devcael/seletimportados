@@ -15,6 +15,7 @@ import FilterTableSales from './components/filter-table-sales';
 import CardResume from './components/card-resume';
 import { BtnAscent } from '@/components/buttons';
 import { Icon } from '@/components/input-with-icon';
+import { VendaProvider } from '@/provider/venda_prodiver';
 const inter = Inter({ subsets: ['latin'] })
 
 const BodyContainer = styled.div`
@@ -128,56 +129,59 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ width: "100vw", height: "100vh", display: "flex" }}>
-      <NavBar></NavBar>
-      <BodyContainer>
-        <AppBar style={{ position: "sticky" }}>
-          <h3>Dashboard</h3>
-          <Leading>
-            <ColumnForLabel>
-              <p>Cotação Atual:</p>
-              <div style={{ display: "flex", gap: "25px", color: "var(--blue-ascent)", fontWeight: 700 }}><h3>DOLAR</h3><h3>R$50,00</h3></div>
-            </ColumnForLabel>
-            <BtnAscent style={{ background: "var(--color-primary)", display: "flex", gap: "25px", alignItems: "center", justifyContent: "center" }}>
+    <VendaProvider>
+      <div style={{ width: "100vw", height: "100vh", display: "flex" }}>
+        <NavBar></NavBar>
+        <BodyContainer>
+          <AppBar style={{ position: "sticky" }}>
+            <h3>Dashboard</h3>
+            <Leading>
               <ColumnForLabel>
-                <p>Trocar</p>
-                <h3>Cotação</h3>
+                <p>Cotação Atual:</p>
+                <div style={{ display: "flex", gap: "25px", color: "var(--blue-ascent)", fontWeight: 700 }}><h3>DOLAR</h3><h3>R$50,00</h3></div>
               </ColumnForLabel>
-              <Icon className={"fa-solid fa-rotate"}>
+              <BtnAscent style={{ background: "var(--color-primary)", display: "flex", gap: "25px", alignItems: "center", justifyContent: "center" }}>
+                <ColumnForLabel>
+                  <p>Trocar</p>
+                  <h3>Cotação</h3>
+                </ColumnForLabel>
+                <Icon className={"fa-solid fa-rotate"}>
 
-              </Icon>
-            </BtnAscent>
-          </Leading>
-        </AppBar>
-        <ResumeSession>
-          <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
-          <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
-          <CardResume label='Valor Do Mês' value='R$200,00'></CardResume>
-        </ResumeSession>
-        <DivRow style={{ paddingLeft: "20px", margin: "15px 0px", justifyContent: "start", width: "100%" }}>
-          <TitleH1>O que você gostaria de fazer?</TitleH1>
-        </DivRow>
-        <ActionsSession style={{ paddingLeft: "20px" }}>
-          <Link href={"/pdv"} >
-            <ActionButton  >
-              <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
-              <strong>Criar venda</strong>
-            </ActionButton>
-          </Link>
-          <Link href={"/pdv"} >
-            <ActionButton >
-              <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
-              <strong>Gerar Orçamento</strong>
-            </ActionButton>
-          </Link>
-        </ActionsSession>
-        <FilterTableSales />
-        <div style={{ width: "100%", padding: "0px 15px" }}>
-          <TableContainer>
-            <SalesTable></SalesTable>
-          </TableContainer>
-        </div>
-      </BodyContainer >
-    </div>
+                </Icon>
+              </BtnAscent>
+            </Leading>
+          </AppBar>
+          <ResumeSession>
+            <CardResume label='Lucro do Mês Atual' value='R$200,00'></CardResume>
+            <CardResume label='Receita Bruta Mês Atual' value='R$200,00'></CardResume>
+            <CardResume label='Total Lista' value='R$200,00'></CardResume>
+          </ResumeSession>
+          <DivRow style={{ paddingLeft: "20px", margin: "15px 0px", justifyContent: "start", width: "100%" }}>
+            <TitleH1>O que você gostaria de fazer?</TitleH1>
+          </DivRow>
+          <ActionsSession style={{ paddingLeft: "20px" }}>
+            <Link href={"/pdv"} >
+              <ActionButton  >
+                <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
+                <strong>Criar venda</strong>
+              </ActionButton>
+            </Link>
+            <Link href={"/pdv"} >
+              <ActionButton >
+                <i style={{ fontSize: "25px", color: "var(--secodary-blue)" }} className="fa-solid fa-money-bill"></i>
+                <strong>Gerar Orçamento</strong>
+              </ActionButton>
+            </Link>
+          </ActionsSession>
+          <FilterTableSales />
+          <div style={{ width: "100%", padding: "0px 15px" }}>
+            <TableContainer>
+              <SalesTable></SalesTable>
+            </TableContainer>
+          </div>
+        </BodyContainer >
+      </div>
+    </VendaProvider>
+
   )
 }

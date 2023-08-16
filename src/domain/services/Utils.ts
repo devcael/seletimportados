@@ -21,6 +21,19 @@ const AppUtil = {
         });
 
         return valorFormatado;
+    }, calculatePercentage(props: { value: number, total: number }): number {
+        console.log("props", props)
+        if (props.total === 0) {
+            return 0;
+        }
+
+        const percentage = (props.value / props.total) * 100;
+        return percentage;
+    }, calculatePercentageValue(props: { value: number, percentage: number }): number {
+        const calculatedValue = (props.value * props.percentage) / 100;
+        console.log("calculatedValue", calculatedValue);
+
+        return calculatedValue;
     }
 
 }

@@ -2,14 +2,14 @@ export default class CabecalhoVenda {
     id: number;
     data: string;
     hora: string;
-    totalvenda: string;
+    totalvenda: number;
     situacao: 'ABERTA' | 'PENDENTE' | 'FINALIZADA' | null;
     id_usuario: number;
     id_cliente: number;
-    desconto: string | null;
-    acrescimo: string | null;
-    subtotal: string;
-    totalcomdescontoeacrescimo: string;
+    desconto: number | null;
+    acrescimo: number | null;
+    subtotal: number;
+    totalcomdescontoeacrescimo: number;
     tipo: 'VENDA' | 'ORCAMENTO' | null;
     nome: string;
 
@@ -17,14 +17,14 @@ export default class CabecalhoVenda {
         id: number,
         data: string,
         hora: string,
-        totalvenda: string,
+        totalvenda: number,
         situacao: 'ABERTA' | 'PENDENTE' | 'FINALIZADA' | null,
         id_usuario: number,
         id_cliente: number,
-        desconto: string,
-        acrescimo: string,
-        subtotal: string,
-        totalcomdescontoeacrescimo: string,
+        desconto: number,
+        acrescimo: number,
+        subtotal: number,
+        totalcomdescontoeacrescimo: number,
         tipo: 'VENDA' | 'ORCAMENTO' | null,
         nome: string
     ) {

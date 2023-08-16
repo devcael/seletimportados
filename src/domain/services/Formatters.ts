@@ -1,3 +1,6 @@
+import StrUtil from "./StrUtils";
+import AppUtil from "./Utils";
+
 const AppFormatters = {
     formatCNPJ(input: string) {
         const cleanedInput = input.replace(/\D/g, ''); // Remove caracteres não numéricos
@@ -37,20 +40,46 @@ const AppFormatters = {
         }
 
         return input;
-    }, formatRealValue(input: string) {
-        const cleanedInput = input.replace(/[^0-9,]/g, ''); // Remove caracteres não numéricos exceto vírgulas
-        const formattedInput = parseFloat(cleanedInput.replace(',', '.')).toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-        });
-        return formattedInput;
-    }, formatador(valor: string): string {
+    }, removeRealFormatter(value: string): number {
+        let valor: string = value.replace('R$', '').trim();
+
+
+        return Number(AppUtil.formatRealToDouble(valor));
+    },
+
+    formatador(valor: string): string {
         if (!valor) return "";
+        let doubleFormat = StrUtil.ensureTwoDecimalPlaces(Number(valor));
         const valorNumerico = parseFloat(valor.replace(/[^\d]/g, '')) / 100;
         return valorNumerico.toLocaleString('pt-BR', {
             style: 'currency',
             currency: 'BRL'
         }).replace('R$', '').trim();
+    }, formatadorComSufixo(valor: string): string {
+
+        if (!valor) return "";
+
+        // Converte para número e garante que tenha duas casas decimais
+
+
+        // Converte para um valor numérico
+        const valorNumerico = parseFloat(valor.replace(/[^\d-]/g, '')) / 100;
+
+        // Verifica se o valor é negativo e formata adequadamente
+        const formattedValue = valorNumerico.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
+        return formattedValue;
+    },
+    formatDouble(number: number): string {
+        return number.toFixed(2);
+    },
+    formatPercentage(number: string): string {
+        const valorNumerico = parseFloat(number.replace(/[^\d]/g, '')) / 100;
+        const formattedPercentage = valorNumerico.toFixed(2) + '%';
+        return formattedPercentage;
     }
 }
 

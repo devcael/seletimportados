@@ -8,6 +8,7 @@ type SimpleInputProps = {
     placeHolder?: string;
     style?: object;
     readonly?: boolean;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     label?: string;
     inputType: string;
     register?: object;
@@ -63,6 +64,7 @@ function InputWithLabelAndFormatter(props: SimpleInputProps) {
     }
 
 
+
     return (
 
         <Controller
@@ -74,6 +76,7 @@ function InputWithLabelAndFormatter(props: SimpleInputProps) {
                 <InputContainer>
                     {props.label != null ? <p>{props.label ?? ""}</p> : ""}
                     <Input
+                        onKeyDown={props.onKeyDown}
                         readOnly={props.readonly ?? false}
                         {...field}
                         value={formatador(field.value)}
@@ -105,14 +108,18 @@ function SimpleInput(props: SimpleInputProps) {
         console.log(event.target.value);
         setInputValue(event.target.value);
         const newValue = event.target.value;
+        console.log("new value", newValue);
+
         props.onChange?.(newValue);
+
+
     };
 
 
     return (
         <InputContainer>
             {props.label != null ? <p>{props.label ?? ""}</p> : ""}
-            <Input readOnly={props.readonly ?? false} style={props.style ?? {}} onChange={handleInputChange} type={props.inputType} placeholder={props.placeHolder ?? ""} {...props.register} ></Input>
+            <Input onKeyDown={props.onKeyDown} readOnly={props.readonly ?? false} style={props.style ?? {}} onChange={handleInputChange} type={props.inputType} placeholder={props.placeHolder ?? ""} {...props.register} ></Input>
         </InputContainer>
     );
 }

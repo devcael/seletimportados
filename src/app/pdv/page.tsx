@@ -6,6 +6,8 @@ import SalesWidget from "./components/sales-widget"
 import SalesWidgetItems from "./components/sales-widget-items"
 import { CriarVendaProvider } from "./CriarVenda"
 import { GerenciadorVendaProvider } from "./GerenciadorDeVendas"
+import { useRouter } from 'next/navigation';
+import { useEffect } from "react"
 
 const Header = styled.div`
     display: flex;
@@ -51,7 +53,18 @@ const LogoContainer = styled.div`
 
 
 
+
+
 export default function PdvScreen() {
+
+    const router = useRouter();
+
+    useEffect(() => {
+        const authenticated = document.cookie.includes('authenticated=true');
+        if (!authenticated) {
+            router.push('/');
+        }
+    }, []);
     return (
         <GerenciadorVendaProvider>
             <Container>
@@ -61,7 +74,7 @@ export default function PdvScreen() {
                         <h4 >Pdv SeletImportados</h4>
                     </LogoContainer>
                     <Leading>
-                        <BtnAscent>Voltar</BtnAscent>
+                        <BtnAscent onClick={() => router.back()}>Voltar</BtnAscent>
                     </Leading>
                 </Header>
                 <Body>

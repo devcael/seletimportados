@@ -23,7 +23,7 @@ export default class ItemVendaUseCase {
             let produto: Produto = await ProdutoUseCase.getById(idProduto);
 
 
-            let newItemVenda: ItemVenda = ItemVenda.fromJson(itemVendaJson);
+            let newItemVenda: ItemVenda = ItemVenda.fromJSON(itemVendaJson);
 
             newItemVenda.setProduto(produto);
             newItemVenda.setImei(null);
@@ -58,7 +58,7 @@ export default class ItemVendaUseCase {
                 let produto: Produto = await ProdutoUseCase.getById(idProduto);
 
 
-                let newItemVenda: ItemVenda = ItemVenda.fromJson(currItemVenda);
+                let newItemVenda: ItemVenda = ItemVenda.fromJSON(currItemVenda);
 
                 newItemVenda.setProduto(produto);
                 newItemVenda.setImei(null);
@@ -80,18 +80,21 @@ export default class ItemVendaUseCase {
     }
 
 
-    static async enviarItemVenda(itemVenda: ItemVenda): Promise<boolean> {
+    static async enviarItemVenda(itemVenda: ItemVenda): Promise<ItemVenda> {
         try {
             const path = '/itemvenda/createNewItemVenda';
             const secondsTimeout = 15;
 
-            await ReqHttp.post({
+            let response = await ReqHttp.post({
                 path,
                 body: itemVenda.toJson({ sendId: false }),
                 secondsTimeout,
             });
 
-            return true;
+            let newItemVenda = ItemVenda.fromJSON(response.body);
+
+
+            return newItemVenda;
         } catch (error) {
             console.error('Erro ao enviar o item venda:', error);
             throw error;

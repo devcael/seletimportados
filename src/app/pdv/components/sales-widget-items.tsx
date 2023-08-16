@@ -1,13 +1,23 @@
-import { BtnAscent } from "@/components/buttons"
+import { BtnAscent, BtnWithBorder } from "@/components/buttons"
 import styled from "styled-components"
 
 
 import { Table, TableData, TableHead, TableHeaderBlue, TableRow } from "@/components/styled-components/table-data-styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useCriarVendaContext } from "../CriarVenda";
 import ItemVenda from "@/domain/models/ItemVenda";
 import useGerenciadorVenda, { useGerenciadorVendaContext } from "../GerenciadorDeVendas";
+import { SessionRow } from "@/components/modal-components";
+import AppFormatters from "@/domain/services/Formatters";
+import { useEffect, useState } from "react";
+import AppUtil from "@/domain/services/Utils";
+import StrUtil from "@/domain/services/StrUtils";
+import CabecalhoVenda from "@/domain/models/CabecalhoVenda";
+import VendaUseCase from "@/domain/usecases/venda_usecase";
+import ItemVendaUseCase from "@/domain/usecases/items_venda_usecase";
+import PagamentoVendaUseCase from "@/domain/usecases/PagamentoVenda_usecase";
+import { useRouter } from 'next/navigation';
 const SalesItemContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -54,24 +64,166 @@ const ResumeLabel = styled.div`
 `
 
 export default function SalesWidgetItems() {
-    const { listaItems, alterarQuantidadeItem } = useGerenciadorVendaContext();
+
+    const router = useRouter();
+    const { listaItems, currCliente, listaPayments, calcValorPagoTotal, calcTotalValue, removerItemPorIndex, calcSubTotalValue, desconto, acrescimo, alterarQuantidadeItem } = useGerenciadorVendaContext();
     const diminuirQuantidade = (index: number, item: ItemVenda) => {
-        alterarQuantidadeItem(index, Number(item.quantidade) - 1);
+        if (Number(item.quantidade) > 1) {
+            alterarQuantidadeItem(index, Number(item.quantidade) - 1);
+        }
     }
 
     const aumentarQuantidade = (index: number, item: ItemVenda) => {
         alterarQuantidadeItem(index, Number(item.quantidade) + 1);
     }
 
+    const deletarItem = (index: number) => {
+        removerItemPorIndex(index);
+    }
+
+    const [canFinish, setCanFinish] = useState(false);
+
+
+    function handleCanFinish() {
+
+        if (listaItems.length == 0) {
+            setCanFinish(false);
+            return;
+        }
+
+        let restante: number = calcTotalValue() - calcValorPagoTotal();
+
+        if (restante < 0) {
+            setCanFinish(true);
+            return;
+        }
+
+        setCanFinish(false);
+    }
+
+    useEffect(() => {
+        handleCanFinish();
+    }, [listaItems, currCliente, calcTotalValue, listaPayments, desconto, calcSubTotalValue, acrescimo, calcValorPagoTotal]);
+
+
+    const handlerFinalizarVenda = async () => {
+        if (!canFinish) {
+            return;
+        }
+
+        const cabecalhoVenda = new CabecalhoVenda(
+            1,
+            StrUtil.getCurrentFormattedDate(),
+            StrUtil.getCurrentFormattedTime(),
+            calcTotalValue(),
+            'FINALIZADA',
+            1,
+            currCliente?.id ?? 1,
+            desconto,
+            acrescimo,
+            calcSubTotalValue(),
+            calcTotalValue(),
+            'VENDA',
+            'Cliente XPTO'
+        );
+
+        try {
+            let newVenda: CabecalhoVenda = await VendaUseCase.createVenda(cabecalhoVenda);
+
+            for (let index = 0; index < listaItems.length; index++) {
+                const currItem: ItemVenda = listaItems[index];
+                console.log("Criando item de venda", currItem)
+
+                currItem.setIdVenda(newVenda.id);
+                await ItemVendaUseCase.enviarItemVenda(currItem);
+
+            }
+
+            for (let index = 0; index < listaPayments.length; index++) {
+                const currPagamento = listaPayments[index];
+
+                currPagamento.setIdVenda(newVenda.id);
+
+                await PagamentoVendaUseCase.createPagamentoVenda(currPagamento);
+
+            }
+
+            console.log("nova venda criada", newVenda);
+
+        } catch (error) {
+            console.log("erro ao criar venda", error);
+            return;
+        }
+
+        router.replace("/dashboard");
+
+    }
+    const handlerGerarOrcamento = async () => {
+
+
+        if (!canFinish) {
+            return;
+        }
+
+        const cabecalhoVenda = new CabecalhoVenda(
+            1,
+            StrUtil.getCurrentFormattedDate(),
+            StrUtil.getCurrentFormattedTime(),
+            calcTotalValue(),
+            'FINALIZADA',
+            1,
+            currCliente?.id ?? 1,
+            desconto,
+            acrescimo,
+            calcSubTotalValue(),
+            calcTotalValue(),
+            'ORCAMENTO',
+            'Cliente XPTO'
+        );
+
+        try {
+            let newVenda: CabecalhoVenda = await VendaUseCase.createVenda(cabecalhoVenda);
+
+            for (let index = 0; index < listaItems.length; index++) {
+                const currItem: ItemVenda = listaItems[index];
+                console.log("Criando item de venda", currItem)
+
+                currItem.setIdVenda(newVenda.id);
+                await ItemVendaUseCase.enviarItemVenda(currItem);
+
+            }
+
+            for (let index = 0; index < listaPayments.length; index++) {
+                const currPagamento = listaPayments[index];
+
+                currPagamento.setIdVenda(newVenda.id);
+
+                await PagamentoVendaUseCase.createPagamentoVenda(currPagamento);
+
+            }
+
+            console.log("nova venda criada", newVenda);
+
+        } catch (error) {
+            console.log("erro ao criar venda", error);
+            return;
+        }
+        router.replace("/dashboard");
+
+    }
+
+
+
     let listOfItems = (): React.ReactNode[] => {
         return listaItems.map((item: ItemVenda, index: number) => (<TableRow key={index} >
             <TableData >{item.produto.nome}</TableData>
             <TableData>{item.quantidade}</TableData>
-            <TableData ><strong>{item.preco_produto}</strong></TableData>
-            <TableData ><strong>{item.valortotal}</strong></TableData>
+            <TableData ><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(item.preco_produto.toString())}</strong></TableData>
+            <TableData ><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(item.valortotal.toString())}</strong></TableData>
             <TableData style={{ display: "flex", gap: "10px", justifyContent: "end" }} >
                 <BtnAscent onClick={() => diminuirQuantidade(index, item)} style={{ background: "red", padding: "8px 20px" }} ><FontAwesomeIcon icon={faMinus}></FontAwesomeIcon></BtnAscent>
                 <BtnAscent onClick={() => aumentarQuantidade(index, item)} style={{ background: "teal", padding: "8px 20px" }} ><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon></BtnAscent>
+                <BtnAscent onClick={() => deletarItem(index)} style={{ background: "red", padding: "8px 20px" }} ><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon></BtnAscent>
             </TableData>
         </TableRow>));
     }
@@ -95,21 +247,24 @@ export default function SalesWidgetItems() {
         <ResumeContainer>
             <ResumeLabel>
                 <h3>SubTotal:</h3>
-                <h3><strong>R$200</strong></h3>
+                <h3><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(calcSubTotalValue().toString())}</strong></h3>
             </ResumeLabel>
             <ResumeLabel>
                 <h3>Desconto:</h3>
-                <h3><strong>R$200</strong></h3>
+                <h3><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(desconto.toString())}</strong></h3>
             </ResumeLabel>
             <ResumeLabel>
                 <h3>Acrescimo:</h3>
-                <h3><strong>R$200</strong></h3>
+                <h3><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(acrescimo.toString())}</strong></h3>
             </ResumeLabel>
             <ResumeLabel>
-                <h3>TOTAL:</h3>
-                <h3><strong>R$200</strong></h3>
+                <h3>Total:</h3>
+                <h3><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(calcTotalValue().toString())}</strong></h3>
             </ResumeLabel>
-            <BtnAscent style={{ fontSize: "16px", padding: "10px" }}>Finalizar Venda</BtnAscent>
+            <SessionRow>
+                <BtnWithBorder onClick={async () => await handlerGerarOrcamento()} style={{ flexGrow: "1", background: canFinish ? "white" : "gray", color: canFinish ? "var(--blue-ascent)" : "white", borderColor: canFinish ? "var(--blue-ascent)" : "gray", fontSize: "16px", padding: "10px" }}>Gerar Orçamento</BtnWithBorder>
+                <BtnAscent onClick={async () => await handlerFinalizarVenda()} style={{ flexGrow: "3", background: canFinish ? "var(--blue-ascent)" : "gray", color: canFinish ? "white" : "white", fontSize: "16px", padding: "10px" }}>Finalizar Venda</BtnAscent>
+            </SessionRow>
         </ResumeContainer>
     </SalesItemContainer>)
 }
