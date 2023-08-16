@@ -1,6 +1,6 @@
 export default class ReqHttp {
 
-    static _url: string = process.env.API_URL ?? 'http://localhost:3000/api';
+    static _url: string = 'http://127.0.0.1:3000/api';
 
     static async get(params: { path: string, headers?: object, queryParams?: Record<string, any>, secondsTimeout: number }): Promise<{ body: any; response: Response }> {
         try {
