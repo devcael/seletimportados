@@ -16,15 +16,14 @@ const VendaController = {
 
     async buscarVendasPaginadas(currPage: number, pageSize: number, search: string, tipo: string | undefined, dataInicial: string | undefined, dataFinal: string | undefined, situacao: string | undefined): Promise<{ vendas: VendaModel[]; totalCount: number, currPage: number }> {
 
+        const offset = currPage * pageSize;
+
         let tipoFilter: string = tipo ? `AND V.tipo = "${tipo}"` : '';
         let situacaoFilter: string = situacao ? `AND V.situacao = "${situacao}"` : '';
 
-        console.log('dataInicial', dataInicial);
-        console.log('dataFinal', dataFinal);
-
         let dataFilter: string = (dataInicial && dataFinal) ? `AND V.data BETWEEN "${dataInicial}" AND "${dataFinal}"` : '';
 
-        const vendas = await sequelize.query(`SELECT V.*, C.nome FROM venda AS V LEFT JOIN clientes AS C ON V.id_cliente = C.id WHERE C.nome LIKE "%${search}%" ${tipoFilter} ${dataFilter} ${situacaoFilter} LIMIT ${pageSize} OFFSET ${currPage};`, {
+        const vendas = await sequelize.query(`SELECT V.*, C.nome FROM venda AS V LEFT JOIN clientes AS C ON V.id_cliente = C.id WHERE C.nome LIKE "%${search}%" ${tipoFilter} ${dataFilter} ${situacaoFilter} LIMIT ${pageSize} OFFSET ${offset};`, {
             model: VendaModel,
             mapToModel: true
         });

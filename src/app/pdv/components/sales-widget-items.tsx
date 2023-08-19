@@ -135,6 +135,7 @@ export default function SalesWidgetItems() {
                 console.log("Criando item de venda", currItem)
 
                 currItem.setIdVenda(newVenda.id);
+                currItem.valortotal = currItem.getValorTotalConvertido();
                 await ItemVendaUseCase.enviarItemVenda(currItem);
 
             }
@@ -218,8 +219,8 @@ export default function SalesWidgetItems() {
         return listaItems.map((item: ItemVenda, index: number) => (<TableRow key={index} >
             <TableData >{item.produto.nome}</TableData>
             <TableData>{item.quantidade}</TableData>
-            <TableData ><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(item.preco_produto.toString())}</strong></TableData>
-            <TableData ><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(item.valortotal.toString())}</strong></TableData>
+            <TableData ><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(item.getPrecoConvertido().toString())}</strong></TableData>
+            <TableData ><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(item.getValorTotalConvertido().toString())}</strong></TableData>
             <TableData style={{ display: "flex", gap: "10px", justifyContent: "end" }} >
                 <BtnAscent onClick={() => diminuirQuantidade(index, item)} style={{ background: "red", padding: "8px 20px" }} ><FontAwesomeIcon icon={faMinus}></FontAwesomeIcon></BtnAscent>
                 <BtnAscent onClick={() => aumentarQuantidade(index, item)} style={{ background: "teal", padding: "8px 20px" }} ><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon></BtnAscent>

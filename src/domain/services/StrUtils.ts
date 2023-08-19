@@ -15,6 +15,30 @@ const StrUtil = {
             currency: 'BRL'
         }).replace('R$', '').trim();
     },
+
+    transformarStringDinheiroEmDOuble(numero: string, sufixReplace: string): number {
+
+        const numeroSemMilhar: string = numero.replace(/\./g, "").replace(",", ".");
+        return parseFloat(numeroSemMilhar.replace(sufixReplace, " ").trim());
+    },
+    formatadorComPrefixo(valor: string, prefix: string): string {
+
+        if (!valor) return "";
+
+        // Converte para número e garante que tenha duas casas decimais
+        let doubleFormat = StrUtil.ensureTwoDecimalPlaces(Number(valor));
+
+        // Converte para um valor numérico
+        const valorNumerico = parseFloat(doubleFormat.replace(/[^\d-]/g, '')) / 100;
+
+        // Verifica se o valor é negativo e formata adequadamente
+        const formattedValue = valorNumerico.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).replace('R$', prefix).trim();
+
+        return formattedValue;
+    },
     formatadorComSufixoComGarantiaDeDecimal(valor: string): string {
 
         if (!valor) return "";

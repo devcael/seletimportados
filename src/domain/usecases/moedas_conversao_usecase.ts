@@ -24,9 +24,9 @@ export default class MoedaConversaoUseCase {
     }
 
     static async updateMoeda(id: number, moeda: {
-        nome_da_moeda: string,
-        taxa_de_conversao_real: number,
-        simbolo: string,
+        nome_da_moeda?: string,
+        taxa_de_conversao_real?: number,
+        simbolo?: string,
     }): Promise<boolean> {
         try {
             const path = `/moedas_conversao/update`;

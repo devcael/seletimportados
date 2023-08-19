@@ -66,7 +66,7 @@ function useGerenciadorVenda(): GerenciadorVendaMethods {
         let valorTotal = 0;
         for (let index = 0; index < listaItems.length; index++) {
             const currItem: ItemVenda = listaItems[index];
-            valorTotal += currItem.calcularValorTotal();
+            valorTotal += currItem.getValorTotalConvertido();
         }
 
         return (valorTotal + acrescimo) - desconto;
@@ -76,7 +76,7 @@ function useGerenciadorVenda(): GerenciadorVendaMethods {
         let valorTotal = 0;
         for (let index = 0; index < listaItems.length; index++) {
             const currItem: ItemVenda = listaItems[index];
-            valorTotal += currItem.calcularValorTotal();
+            valorTotal += currItem.getValorTotalConvertido();
         }
 
         return valorTotal;

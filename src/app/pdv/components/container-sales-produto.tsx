@@ -135,7 +135,7 @@ export default function ContainerProduto() {
 
 
         let qnt: number = Number(value);
-        let precoProduto: number = Number(produto?.preco ?? 0.0)
+        let precoProduto: number = Number(produto?.getPrecoProdutoConvertido() ?? 0.0)
 
         console.log("Quantidade: ", qnt, precoProduto, qnt * precoProduto);
 
@@ -170,7 +170,7 @@ export default function ContainerProduto() {
         handlerSetAcrescimo(watchAcrescimo, produto?.preco ?? 0.00, Number(watchQuantidade));
         handlerSetDesconto(watchDesconto, produto?.preco ?? 0.00, Number(watchQuantidade));
         setValue("nome", produto?.nome ?? "", { shouldValidate: true });
-        setValue("preco", produto?.preco ?? "", { shouldValidate: true });
+        setValue("preco", StrUtil.formatadorComPrefixo(produto?.getPrecoProdutoConvertido().toString() ?? " ", "R$"), { shouldValidate: true });
         setValue("quantidade", watchQuantidade, { shouldValidate: true });
         setValue("total", StrUtil.formatadorComSufixoComGarantiaDeDecimal((total + totalAcrescimo - totalDesconto).toString()), { shouldValidate: true });
         setValue("desconto", watchDesconto, { shouldValidate: true });
@@ -195,7 +195,7 @@ export default function ContainerProduto() {
                                 <p><strong>{produto.nome}</strong></p>
                             </ProdutoItemLabel>
                             <ProdutoItemLabel >
-                                <p><strong>{AppUtil.formatarReais(produto.preco)}</strong></p>
+                                <p><strong>{StrUtil.formatadorComPrefixo(produto.preco.toString(), produto.getSimboloMoedaPreco())}</strong></p>
                             </ProdutoItemLabel>
 
                         </ProdutoItem>

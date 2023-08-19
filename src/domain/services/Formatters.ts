@@ -72,6 +72,23 @@ const AppFormatters = {
         });
 
         return formattedValue;
+    }, formatadorPersonalizado(valor: string, sufixo: string): string {
+
+        if (!valor) return "";
+
+        // Converte para número e garante que tenha duas casas decimais
+
+
+        // Converte para um valor numérico
+        const valorNumerico = parseFloat(valor.replace(/[^\d-]/g, '')) / 100;
+
+        // Verifica se o valor é negativo e formata adequadamente
+        const formattedValue = valorNumerico.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).replace('R$', sufixo).trim();
+
+        return formattedValue;
     },
     formatDouble(number: number): string {
         return number.toFixed(2);

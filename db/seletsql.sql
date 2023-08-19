@@ -16,8 +16,8 @@
 
 
 -- Copiando estrutura do banco de dados para seletimportados
-CREATE DATABASE IF NOT EXISTS `seletimportados2` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `seletimportado2s`;
+CREATE DATABASE IF NOT EXISTS `testedois` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `testedois`;
 
 -- Copiando estrutura para tabela seletimportados.cabecalho_pedido
 CREATE TABLE IF NOT EXISTS `cabecalho_pedido` (

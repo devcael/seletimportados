@@ -1,4 +1,6 @@
 import { BtnAscent } from "@/components/buttons";
+import EmptyListContainer from "@/components/empty_list";
+import { LoadingSpinnerWithLabel } from "@/components/simple_loading_container";
 import { DivColumn } from "@/components/styled-components/directions"
 import CabecalhoVenda from "@/domain/models/CabecalhoVenda";
 import { useVendaContext } from "@/provider/venda_prodiver";
@@ -49,8 +51,11 @@ export default function SalesTable() {
                     <TableHeaderBlue scope="col" style={{ width: "fit-content" }}></TableHeaderBlue>
                 </TableRow>
             </TableHead>
-            <TableBody>
-                {listOfSales()}
-            </TableBody>
+
+
+            {vendaData.loading ? <LoadingSpinnerWithLabel label="Carregando..." ></LoadingSpinnerWithLabel> :
+                <TableBody> {vendaData.data.length > 0 ? listOfSales() : <EmptyListContainer label="Lista Vazia" ></EmptyListContainer>} </TableBody>
+            }
+
         </Table>);
 }

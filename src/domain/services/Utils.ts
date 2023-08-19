@@ -21,7 +21,19 @@ const AppUtil = {
         });
 
         return valorFormatado;
-    }, calculatePercentage(props: { value: number, total: number }): number {
+    },
+    formatarMoeda(value: number, prefix: string): string {
+        const valor: string = value.toString().replace(/\D/g, '');
+
+        const valorNumerico: number = parseFloat(valor) / 100;
+        const valorFormatado: string = valorNumerico.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        }).replace("R$", prefix);
+
+        return valorFormatado;
+    }
+    , calculatePercentage(props: { value: number, total: number }): number {
         console.log("props", props)
         if (props.total === 0) {
             return 0;

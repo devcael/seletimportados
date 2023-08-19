@@ -29,18 +29,18 @@ const SpinnerWrapper = styled.div`
 `;
 
 const LoadingSpinner = () => (
-    <SpinnerWrapper>
-        <FontAwesomeIcon icon={faSpinner} size="lg" />
-    </SpinnerWrapper>
+  <SpinnerWrapper>
+    <FontAwesomeIcon icon={faSpinner} size="lg" />
+  </SpinnerWrapper>
 );
 
 function LoadingSpinnerWithLabel(params: { label: string; }) {
-    return (
-        <LoagingContainer>
-            <LoadingSpinner></LoadingSpinner>
-            <p>{params.label}</p>
-        </LoagingContainer>
-    )
+  return (
+    <LoagingContainer>
+      <LoadingSpinner></LoadingSpinner>
+      <p>{params.label}</p>
+    </LoagingContainer>
+  )
 }
 
 export { LoadingSpinner, LoadingSpinnerWithLabel };

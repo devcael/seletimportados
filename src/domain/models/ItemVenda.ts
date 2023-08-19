@@ -131,4 +131,12 @@ export default class ItemVenda {
         return this.valortotal = (this.quantidade * this.preco_produto) + (this.acrescimo ?? 0.00) - (this.desconto ?? 0.00);
     }
 
+    public getPrecoConvertido(): number {
+        return this.preco_produto * this.taxa_moeda_preco_produto;
+    }
+
+    public getValorTotalConvertido(): number {
+        return this.valortotal * this.taxa_moeda_preco_produto;
+    }
+
 }

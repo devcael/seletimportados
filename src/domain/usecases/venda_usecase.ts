@@ -77,8 +77,6 @@ export default class VendaUseCase {
 
             let listOfVendasJson = response.body;
 
-            console.log('listOfVendasJson', listOfVendasJson);
-
 
             let listOfCabecalhoVendas: CabecalhoVenda[] = [];
 

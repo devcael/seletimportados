@@ -101,7 +101,7 @@ export default function ProductsTable() {
                 <TableData scope="row" >{produto.ativo ? "SIM" : "NAO"}</TableData>
                 <TableData >{produto.nome}</TableData>
                 <TableData>{produto.ean}</TableData>
-                <TableData ><strong>{AppUtil.formatarReais(produto.preco)}</strong></TableData>
+                <TableData ><strong>{AppUtil.formatarMoeda(produto.preco, produto.getSimboloMoedaPreco())}</strong></TableData>
                 <TableData style={{ display: "flex", justifyContent: "end" }} >
                     <BtnAscent onClick={async () => await handleEdit(produto)}>Editar</BtnAscent>
                     {produto.ativo ? null : <BtnAscent style={{ background: "teal", marginLeft: "10px" }} onClick={async () => await handleAtivar(produto.id)}>Ativar</BtnAscent>}

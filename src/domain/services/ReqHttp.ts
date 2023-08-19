@@ -10,12 +10,12 @@ export default class ReqHttp {
 
             const url = `${this._url}${params.path}${queryParams ? `?${queryParams}` : ''}`;
 
-            const timeoutDuration = params.secondsTimeout * 1000;
-
-            const controller = new AbortController();
-            const timeout = setTimeout(() => {
-                controller.abort(); // Cancela a requisição quando o timeout é atingido
-            }, timeoutDuration);
+            /*    const timeoutDuration = params.secondsTimeout * 1000;
+   
+               const controller = new AbortController();
+               const timeout = setTimeout(() => {
+                   controller.abort(); // Cancela a requisição quando o timeout é atingido
+               }, 120); */
 
             const response = await fetch(url, {
                 method: 'GET',
@@ -23,10 +23,10 @@ export default class ReqHttp {
                     'Content-Type': 'application/json',
                     ...params.headers ?? {}
                 },
-                signal: controller.signal,
+
             });
 
-            clearTimeout(timeout);
+            /*             clearTimeout(timeout); */
 
 
             const responseBody = await response.text();
@@ -60,12 +60,12 @@ export default class ReqHttp {
 
             const url = `${this._url}/${params.path}${queryParams ? `?${queryParams}` : ''}`;
 
-            const timeoutDuration = params.secondsTimeout * 1000;
-
-            const controller = new AbortController();
-            const timeout = setTimeout(() => {
-                controller.abort(); // Cancela a requisição quando o timeout é atingido
-            }, timeoutDuration);
+            /*   const timeoutDuration = params.secondsTimeout * 1000;
+  
+              const controller = new AbortController();
+              const timeout = setTimeout(() => {
+                  controller.abort(); // Cancela a requisição quando o timeout é atingido
+              }, 120); */
 
             const response = await fetch(url, {
                 method: 'POST', // Alterado para POST
@@ -74,10 +74,10 @@ export default class ReqHttp {
                     ...params.headers ?? {},
                 },
                 body: params.body !== null ? JSON.stringify(params.body) : '',
-                signal: controller.signal,
+
             });
 
-            clearTimeout(timeout);
+            /*          clearTimeout(timeout); */
 
             const responseBody = await response.text();
 
@@ -106,12 +106,12 @@ export default class ReqHttp {
 
             const url = `${this._url}/${params.path}${queryParams ? `?${queryParams}` : ''}`;
 
-            const timeoutDuration = params.secondsTimeout * 1000;
-
-            const controller = new AbortController();
-            const timeout = setTimeout(() => {
-                controller.abort(); // Cancela a requisição quando o timeout é atingido
-            }, timeoutDuration);
+            /*       const timeoutDuration = params.secondsTimeout * 1000;
+      
+                  const controller = new AbortController();
+                  const timeout = setTimeout(() => {
+                      controller.abort(); // Cancela a requisição quando o timeout é atingido
+                  }, 120); */
 
             const response = await fetch(url, {
                 method: 'PUT', // Alterado para PUT (método de atualização)
@@ -120,10 +120,10 @@ export default class ReqHttp {
                     ...params.headers ?? {},
                 },
                 body: JSON.stringify(params.body), // Corpo da requisição
-                signal: controller.signal,
+
             });
 
-            clearTimeout(timeout);
+            /*          clearTimeout(timeout); */
 
             const responseBody = await response.text();
 
@@ -151,12 +151,12 @@ export default class ReqHttp {
 
             const url = `${this._url}/${params.path}${queryParams ? `?${queryParams}` : ''}`;
 
-            const timeoutDuration = params.secondsTimeout * 1000;
+            // const timeoutDuration = params.secondsTimeout * 1000;
 
-            const controller = new AbortController();
-            const timeout = setTimeout(() => {
-                controller.abort(); // Cancela a requisição quando o timeout é atingido
-            }, timeoutDuration);
+            //  const controller = new AbortController();
+            // const timeout = setTimeout(() => {
+            //controller.abort(); // Cancela a requisição quando o timeout é atingido
+            // }, 120);
 
             const response = await fetch(url, {
                 method: 'DELETE', // Método de exclusão
@@ -164,10 +164,10 @@ export default class ReqHttp {
                     'Content-Type': 'application/json',
                     ...params.headers ?? {},
                 },
-                signal: controller.signal,
+
             });
 
-            clearTimeout(timeout);
+            // clearTimeout(timeout);
 
 
             const responseBody = await response.text();

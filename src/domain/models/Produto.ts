@@ -36,6 +36,34 @@ export default class Produto {
         this.marca = marca;
     }
 
+    getPrecoProdutoNormal(): number {
+        return this.preco;
+    }
+
+    getLucroPorProduto(): number {
+        return this.preco - this.custo;
+    }
+
+    getPrecoProdutoConvertido(): number {
+        return this.preco * this.moeda_preco.taxa_de_conversao_real;
+    }
+
+    getCustoProdutoNormal(): number {
+        return this.custo;
+    }
+
+    getCustoProdutoConvertido(): number {
+        return this.custo * this.valor_moeda_custo;
+    }
+
+    getSimboloMoedaPreco(): string {
+        return this.moeda_preco.simbolo ?? "R$";
+    }
+
+    getSimboloMoedaCusto(): string {
+        return this.moeda_custo.simbolo;
+    }
+
     static fromJSON(json: any): Produto {
         return new Produto(
             json.currProduto.id,
