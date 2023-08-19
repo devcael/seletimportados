@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(401).json({ message: 'Credenciais inválidas.' });
       }
     } catch (error) {
-      return res.status(500).json({ message: 'Erro ao fazer login.' });
+      return res.status(500).json({ message: `Erro ao fazer login. ${error}` });
     }
   } else {
     return res.status(405).json({ message: 'Método não permitido.' });
