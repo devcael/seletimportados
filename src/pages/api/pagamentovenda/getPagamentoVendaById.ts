@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const pagamento = await PagamentoVendaController.getPagamentoVendaById(pagamentoId);
+        const pagamento = await PagamentoVendaController.findAllVenda(pagamentoId);
 
         if (pagamento === null) {
             res.status(404).json({ message: 'Pagamento não encontrado' });

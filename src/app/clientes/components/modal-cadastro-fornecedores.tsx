@@ -102,14 +102,10 @@ export default function ModalCadastroDeClientes(props: ModalProps) {
         }
 
         clientesData.fetchData(0, 10, "");
-        console.log('save', data);
-        console.log(data);
         closeModal();
     }
 
     const handleUpdate = async (data: any) => {
-        console.log('update', data);
-        console.log(data);
 
         try {
             await ClientesUseCase.updateCliente(props.cliente?.id ?? 0, data);

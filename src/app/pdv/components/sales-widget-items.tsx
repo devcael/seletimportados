@@ -111,18 +111,29 @@ export default function SalesWidgetItems() {
             return;
         }
 
+        var totalVenda = 0.00;
+        var subTotalVenda = 0.00;
+
+        listaItems.forEach(item => {
+            totalVenda += item.getValorTotalConvertido();
+            subTotalVenda += item.getValorTotalConvertido();
+        });
+
+        totalVenda += acrescimo;
+        totalVenda -= desconto;
+
         const cabecalhoVenda = new CabecalhoVenda(
             1,
             StrUtil.getCurrentFormattedDate(),
             StrUtil.getCurrentFormattedTime(),
-            calcTotalValue(),
+            totalVenda,
             'FINALIZADA',
             1,
             currCliente?.id ?? 1,
             desconto,
             acrescimo,
-            calcSubTotalValue(),
-            calcTotalValue(),
+            subTotalVenda,
+            totalVenda,
             'VENDA',
             'Cliente XPTO'
         );
@@ -135,7 +146,7 @@ export default function SalesWidgetItems() {
                 console.log("Criando item de venda", currItem)
 
                 currItem.setIdVenda(newVenda.id);
-                currItem.valortotal = currItem.getValorTotalConvertido();
+                // currItem.valortotal = currItem.getValorTotalConvertido();
                 await ItemVendaUseCase.enviarItemVenda(currItem);
 
             }

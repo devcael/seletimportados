@@ -1,6 +1,6 @@
 export default class ReqHttp {
 
-    static _url: string = 'http://154.49.246.212:3000/api';
+    static _url: string = 'http://154.49.246.212/api';
 
     static async get(params: { path: string, headers?: object, queryParams?: Record<string, any>, secondsTimeout: number }): Promise<{ body: any; response: Response }> {
         try {

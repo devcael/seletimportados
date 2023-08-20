@@ -34,11 +34,11 @@ var menuItems: MenuItemsType[] = [
     href: "/produtos",
     icon: "fa-solid fa-cubes",
     label: "Produtos",
-  }, /* {
+  }/* , {
     id: 4,
-    href: "/financeiro",
-    icon: "fa-solid fa-money-bills",
-    label: "Financeiro",
+    href: "/empresa",
+    icon: "fa-solid fa-building",
+    label: "Empresa",
   }, */
 ]
 

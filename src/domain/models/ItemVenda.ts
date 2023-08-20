@@ -57,12 +57,16 @@ export default class ItemVenda {
         this.calcularValorTotal();
     }
 
+
+
     static fromJSON(json: any): ItemVenda {
+        console.log("CHAMOU FROM JSON");
+
         return new ItemVenda({
             id_itens_venda: json.id_itens_venda,
             id_produto: json.id_produto,
-            produto: json.produto,
-            imei: json.imei,
+            produto: Produto.fromJSON({ currProduto: json.produto, moedaCusto: json.produto.moeda_custo, moedaPreco: json.produto.moeda_preco }),
+            imei: Imei.fromJson(json.imei),
             nome_produto: json.nome_produto,
             preco_produto: json.preco_produto,
             custo_produto: json.custo_produto,
@@ -78,6 +82,16 @@ export default class ItemVenda {
         });
     }
 
+
+    static fromJsonList(lista: Array<any>): ItemVenda[] {
+
+        let bufferList = [];
+
+        for (let i = 0; i < lista.length; i++) {
+            bufferList.push(ItemVenda.fromJSON(lista[i]));
+        }
+        return bufferList;
+    }
 
     toJson(props: { sendId: boolean }): any {
         return {
@@ -114,6 +128,7 @@ export default class ItemVenda {
     }
     public alterarQuantidade(novaQuantidade: number) {
         this.quantidade = novaQuantidade;
+        this.valortotal = (this.quantidade * this.preco_produto) + (this.acrescimo ?? 0.00) - (this.desconto ?? 0.00);
         this.calcularValorTotal();
     }
 
@@ -128,7 +143,7 @@ export default class ItemVenda {
     }
 
     public calcularValorTotal(): number {
-        return this.valortotal = (this.quantidade * this.preco_produto) + (this.acrescimo ?? 0.00) - (this.desconto ?? 0.00);
+        return (this.quantidade * this.preco_produto) + (this.acrescimo ?? 0.00) - (this.desconto ?? 0.00);
     }
 
     public getPrecoConvertido(): number {

@@ -21,6 +21,7 @@ import useFetchMoedaDolar from '@/hooks/useMoedaDolarFetch';
 import StrUtil from '@/domain/services/StrUtils';
 import useModal from '@/hooks/useModal';
 import ModalAlterarMoedaDolar from './components/modal_alterar_dolar';
+import ResumeSessionContainer from './components/resume_session';
 const inter = Inter({ subsets: ['latin'] })
 
 const BodyContainer = styled.div`
@@ -29,16 +30,6 @@ const BodyContainer = styled.div`
   overflow-y: scroll;
 `
 
-
-const ResumeSession = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  gap: 35px;
-  height: 120px;
-  padding: 15px 30px;
-      margin: 10px 0px;
-`
 
 
 
@@ -168,11 +159,7 @@ export default function Home() {
                 </BtnAscent>
               </Leading>
             </AppBar>
-            <ResumeSession>
-              <CardResume label='Lucro do Mês Atual' value='R$200,00'></CardResume>
-              <CardResume label='Receita Bruta Mês Atual' value='R$200,00'></CardResume>
-              <CardResume label='Total Lista' value='R$200,00'></CardResume>
-            </ResumeSession>
+            <ResumeSessionContainer />
             <DivRow style={{ paddingLeft: "20px", margin: "15px 0px", justifyContent: "start", width: "100%" }}>
               <TitleH1>O que você gostaria de fazer?</TitleH1>
             </DivRow>

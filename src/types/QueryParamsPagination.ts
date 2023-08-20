@@ -4,5 +4,5 @@ export type QueryParamsPagination = {
     search: string;
     tipo?: 'VENDA' | 'ORCAMENTO';
     situacao?: 'ABERTA' | 'PENDENTE' | 'FINALIZADA';
-    dataInicial?: Date; dataFinal?: Date;
+    dataInicial?: string; dataFinal?: string;
 };

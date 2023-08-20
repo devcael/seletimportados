@@ -1,39 +1,41 @@
+import Imei from "../models/Imei";
 import ItemVenda from "../models/ItemVenda";
 import Produto from "../models/Produto";
 import ReqHttp from "../services/ReqHttp";
+import ImeiUseCase from "./imei_use_case";
 import ProdutoUseCase from "./produto_usecase";
 
 export default class ItemVendaUseCase {
 
 
 
-    static async getById(id: number) {
-        try {
-            let url: string = "/itemvenda/getItemsVendaById";
-
-            let response = await ReqHttp.get({ path: url, queryParams: { id: id }, secondsTimeout: 10, });
-
-            console.log(response.body);
-
-            let itemVendaJson = response.body;
-
-            let idProduto = Number(itemVendaJson.id_produto);
-            let idVenda = Number(itemVendaJson.id_itens_venda);
-
-            let produto: Produto = await ProdutoUseCase.getById(idProduto);
-
-
-            let newItemVenda: ItemVenda = ItemVenda.fromJSON(itemVendaJson);
-
-            newItemVenda.setProduto(produto);
-            newItemVenda.setImei(null);
-
-            console.log(newItemVenda);
-        } catch (error) {
-            throw error;
-        }
-
-    }
+    /*  static async getById(id: number) {
+         try {
+             let url: string = "/itemvenda/getItemsVendaById";
+ 
+             let response = await ReqHttp.get({ path: url, queryParams: { id: id }, secondsTimeout: 10, });
+ 
+             console.log(response.body);
+ 
+             let itemVendaJson = response.body;
+ 
+             let idProduto = Number(itemVendaJson.id_produto);
+             let idVenda = Number(itemVendaJson.id_itens_venda);
+ 
+             let produto: Produto = await ProdutoUseCase.getById(idProduto);
+ 
+ 
+             let newItemVenda: ItemVenda = ItemVenda.fromJSON(itemVendaJson);
+ 
+             newItemVenda.setProduto(produto);
+             newItemVenda.setImei(null);
+ 
+             console.log(newItemVenda);
+         } catch (error) {
+             throw error;
+         }
+ 
+     } */
 
     static async getAllByIdVenda(id_venda: number): Promise<ItemVenda[]> {
         try {
@@ -50,25 +52,13 @@ export default class ItemVendaUseCase {
             let listOfItems: ItemVenda[] = [];
 
             for (let index = 0; index < listOfItemsJson.length; index++) {
-                const currItemVenda = listOfItemsJson[index];
-
-                let idProduto = Number(currItemVenda.id_produto);
-                let idVenda = Number(currItemVenda.id_itens_venda);
-
-                let produto: Produto = await ProdutoUseCase.getById(idProduto);
 
 
-                let newItemVenda: ItemVenda = ItemVenda.fromJSON(currItemVenda);
-
-                newItemVenda.setProduto(produto);
-                newItemVenda.setImei(null);
-
-                console.log(newItemVenda);
-                listOfItems.push(newItemVenda);
+                listOfItems.push(ItemVenda.fromJSON(listOfItemsJson[index]));
 
             }
 
-            console.log(listOfItems.length);
+            console.log(listOfItems);
 
             return listOfItems;
 
@@ -80,7 +70,7 @@ export default class ItemVendaUseCase {
     }
 
 
-    static async enviarItemVenda(itemVenda: ItemVenda): Promise<ItemVenda> {
+    static async enviarItemVenda(itemVenda: ItemVenda): Promise<any> {
         try {
             const path = '/itemvenda/createNewItemVenda';
             const secondsTimeout = 15;
@@ -91,10 +81,10 @@ export default class ItemVendaUseCase {
                 secondsTimeout,
             });
 
-            let newItemVenda = ItemVenda.fromJSON(response.body);
+            // let newItemVenda = ItemVenda.fromJSON(response.body);
 
 
-            return newItemVenda;
+            return null;
         } catch (error) {
             console.error('Erro ao enviar o item venda:', error);
             throw error;

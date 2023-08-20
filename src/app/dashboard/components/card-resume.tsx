@@ -36,16 +36,16 @@ const LabelSpan = styled.span<{ color: string, size: string }>`
   font-size:  calc(var(--scale-fonts) * ${props => props.size});
 `
 
-export default function CardResume(props: { label: string, value: string }) {
-    return (<ResumeCard>
-        <IconWrapper  >
-            <i className="fa-solid fa-money-bill"></i>
-        </IconWrapper>
-        <ResumeLabel >
-            <LabelSpan color={"grey"} size={"15px"} >{props.label}</LabelSpan>
-            <LabelSpan color={"black"} size={"22px"} ><strong>{props.value}</strong></LabelSpan>
-        </ResumeLabel>
+export default function CardResume(props: { label: string, value: string, icon: string, color: string }) {
+  return (<ResumeCard>
+    <IconWrapper style={{ background: props.color }} >
+      <i className={props.icon}></i>
+    </IconWrapper>
+    <ResumeLabel >
+      <LabelSpan color={"grey"} size={"15px"} >{props.label}</LabelSpan>
+      <LabelSpan color={"black"} size={"22px"} ><strong>{props.value}</strong></LabelSpan>
+    </ResumeLabel>
 
-    </ResumeCard>);
+  </ResumeCard>);
 }
 

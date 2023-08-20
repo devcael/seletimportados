@@ -119,7 +119,7 @@ function SimpleInput(props: SimpleInputProps) {
     return (
         <InputContainer>
             {props.label != null ? <p>{props.label ?? ""}</p> : ""}
-            <Input onKeyDown={props.onKeyDown} readOnly={props.readonly ?? false} style={props.style ?? {}} onChange={handleInputChange} type={props.inputType} placeholder={props.placeHolder ?? ""} {...props.register} ></Input>
+            <Input onKeyDown={props.onKeyDown} value={props.defaultValue} readOnly={props.readonly ?? false} style={props.style ?? {}} onChange={handleInputChange} type={props.inputType} placeholder={props.placeHolder ?? ""} {...props.register} ></Input>
         </InputContainer>
     );
 }

@@ -84,12 +84,6 @@ function TableFilterProducts() {
         delayedSearch(handleDelayedSearch, event);
     };
 
-    useEffect(() => {
-        console.log('Search: ' + productData.search);
-        console.log('Items per page: ' + itemsPerPage);
-        console.log("Page: " + currPage);
-        productData.fetchData(currPage, itemsPerPage, '');
-    }, [currPage, itemsPerPage]);
 
     const handlePageChange = (event: string) => {
         let page: number = Number(event);

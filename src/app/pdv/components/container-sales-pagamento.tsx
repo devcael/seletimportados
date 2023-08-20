@@ -135,7 +135,7 @@ function PagamentoAvista() {
                 valorPago,
                 null,
                 currTipoPagamento,
-                new Date()
+                null,
             );
 
             adicionarPagamento(pagamento, currTipoPagamento);

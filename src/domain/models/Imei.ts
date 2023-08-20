@@ -9,7 +9,10 @@ export default class Imei {
         this.numeroimei = numeroimei;
     }
 
-    static fromJson(json: any): Imei {
+    static fromJson(json: Imei | null): Imei | null {
+        if (json == null) {
+            return null;
+        }
         return new Imei(
             json.id_imei,
             json.id_itemvenda,

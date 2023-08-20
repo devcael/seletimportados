@@ -17,7 +17,7 @@ export default class ImeiUseCase {
         }
     }
 
-    static async getAllImeisByItemVenda(itemvendaId: number): Promise<Imei[]> {
+    static async getAllImeisByItemVenda(itemvendaId: number): Promise<Imei | null> {
         try {
             const queryParams = {
                 itemvenda: itemvendaId,
@@ -29,9 +29,9 @@ export default class ImeiUseCase {
                 secondsTimeout: 10,
             });
 
-            const listOfImeis: Imei[] = body;
+            const imei: Imei | null = body.length > 0 ? Imei.fromJson(body[0]) : null;
 
-            return listOfImeis;
+            return imei;
         } catch (error) {
             console.error('Erro ao buscar IMEIs por itemvenda:', error);
             throw error;

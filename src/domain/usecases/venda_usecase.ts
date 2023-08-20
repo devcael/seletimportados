@@ -26,36 +26,12 @@ export default class VendaUseCase {
 
             let vendaJson: any = response.body;
 
-            console.log('vendaJson', vendaJson);
+            let venda: Venda = Venda.fromJson(vendaJson);
 
-            let venda: CabecalhoVenda = CabecalhoVenda.fromJson(vendaJson);
-
-
-
-            let clienteLincado: Clientes | null = await ClientesUseCase.getClienteById(venda.id_cliente);
-            let listOfItems: ItemVenda[] = await ItemVendaUseCase.getAllByIdVenda(venda.id);
-            let listOfPagamentos: PagamentoVenda[] = await PagamentoVendaUseCase.getAllPagamentosByVenda(venda.id);
-
-            const novaVenda = new Venda(
-                1,
-                new Date(),
-                "10:00",
-                200,
-                "ABERTA",
-                1,
-                clienteLincado,
-                10,
-                5,
-                185,
-                listOfPagamentos,
-                200,
-                venda.tipo,
-                listOfItems
-            );
 
             console.log(venda);
 
-            return novaVenda;
+            return venda;
         } catch (error) {
             console.error('Erro ao receber a venda:', error);
             throw error;
@@ -74,6 +50,9 @@ export default class VendaUseCase {
                 queryParams: params.queryParams,
                 secondsTimeout,
             });
+
+            console.log("Path Response:", params.queryParams);
+
 
             let listOfVendasJson = response.body;
 

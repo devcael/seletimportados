@@ -115,7 +115,6 @@ export default function Home() {
 
       const data = await response.json();
 
-      console.log(data);
 
       if (response.status == 200) {
 
@@ -166,8 +165,8 @@ export default function Home() {
           <SimpleInputWithLabel register={register("password", { required: true })} type='password' label='Senha' description='Digite sua senha aqui...'></SimpleInputWithLabel>
           {errors.password?.type === 'required' && <p style={{ color: "red" }} role="alert">Por favor, digite sua senha</p>}
 
-          <LoginButton type='submit' onClick={() => console.log("Cael")
-          }></LoginButton>
+          <LoginButton type='submit'
+          ></LoginButton>
         </form>
       </LoginContainer>
     </div>

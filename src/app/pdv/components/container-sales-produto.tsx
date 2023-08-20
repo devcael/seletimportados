@@ -118,7 +118,7 @@ export default function ContainerProduto() {
             quantidade: data.quantidade ?? 1.0,
             acrescimo: AppFormatters.removeRealFormatter(data.totalAcrescimo) ?? 0.0,
             desconto: AppFormatters.removeRealFormatter(data.totalDesconto) ?? 0.0,
-            valortotal: data.total ?? 0.0,
+            valortotal: produto?.preco ?? 0.0 * data.quantidade ?? 1.0,
             id_moeda_custo_produto: produto?.moeda_custo.id_taxa ?? 0,
             taxa_moeda_custo_produto: produto?.moeda_custo.taxa_de_conversao_real ?? 0.0,
             id_moeda_preco_produto: produto?.moeda_preco.id_taxa ?? 0,

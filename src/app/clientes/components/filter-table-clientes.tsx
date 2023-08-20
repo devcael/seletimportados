@@ -13,7 +13,6 @@ function TableFilterClientes() {
     const { clientesData } = useClientesContext();
 
     function hangleChange(params: string) {
-        console.log(params);
 
     } const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currPage, setCurrPage] = useState(0);
@@ -21,13 +20,13 @@ function TableFilterClientes() {
 
     const delayedSearch = useDelayedFunctionCall(300);
     const handleDelayedSearch = (value: string) => {
-        console.log(clientesData.search);
+
         clientesData.fetchData(0, itemsPerPage, value);
     };
 
     const handleInputChange = (event: string) => {
         clientesData.setSearch(event);
-        console.log(clientesData.search);
+
         delayedSearch(handleDelayedSearch, event);
     };
 
