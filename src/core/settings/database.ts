@@ -5,7 +5,7 @@ const sequelize = new Sequelize({
     host: '127.0.0.1',
     username: 'asnweb',
     password: 'webasnsoft',
-    database: 'seletimportados',
+    database: 'testedois',
 });
 
 
