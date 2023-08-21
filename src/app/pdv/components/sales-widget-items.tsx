@@ -93,7 +93,7 @@ export default function SalesWidgetItems() {
 
         let restante: number = calcTotalValue() - calcValorPagoTotal();
 
-        if (restante < 0) {
+        if (parseInt(restante.toFixed(2)) <= 0) {
             setCanFinish(true);
             return;
         }

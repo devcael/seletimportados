@@ -58,7 +58,7 @@ export default function SalesTable() {
     }
 
     const handleImprimirVenda = (id_venda: number) => {
-        window.open(`http://154.49.246.212:3000/api/gerar_pdf_venda?idvenda=${id_venda}`, '_blank');
+        window.open(`http://154.49.246.212/api/gerar_pdf_venda?idvenda=${id_venda}`, '_blank');
     }
 
     useEffect(() => {

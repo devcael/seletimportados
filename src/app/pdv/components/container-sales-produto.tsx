@@ -167,8 +167,8 @@ export default function ContainerProduto() {
 
     useEffect(() => {
         handlerSetQuantidade(watchQuantidade, totalAcrescimo, totalDesconto);
-        handlerSetAcrescimo(watchAcrescimo, produto?.preco ?? 0.00, Number(watchQuantidade));
-        handlerSetDesconto(watchDesconto, produto?.preco ?? 0.00, Number(watchQuantidade));
+        handlerSetAcrescimo(watchAcrescimo, produto?.getPrecoProdutoConvertido() ?? 0.00, Number(watchQuantidade));
+        handlerSetDesconto(watchDesconto, produto?.getPrecoProdutoConvertido() ?? 0.00, Number(watchQuantidade));
         setValue("nome", produto?.nome ?? "", { shouldValidate: true });
         setValue("preco", StrUtil.formatadorComPrefixo(produto?.getPrecoProdutoConvertido().toString() ?? " ", "R$"), { shouldValidate: true });
         setValue("quantidade", watchQuantidade, { shouldValidate: true });

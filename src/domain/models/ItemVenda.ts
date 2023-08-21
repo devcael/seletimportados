@@ -126,6 +126,14 @@ export default class ItemVenda {
     setProduto(produto: Produto) {
         this.produto = produto;
     }
+
+    getDescontoConvertido(): number {
+        return (this?.desconto ?? 0.00) * this.taxa_moeda_preco_produto;
+    }
+
+    getAcrecimoConvertido(): number {
+        return (this?.acrescimo ?? 0.00) * this.taxa_moeda_preco_produto;
+    }
     public alterarQuantidade(novaQuantidade: number) {
         this.quantidade = novaQuantidade;
         this.valortotal = (this.quantidade * this.preco_produto) + (this.acrescimo ?? 0.00) - (this.desconto ?? 0.00);
