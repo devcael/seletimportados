@@ -32,7 +32,7 @@ const VendaController = {
 
     let dataFilter: string = (dataInicial && dataFinal) ? `AND V.data BETWEEN "${dataInicial}" AND "${dataFinal}"` : '';
 
-    const vendas = await sequelize.query(`SELECT V.*, C.nome FROM venda AS V LEFT JOIN clientes AS C ON V.id_cliente = C.id WHERE C.nome LIKE "%${search}%" ${tipoFilter} ${dataFilter} ${situacaoFilter} LIMIT ${pageSize} OFFSET ${offset};`, {
+    const vendas = await sequelize.query(`SELECT V.*, C.nome FROM venda AS V LEFT JOIN clientes AS C ON V.id_cliente = C.id WHERE C.nome LIKE "%${search}%" OR V.id LIKE "%${search}%" ${tipoFilter} ${dataFilter} ${situacaoFilter}  ORDER BY V.id DESC LIMIT ${pageSize} OFFSET ${offset};`, {
       model: VendaModel,
       mapToModel: true
     });
@@ -88,6 +88,7 @@ const VendaController = {
     hora?: string;
     totalvenda?: number;
     situacao?: string | null;
+    tipo?: "VENDA" | "ORÇAMENTO";
     id_usuario?: number;
     id_cliente?: number;
     desconto?: number | null;

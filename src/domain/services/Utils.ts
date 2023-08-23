@@ -43,7 +43,6 @@ const AppUtil = {
         return percentage;
     }, calculatePercentageValue(props: { value: number, percentage: number }): number {
         const calculatedValue = (props.value * props.percentage) / 100;
-        console.log("calculatedValue", calculatedValue);
 
         return calculatedValue;
     }

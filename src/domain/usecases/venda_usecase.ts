@@ -51,9 +51,6 @@ export default class VendaUseCase {
                 secondsTimeout,
             });
 
-            console.log("Path Response:", params.queryParams);
-
-
             let listOfVendasJson = response.body;
 
 

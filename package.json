@@ -45,6 +45,7 @@
     "react-fontawesome": "^1.7.1",
     "react-hook-form": "^7.45.1",
     "react-modal": "^3.16.1",
+    "react-to-print": "^2.14.13",
     "reflect-metadata": "^0.1.13",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",

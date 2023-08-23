@@ -4,7 +4,7 @@ const sequelize = new Sequelize({
     dialect: 'mysql', // Pode ser 'mysql', 'postgres', 'sqlite' ou 'mssql'
     host: '127.0.0.1',
     username: 'asnweb',
-    password: 'webasnsoft',
+    password: 'webasnsoft@',
     database: 'seletimportados',
 });
 

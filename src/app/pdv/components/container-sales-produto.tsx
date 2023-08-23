@@ -16,6 +16,7 @@ import { useGerenciadorVendaContext } from "../GerenciadorDeVendas";
 import handler from "@/pages/api/login";
 import AppFormatters from "@/domain/services/Formatters";
 import StrUtil from "@/domain/services/StrUtils";
+import { App } from "antd";
 
 
 const Container = styled.div`
@@ -107,6 +108,23 @@ export default function ContainerProduto() {
 
 
     const onSubmit = (data: any) => {
+
+        function calcAcrescimoEDesconto(): number {
+
+            let descPercent: number = Number(watchDesconto) ?? 0.0;
+            let acresPercent: number = Number(watchAcrescimo) ?? 0.0;
+
+            let totalDesconto: number = AppUtil.calculatePercentageValue({ value: produto?.preco ?? 0.0, percentage: descPercent });
+            let totalAcrescimo: number = AppUtil.calculatePercentageValue({ value: produto?.preco ?? 0.0, percentage: acresPercent });
+
+            let valorTotal = (produto?.preco ?? 0.0) * (data.quantidade ?? 1.0);
+
+            valorTotal += totalAcrescimo;
+            valorTotal -= totalDesconto;
+
+            return valorTotal;
+        }
+
         let novoItem: ItemVenda = new ItemVenda({
             id_itens_venda: 1,
             id_produto: produto?.id ?? 0,
@@ -118,15 +136,13 @@ export default function ContainerProduto() {
             quantidade: data.quantidade ?? 1.0,
             acrescimo: AppFormatters.removeRealFormatter(data.totalAcrescimo) ?? 0.0,
             desconto: AppFormatters.removeRealFormatter(data.totalDesconto) ?? 0.0,
-            valortotal: produto?.preco ?? 0.0 * data.quantidade ?? 1.0,
+            valortotal: calcAcrescimoEDesconto() ?? 0.0,
             id_moeda_custo_produto: produto?.moeda_custo.id_taxa ?? 0,
             taxa_moeda_custo_produto: produto?.moeda_custo.taxa_de_conversao_real ?? 0.0,
             id_moeda_preco_produto: produto?.moeda_preco.id_taxa ?? 0,
             taxa_moeda_preco_produto: produto?.moeda_preco.taxa_de_conversao_real ?? 0.0,
             id_venda: 2
         });
-
-        console.log("Novo Item: ", novoItem)
 
         adicionarItemVenda(novoItem);
     };

@@ -24,6 +24,9 @@ import useModal from "@/hooks/useModal";
 import ModalAlterarMoedaDolar from "./modal_alterar_dolar";
 import Modal from 'react-modal';
 import ModalVisualizarVenda from "./modal-visualizar-venda";
+import ReqHttp from "@/domain/services/ReqHttp";
+import VendaUseCase from "@/domain/usecases/venda_usecase";
+import { useRouter } from "next/navigation";
 
 
 dayjs.extend(utc);
@@ -33,6 +36,7 @@ dayjs.locale('pt-br'); // Defina o local para português do Brasil
 
 export default function SalesTable() {
 
+    const router = useRouter();
     const { modalIsOpen, openModal, closeModal, modalStyles } = useModal();
 
     const { vendaData } = useVendaContext();
@@ -47,7 +51,7 @@ export default function SalesTable() {
                 <TableData >{venda.tipo}</TableData>
                 <TableData >{dayjs(new Date(venda.data)).add(1, 'd').format("DD/MM/YYYY")}</TableData>
                 <TableData><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(venda.totalvenda.toString())}</strong></TableData>
-                <TableData style={{ display: "flex", gap: "10px", justifyContent: "end" }} ><BtnAscent onClick={() => handleEditVenda(venda.id)}>Editar</BtnAscent><BtnAscent onClick={() => handleImprimirVenda(venda.id)}>Imprimir</BtnAscent></TableData>
+                <TableData style={{ display: "flex", gap: "10px", justifyContent: "end" }} ><BtnAscent onClick={() => handleEditVenda(venda.id)}>Editar</BtnAscent><BtnAscent onClick={() => handleImprimirVenda(venda.id)}>Imprimir</BtnAscent>{venda.tipo == "ORCAMENTO" ? <BtnAscent style={{ background: "teal" }} onClick={() => handleConfimarVenda(venda.id)}>Confirmar</BtnAscent> : null}</TableData>
             </TableRow>
         });
     }
@@ -58,7 +62,24 @@ export default function SalesTable() {
     }
 
     const handleImprimirVenda = (id_venda: number) => {
-        window.open(`http://154.49.246.212/api/gerar_pdf_venda?idvenda=${id_venda}`, '_blank');
+        window.open(`${ReqHttp._url}/gerar_pdf_venda?idvenda=${id_venda}`, '_blank');
+    }
+
+    const handleConfimarVenda = async (id_venda: number) => {
+        try {
+            await VendaUseCase.updateVenda(id_venda, { tipo: "VENDA" });
+            vendaData.fetchData(0, 10, "", {
+                currPage: 0,
+                pageSize: 10,
+                search: "",
+                dataInicial: dayjs(vendaData.selectedDates[0]).format("YYYY-MM-DD"),
+                dataFinal: dayjs(vendaData.selectedDates[1]).format("YYYY-MM-DD")
+            });
+
+        } catch (error) {
+
+        }
+
     }
 
     useEffect(() => {
