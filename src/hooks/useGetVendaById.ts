@@ -19,7 +19,7 @@ function useVendaDetails(id: number) {
 
     useEffect(() => {
         fetchVendaDetails();
-    }, [id]);
+    }, []);
 
     const refreshVendaDetails = async () => {
         setLoading(true); // Define loading como true antes da atualização

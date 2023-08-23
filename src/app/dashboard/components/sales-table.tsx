@@ -62,7 +62,7 @@ export default function SalesTable() {
     }
 
     const handleImprimirVenda = (id_venda: number) => {
-        window.open(`${ReqHttp._url}/gerar_pdf_venda?idvenda=${id_venda}`, '_blank');
+        window.open(`${ReqHttp._url.replace("/api", " ").trim()}/invoice/${id_venda}`, '_blank');
     }
 
     const handleConfimarVenda = async (id_venda: number) => {

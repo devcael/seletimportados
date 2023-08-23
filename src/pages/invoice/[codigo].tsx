@@ -1,10 +1,18 @@
 "use client"
 import "@styles/fonts.css"
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import { styled } from "styled-components"
-import "./invoice.css";
 import { BtnAscent } from "@/components/buttons";
+import { useRouter, withRouter } from "next/router";
+import "../../app/globals.css";
+import "./invoice.css";
+import useVendaDetails from "@/hooks/useGetVendaById";
+import Venda from "@/domain/models/Venda";
+import StrUtil from "@/domain/services/StrUtils";
+import ItemVenda from "@/domain/models/ItemVenda";
+import VendaUseCase from "@/domain/usecases/venda_usecase";
+import { set } from "react-hook-form";
 
 
 const Container = styled.div`
@@ -134,6 +142,8 @@ const Th = styled.th`
             text-align: left;
 `
 
+const Tr = styled.tr``
+
 const ResumeContainer = styled.div`
     width: 100%;
     display: flex;
@@ -159,13 +169,22 @@ const ResumeInfo = styled.div`
     align-items: start;
     overflow: hidden;
 `
+interface ComponentToPrintProps {
+    currVenda: Venda | null; // Defina o tipo da propriedade customString
+}
 
-class ComponentToPrint extends React.PureComponent {
+
+class ComponentToPrint extends React.PureComponent<ComponentToPrintProps> {
     render() {
+
+        const { currVenda } = this.props;
+
+
+        let total = 0;
         return (
             <PdfContainer>
 
-                <PdfHeader>INVOICE #21</PdfHeader>
+                <PdfHeader>INVOICE #{currVenda?.id ?? 0}</PdfHeader>
                 <CompanyInfo>
                     <h2>Selet Importados</h2>
                     <h3>Av. Brasil, 1234</h3>
@@ -176,22 +195,20 @@ class ComponentToPrint extends React.PureComponent {
                 <Divider />
                 <ClientInfoContainer>
                     <ClienteInfo>
-                        <h3>Cliente: Fulano de Tal</h3>
-                        <h3>Endereço: Av. Brasil, 1234</h3>
-                        <h3>CEP: 12345-678</h3>
-                        <h3>Telefone: (11) 1234-5678</h3>
-                        <h3>CNPJ: 12.345.678/0001-90</h3>
+                        <h3>Cliente: {currVenda?.cliente?.nome}</h3>
+                        <h3>Endereço: {currVenda?.cliente?.endereco}, {currVenda?.cliente?.numero}</h3>
+                        <h3>CEP: {currVenda?.cliente?.cep}</h3>
+                        <h3>Telefone: {currVenda?.cliente?.telefone}</h3>
+                        <h3>CPF: {currVenda?.cliente?.cpfcnpj}</h3>
                     </ClienteInfo>
                     <InvoiceInfo>
-                        <h3>Invoice Date: 01/01/2021</h3>
-                        <h3>Due Date: 01/01/2021</h3>
+                        <h3>Invoice Date: {currVenda?.data}</h3>
                     </InvoiceInfo>
                 </ClientInfoContainer>
                 <div className="container">
                     <Table>
                         <thead>
                             <tr>
-
                                 <Th>Produto</Th>
                                 <Th>IMEI</Th>
                                 <Th>Qnt</Th>
@@ -201,14 +218,15 @@ class ComponentToPrint extends React.PureComponent {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <Td>Dado 2</Td>
-                                <Td>Dado 2</Td>
-                                <Td>Dado 2</Td>
-                                <Td>Dado 2</Td>
-                                <Td>Dado 2</Td>
-                                <Td>Dado 2</Td>
-                            </tr>
+                            {currVenda?.listItems.map((item: ItemVenda, index: number) => <Tr key={index} >
+                                <Td>{item.nome_produto}</Td>
+                                <Td>{item.imei?.numeroimei ?? "Não Adicionado"}</Td>
+                                <Td>{item.quantidade}</Td>
+                                <Td>{StrUtil.formatadorComPrefixo(item.preco_produto.toString(), "$")}</Td>
+                                <Td>{StrUtil.formatadorComPrefixo(item.getPrecoConvertido().toString(), "R$")}</Td>
+                                <Td>{StrUtil.formatadorComPrefixo(item.getValorTotalConvertido().toString(), "R$")}</Td>
+                            </Tr>)}
+
 
                         </tbody>
                     </Table>
@@ -216,21 +234,21 @@ class ComponentToPrint extends React.PureComponent {
                 <ResumeContainer>
                     <ResumeInfo>
                         <h3>Sub total:</h3>
-                        <h3>R$300,00</h3>
+                        <h3>{StrUtil.formatadorComPrefixo(currVenda?.subtotal.toString() ?? "0.00", "R$")}</h3>
                     </ResumeInfo>
                     <ResumeInfo>
                         <h3>Desconto:</h3>
-                        <h3>R$300,00</h3>
+                        <h3>{StrUtil.formatadorComPrefixo(currVenda?.desconto?.toString() ?? "0.00", "R$")}</h3>
                     </ResumeInfo>
 
                     <ResumeInfo>
                         <h3>Acrescimo:</h3>
-                        <h3>R$300,00</h3>
+                        <h3>{StrUtil.formatadorComPrefixo(currVenda?.acrescimo?.toString() ?? "0.00", "R$")}</h3>
                     </ResumeInfo>
 
                     <ResumeInfo>
                         <h3>Valor total:</h3>
-                        <h3>R$300,00</h3>
+                        <h3>{StrUtil.formatadorComPrefixo(currVenda?.totalvenda.toString() ?? "0.00", "R$")}</h3>
                     </ResumeInfo>
                 </ResumeContainer>
 
@@ -241,22 +259,99 @@ class ComponentToPrint extends React.PureComponent {
 }
 
 
+function Loading() {
+    return <h1>Carregando...</h1>;
+}
 
-export default function Example() {
+function Carregado(props: { codigo: number }) {
     const componentRef = useRef(null);
 
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
     });
 
-    return (
-        <Container>
-            <HeaderButtons>
 
-                <BtnAscent onClick={() => handlePrint()}>Imprimir / Download</BtnAscent>
-            </HeaderButtons>
-            <ComponentToPrint ref={componentRef} />
-        </Container>
+    const { venda, loading, refreshVendaDetails } = useVendaDetails(props.codigo);
+
+    useEffect(() => {
+
+    }, [venda, loading]);
+
+    return (
+        <>
+            {
+                loading ? <h1>Carregando...</h1> : <Container> <h1>Codigo: {props.codigo}</h1>
+                    <HeaderButtons>
+                        <BtnAscent onClick={() => handlePrint()}>Imprimir / Download</BtnAscent>
+                    </HeaderButtons>
+                    <ComponentToPrint currVenda={venda} ref={componentRef} /></Container>
+            }
+        </>
 
     );
+}
+
+
+
+export default function Example() {
+
+    const { query, isReady } = useRouter();
+
+    function getCodito(): number {
+        let param = query.codigo;
+
+        let numeroVenda: number = parseInt(param as string);
+        return numeroVenda;
+    }
+
+    const [isReadyState, setIsReadyState] = useState<boolean>(false);
+
+    useEffect(() => {
+        setIsReadyState(isReady);
+    }, [isReady]);
+
+    if (isReadyState) {
+        return <Carregado codigo={getCodito()} />
+    } else {
+        return <Loading />
+    }
+
+
+
+
+    /* let codigo = route.query.codigo;
+
+    function getCodito(): number {
+        
+        
+        let numeroVenda: number = parseInt(codigo as string);
+
+        return numeroVenda;
+    }
+
+    const componentRef = useRef(null);
+
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
+
+
+    const { venda, loading, refreshVendaDetails } = useVendaDetails(getCodito());
+    
+    useEffect(() => {
+
+    }, [venda, loading, isReady]);
+
+    return (
+        <>
+            {
+                loading ? <h1>Carregando...</h1> : <Container> <h1>Codigo: {codigo}</h1>
+                    <HeaderButtons>
+                        <BtnAscent onClick={() => handlePrint()}>Imprimir / Download</BtnAscent>
+                    </HeaderButtons>
+                    <ComponentToPrint currVenda={venda} ref={componentRef} /></Container>
+            }
+        </>
+
+    ); */
 }
