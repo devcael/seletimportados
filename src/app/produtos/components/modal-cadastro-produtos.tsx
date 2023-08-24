@@ -244,13 +244,13 @@ export default function ModalCadastroDeProdutos(props: ModalProps) {
               register={register("marca")}
             />
           </SessionRow>
-          <SessionRow>
+          {/*  <SessionRow>
             <SimpleInput
               inputType='text'
               label="Fornecedor"
               register={register("id_fornecedor")}
             />
-          </SessionRow>
+          </SessionRow> */}
           {
             props.produto == null ? <BtnAscent type="submit" >Salvar</BtnAscent> : <BtnAscent type="submit" >Alterar</BtnAscent>
           }

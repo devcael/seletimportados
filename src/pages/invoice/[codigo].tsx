@@ -13,6 +13,9 @@ import StrUtil from "@/domain/services/StrUtils";
 import ItemVenda from "@/domain/models/ItemVenda";
 import VendaUseCase from "@/domain/usecases/venda_usecase";
 import { set } from "react-hook-form";
+import Empresa from "@/domain/models/Empresa";
+import { useEmpresa } from "@/hooks/useEmpresaFetch";
+import AppFormatters from "@/domain/services/Formatters";
 
 
 const Container = styled.div`
@@ -138,11 +141,13 @@ const Td = styled.td`
 
 const Th = styled.th`
  background-color: #5c9dff9a;
+ padding: 8px;
             color: #0d3a7d;
             text-align: left;
 `
 
-const Tr = styled.tr``
+const Tr = styled.tr`
+`
 
 const ResumeContainer = styled.div`
     width: 100%;
@@ -171,26 +176,27 @@ const ResumeInfo = styled.div`
 `
 interface ComponentToPrintProps {
     currVenda: Venda | null; // Defina o tipo da propriedade customString
+    currEmpresa: Empresa | null;
 }
 
 
 class ComponentToPrint extends React.PureComponent<ComponentToPrintProps> {
     render() {
 
-        const { currVenda } = this.props;
+        const { currVenda, currEmpresa } = this.props;
 
 
         let total = 0;
         return (
             <PdfContainer>
 
-                <PdfHeader>INVOICE #{currVenda?.id ?? 0}</PdfHeader>
+                <PdfHeader><h1>INVOICE #{currVenda?.id ?? 0}</h1></PdfHeader>
                 <CompanyInfo>
-                    <h2>Selet Importados</h2>
-                    <h3>Av. Brasil, 1234</h3>
-                    <h3>CEP: 12345-678</h3>
-                    <h3>Telefone: (11) 1234-5678</h3>
-                    <h3>CNPJ: 12.345.678/0001-90</h3>
+                    <h2>{currEmpresa?.nome ?? ""}</h2>
+                    <h3>{currEmpresa?.endereco ?? ''}, {currEmpresa?.numero} - {currEmpresa?.estado ?? ""}</h3>
+                    <h3>CEP: {currEmpresa?.cep ?? ""}</h3>
+                    <h3>Telefone: {AppFormatters.formatPhoneNumber(currEmpresa?.telefone ?? "00000000000")}</h3>
+                    <h3>CNPJ: {AppFormatters.formatCNPJ(currEmpresa?.cpfcnpj ?? "00000000000000")}</h3>
                 </CompanyInfo>
                 <Divider />
                 <ClientInfoContainer>
@@ -226,8 +232,6 @@ class ComponentToPrint extends React.PureComponent<ComponentToPrintProps> {
                                 <Td>{StrUtil.formatadorComPrefixo(item.getPrecoConvertido().toString(), "R$")}</Td>
                                 <Td>{StrUtil.formatadorComPrefixo(item.getValorTotalConvertido().toString(), "R$")}</Td>
                             </Tr>)}
-
-
                         </tbody>
                     </Table>
                 </div>
@@ -264,6 +268,7 @@ function Loading() {
 }
 
 function Carregado(props: { codigo: number }) {
+    const { empresa } = useEmpresa();
     const componentRef = useRef(null);
 
     const handlePrint = useReactToPrint({
@@ -280,11 +285,11 @@ function Carregado(props: { codigo: number }) {
     return (
         <>
             {
-                loading ? <h1>Carregando...</h1> : <Container> <h1>Codigo: {props.codigo}</h1>
+                loading ? <h1>Carregando...</h1> : <Container>
                     <HeaderButtons>
                         <BtnAscent onClick={() => handlePrint()}>Imprimir / Download</BtnAscent>
                     </HeaderButtons>
-                    <ComponentToPrint currVenda={venda} ref={componentRef} /></Container>
+                    <ComponentToPrint currEmpresa={empresa} currVenda={venda} ref={componentRef} /></Container>
             }
         </>
 
@@ -317,41 +322,4 @@ export default function Example() {
     }
 
 
-
-
-    /* let codigo = route.query.codigo;
-
-    function getCodito(): number {
-        
-        
-        let numeroVenda: number = parseInt(codigo as string);
-
-        return numeroVenda;
-    }
-
-    const componentRef = useRef(null);
-
-    const handlePrint = useReactToPrint({
-        content: () => componentRef.current,
-    });
-
-
-    const { venda, loading, refreshVendaDetails } = useVendaDetails(getCodito());
-    
-    useEffect(() => {
-
-    }, [venda, loading, isReady]);
-
-    return (
-        <>
-            {
-                loading ? <h1>Carregando...</h1> : <Container> <h1>Codigo: {codigo}</h1>
-                    <HeaderButtons>
-                        <BtnAscent onClick={() => handlePrint()}>Imprimir / Download</BtnAscent>
-                    </HeaderButtons>
-                    <ComponentToPrint currVenda={venda} ref={componentRef} /></Container>
-            }
-        </>
-
-    ); */
 }

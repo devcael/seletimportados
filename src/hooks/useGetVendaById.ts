@@ -1,3 +1,4 @@
+
 import Venda from '@/domain/models/Venda';
 import VendaUseCase from '@/domain/usecases/venda_usecase';
 import { useEffect, useState } from 'react';
