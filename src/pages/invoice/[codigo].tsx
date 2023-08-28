@@ -1,21 +1,20 @@
 "use client"
-import "@styles/fonts.css"
 import React, { useEffect, useRef, useState } from "react";
-import ReactToPrint, { useReactToPrint } from "react-to-print";
+import { useReactToPrint } from "react-to-print";
 import { styled } from "styled-components"
 import { BtnAscent } from "@/components/buttons";
-import { useRouter, withRouter } from "next/router";
+import { useRouter } from "next/router";
 import "../../app/globals.css";
 import "./invoice.css";
 import useVendaDetails from "@/hooks/useGetVendaById";
 import Venda from "@/domain/models/Venda";
 import StrUtil from "@/domain/services/StrUtils";
 import ItemVenda from "@/domain/models/ItemVenda";
-import VendaUseCase from "@/domain/usecases/venda_usecase";
-import { set } from "react-hook-form";
 import Empresa from "@/domain/models/Empresa";
 import { useEmpresa } from "@/hooks/useEmpresaFetch";
 import AppFormatters from "@/domain/services/Formatters";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '@styles/fonts.css'
 
 
 const Container = styled.div`
@@ -67,36 +66,48 @@ const PdfContainer = styled.div`
 
 const PdfHeader = styled.div`
     width: 100%;
-    height: 40px;
     padding: 25px;
-    
     background-color: white;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     overflow: hidden;
 `
 
 const CompanyInfo = styled.div`
-    width: 100%;
-    padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: start;
     overflow: hidden;
+    p{
+        color: #2c2c2c;
+    }
 `
 
+const PdfTitle = styled.div`
+    width: 100%;
+    padding: 0px 25px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    h1{
+        font-size: 28px;
+        color: var(--blue-ascent);
+    }
+`
 const Divider = styled.div`
     width: 100%;
     height: 1px;
-    background-color: #000;
+    background-color: var(--blue-ascent);
     margin: 10px 0;
 `
 
 const ClientInfoContainer = styled.div`
     width: 100%;
-    padding: 10px;
+    padding: 20px 25px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -124,23 +135,21 @@ const InvoiceInfo = styled.div`
 `
 
 const Table = styled.table`
-    margin-top:  10px;
+    margin-top:  60px;
     width: 100%;
     padding: 10px;
     border-collapse: collapse;
     border-spacing: 0;
     overflow: hidden;
-    border-radius: 5px;
 `
 
 const Td = styled.td`
- border-bottom: 1px solid #ccc;
             padding: 8px;
             text-align: left;
 `
 
 const Th = styled.th`
- background-color: #5c9dff9a;
+ background-color: #5c9dff27;
  padding: 8px;
             color: #0d3a7d;
             text-align: left;
@@ -166,7 +175,7 @@ const ResumeContainer = styled.div`
 `
 
 const ResumeInfo = styled.div`
-    width: 60%;
+    width: 30%;
     padding: 3px 8px;
     display: flex;
     flex-direction: row;
@@ -174,11 +183,124 @@ const ResumeInfo = styled.div`
     align-items: start;
     overflow: hidden;
 `
+
+const DottedDivider = styled.div`
+    width: 100%;
+  height: 1px;
+  background: transparent;
+  border: none;
+  border-top: 1px dotted gray;
+  margin: 1em 0;
+`;
+
 interface ComponentToPrintProps {
     currVenda: Venda | null; // Defina o tipo da propriedade customString
     currEmpresa: Empresa | null;
 }
 
+
+
+
+class NewInvoice extends React.PureComponent<ComponentToPrintProps> {
+
+    render(): React.ReactNode {
+
+        const { currVenda, currEmpresa } = this.props;
+        return (
+            <PdfContainer>
+
+                <PdfHeader>
+                    <CompanyInfo>
+                        <h2><strong>{currEmpresa?.nome}</strong></h2>
+                        <p><strong>{currEmpresa?.endereco}, {currEmpresa?.numero}, {currEmpresa?.estado}</strong></p>
+                        <p><strong>CEP: {currEmpresa?.cep}</strong></p>
+                        <p><strong>Telefone: {AppFormatters.formatPhoneNumber(currEmpresa?.telefone ?? "00000000000")}</strong></p>
+                        <p><strong>CNPJ: {AppFormatters.formatCNPJ(currEmpresa?.cpfcnpj ?? "00000000000000")}</strong></p>
+                    </CompanyInfo>
+                    <div style={{ width: 100, borderRadius: 5, height: "100px", overflow: "hidden", position: "relative" }}>
+                        <img style={{ height: "100%", position: "relative" }} src="/logo.png" alt="" />
+                    </div>
+                </PdfHeader>
+                <PdfTitle>
+                    <h1>{currVenda?.tipo == "VENDA" ? "INVOICE" : "BUDGET"}</h1>
+                </PdfTitle>
+                <ClientInfoContainer>
+                    <ClienteInfo>
+                        <h2><strong>BILL TO</strong></h2>
+                        <h3>Cliente: {currVenda?.cliente?.nome}</h3>
+                        <h3>Endereço: {currVenda?.cliente?.endereco}, {currVenda?.cliente?.numero} </h3>
+                        <h3>CEP: {currVenda?.cliente?.cep}</h3>
+                        <h3>Telefone:  {AppFormatters.formatPhoneNumber(currVenda?.cliente?.telefone ?? "0000000000")}</h3>
+                        <h3>CPF: {AppFormatters.formatCPF(currVenda?.cliente?.cpfcnpj ?? "00000000000")}</h3>
+                    </ClienteInfo>
+                    <ClienteInfo>
+                        <h2><strong>SHIP TO</strong></h2>
+                        <h3>Cliente: {currVenda?.cliente?.nome}</h3>
+                        <h3>Endereço: {currVenda?.cliente?.endereco}, {currVenda?.cliente?.numero} </h3>
+                        <h3>CEP: {currVenda?.cliente?.cep}</h3>
+                        <h3>Telefone:  {AppFormatters.formatPhoneNumber(currVenda?.cliente?.telefone ?? "0000000000")}</h3>
+                        <h3>CPF: {AppFormatters.formatCPF(currVenda?.cliente?.cpfcnpj ?? "00000000000")}</h3>
+                    </ClienteInfo>
+                    <InvoiceInfo>
+                        <h2><strong>INVOICE #</strong>{currVenda?.id} </h2>
+                        <h2><strong>DATE:</strong> {currVenda?.data} </h2>
+                    </InvoiceInfo>
+                </ClientInfoContainer>
+                <Divider />
+                <div className="container">
+                    <Table>
+                        <thead>
+                            <tr>
+                                <Th>DESCRIÇÃO</Th>
+                                <Th>IMEI</Th>
+                                <Th>QNT</Th>
+                                <Th>PRECO</Th>
+                                <Th>TOTAL</Th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currVenda?.listItems.map((item: ItemVenda, index: number) => <Tr key={index} >
+
+                                <Td><strong>{item.nome_produto} </strong></Td>
+
+                                <Td><strong>{item.imei != null ? item.imei.numeroimei : "Não Inserido"}</strong></Td>
+
+                                <Td><strong>{item.quantidade}</strong></Td>
+
+                                <Td><strong> {StrUtil.formatadorComPrefixo(item.getPrecoConvertido().toString() ?? "0.00", "R$")}</strong></Td>
+
+                                <Td><strong> {StrUtil.formatadorComPrefixo(item.getValorTotalConvertido().toString() ?? "0.00", "R$")}</strong></Td>
+
+                            </Tr>)}
+
+                        </tbody>
+                    </Table>
+                </div>
+                <DottedDivider></DottedDivider>
+                <ResumeContainer>
+                    <ResumeInfo>
+                        <h3>SUB TOTAL:</h3>
+                        <h3>{StrUtil.formatadorComPrefixo(currVenda?.subtotal.toString() ?? "0.00", "R$")}</h3>
+                    </ResumeInfo>
+                    <ResumeInfo>
+                        <h3>DESCONTO:</h3>
+                        <h3>{StrUtil.formatadorComPrefixo(currVenda?.desconto?.toString() ?? "0.00", "R$")}</h3>
+                    </ResumeInfo>
+
+                    <ResumeInfo>
+                        <h3>ACRESCIMO:</h3>
+                        <h3>{StrUtil.formatadorComPrefixo(currVenda?.acrescimo?.toString() ?? "0.00", "R$")}</h3>
+                    </ResumeInfo>
+
+                    <ResumeInfo>
+                        <h3><strong>VALOR TOTAL:</strong></h3>
+                        <h2><strong>{StrUtil.formatadorComPrefixo(currVenda?.totalvenda.toString() ?? "0.00", "R$")}</strong></h2>
+                    </ResumeInfo>
+                </ResumeContainer>
+            </PdfContainer>
+        )
+    }
+}
 
 class ComponentToPrint extends React.PureComponent<ComponentToPrintProps> {
     render() {
@@ -198,6 +320,9 @@ class ComponentToPrint extends React.PureComponent<ComponentToPrintProps> {
                     <h3>Telefone: {AppFormatters.formatPhoneNumber(currEmpresa?.telefone ?? "00000000000")}</h3>
                     <h3>CNPJ: {AppFormatters.formatCNPJ(currEmpresa?.cpfcnpj ?? "00000000000000")}</h3>
                 </CompanyInfo>
+                <div style={{ width: 100, borderRadius: 5, height: "100px", overflow: "hidden", position: "relative" }}>
+                    <img style={{ height: "100%", position: "relative" }} className="fullwidth-img" src="logo.png" alt="" />
+                </div>
                 <Divider />
                 <ClientInfoContainer>
                     <ClienteInfo>
@@ -289,7 +414,7 @@ function Carregado(props: { codigo: number }) {
                     <HeaderButtons>
                         <BtnAscent onClick={() => handlePrint()}>Imprimir / Download</BtnAscent>
                     </HeaderButtons>
-                    <ComponentToPrint currEmpresa={empresa} currVenda={venda} ref={componentRef} /></Container>
+                    <NewInvoice currEmpresa={empresa} currVenda={venda} ref={componentRef} /></Container>
             }
         </>
 
@@ -314,6 +439,7 @@ export default function Example() {
     useEffect(() => {
         setIsReadyState(isReady);
     }, [isReady]);
+
 
     if (isReadyState) {
         return <Carregado codigo={getCodito()} />
