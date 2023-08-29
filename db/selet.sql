@@ -58,6 +58,30 @@ CREATE TABLE IF NOT EXISTS `cabecalho_pedido` (
 -- Copiando dados para a tabela seletimportados.cabecalho_pedido: ~0 rows (aproximadamente)
 DELETE FROM `cabecalho_pedido`;
 
+-- Copiando estrutura para tabela seletimportados.cad_empresa
+CREATE TABLE IF NOT EXISTS `cad_empresa` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `cpfcnpj` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `telefone` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `tipo` enum('PF','PJ') CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `endereco` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `cep` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `numero` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `complemento` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `cidade` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `estado` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `pais` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `crt` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+-- Copiando dados para a tabela seletimportados.cad_empresa: ~0 rows (aproximadamente)
+DELETE FROM `cad_empresa`;
+INSERT INTO `cad_empresa` (`id`, `nome`, `cpfcnpj`, `telefone`, `email`, `tipo`, `endereco`, `cep`, `numero`, `complemento`, `cidade`, `estado`, `pais`, `crt`) VALUES
+	(1, 'Micael', '', '75983534877', 'dasda', NULL, '', '', '', 'Centro', '', '', '', '');
+
 -- Copiando estrutura para tabela seletimportados.clientes
 CREATE TABLE IF NOT EXISTS `clientes` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -73,12 +97,12 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `cidade` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `estado` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
 -- Copiando dados para a tabela seletimportados.clientes: ~1 rows (aproximadamente)
 DELETE FROM `clientes`;
 INSERT INTO `clientes` (`id`, `nome`, `cpfcnpj`, `telefone`, `email`, `tipo`, `endereco`, `cep`, `numero`, `complemento`, `cidade`, `estado`) VALUES
-	(1, 'dasda', '', '', '', 'PF', '', '', '', '', '', '');
+	(1, 'Micael', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- Copiando estrutura para tabela seletimportados.consumo_pedido
 CREATE TABLE IF NOT EXISTS `consumo_pedido` (
@@ -128,9 +152,7 @@ CREATE TABLE IF NOT EXISTS `contas_a_pagar` (
   `id_fornecedor` int NOT NULL,
   PRIMARY KEY (`idcontas_a_pagar`),
   KEY `fk_ctpagar_fornecedor_idx` (`id_fornecedor`),
-  KEY `fk_ctpagar_usuario_idx` (`id_do_usuario`),
-  CONSTRAINT `fk_ctpagar_fornecedor` FOREIGN KEY (`id_fornecedor`) REFERENCES `fornecedor` (`id`),
-  CONSTRAINT `fk_ctpagar_usuario` FOREIGN KEY (`id_do_usuario`) REFERENCES `usuario` (`idusuario`)
+  KEY `fk_ctpagar_usuario_idx` (`id_do_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Copiando dados para a tabela seletimportados.contas_a_pagar: ~0 rows (aproximadamente)
@@ -150,9 +172,7 @@ CREATE TABLE IF NOT EXISTS `contas_a_receber` (
   `data_vencimento` date DEFAULT NULL,
   PRIMARY KEY (`idcontas_a_receber`),
   KEY `fk_conta_a_receber_idx` (`id_venda`),
-  KEY `fk_conta_a_receber_cliente_idx` (`id_cliente`),
-  CONSTRAINT `fk_conta_a_receber_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id`),
-  CONSTRAINT `fk_conta_a_receber_venda` FOREIGN KEY (`id_venda`) REFERENCES `venda` (`id`)
+  KEY `fk_conta_a_receber_cliente_idx` (`id_cliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Copiando dados para a tabela seletimportados.contas_a_receber: ~0 rows (aproximadamente)
@@ -192,12 +212,10 @@ CREATE TABLE IF NOT EXISTS `fornecedor` (
   `pais` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `crt` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela seletimportados.fornecedor: ~1 rows (aproximadamente)
+-- Copiando dados para a tabela seletimportados.fornecedor: ~0 rows (aproximadamente)
 DELETE FROM `fornecedor`;
-INSERT INTO `fornecedor` (`id`, `nome`, `cpfcnpj`, `telefone`, `email`, `tipo`, `endereco`, `cep`, `numero`, `complemento`, `cidade`, `estado`, `pais`, `crt`) VALUES
-	(1, 'dasda', '', '', '', 'PJ', '', '', '', '', '', '', '', '');
 
 -- Copiando estrutura para tabela seletimportados.grupo_adicionais
 CREATE TABLE IF NOT EXISTS `grupo_adicionais` (
@@ -251,21 +269,17 @@ CREATE TABLE IF NOT EXISTS `items_venda` (
   KEY `fk_moeda_preco_idx` (`id_moeda_preco_produto`) USING BTREE,
   KEY `fk_taxa_custo_conversao_idx` (`id_moeda_custo_produto`) USING BTREE,
   KEY `fk_item_venda_idx` (`id_venda`) USING BTREE,
-  KEY `fk_item_product` (`id_produto`) USING BTREE,
-  CONSTRAINT `fk_item_product` FOREIGN KEY (`id_produto`) REFERENCES `produtos` (`id`),
-  CONSTRAINT `fk_item_venda` FOREIGN KEY (`id_venda`) REFERENCES `venda` (`id`),
-  CONSTRAINT `fk_taxa_custo_conversao` FOREIGN KEY (`id_moeda_custo_produto`) REFERENCES `moedasconversao` (`id_taxa`),
-  CONSTRAINT `fk_taxa_preco_conversao` FOREIGN KEY (`id_moeda_preco_produto`) REFERENCES `moedasconversao` (`id_taxa`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb3;
+  KEY `fk_item_product` (`id_produto`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela seletimportados.items_venda: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela seletimportados.items_venda: ~5 rows (aproximadamente)
 DELETE FROM `items_venda`;
 INSERT INTO `items_venda` (`id_itens_venda`, `id_produto`, `nome_produto`, `preco_produto`, `custo_produto`, `quantidade`, `acrescimo`, `desconto`, `valortotal`, `id_moeda_custo_produto`, `taxa_moeda_custo_produto`, `id_moeda_preco_produto`, `taxa_moeda_preco_produto`, `id_venda`) VALUES
-	(26, 43, 'dasd', 123.13, 0.00, 1.00, 0.00, 589.42, 110.82, 1, 47.87, 1, 47.87, 21),
-	(27, 43, 'dasd', 123.13, 0.00, 1.00, 884.13, 589.42, 129.29, 1, 47.87, 1, 47.87, 21),
-	(28, 43, 'dasd', 123.13, 0.00, 1.00, 0.00, 0.00, 123.13, 1, 47.87, 1, 47.87, 22),
-	(29, 43, 'dasd', 123.13, 0.00, 1.00, 0.00, 0.00, 123.13, 1, 47.87, 1, 47.87, 23),
-	(30, 43, 'dasd', 123.13, 0.00, 1.00, 0.00, 0.00, 123.13, 1, 47.87, 1, 47.87, 24);
+	(1, 1, 'Iphone  13 Pro Max', 300.00, 150.00, 1.00, 0.00, 0.00, 300.00, 1, 4.70, 1, 4.70, 1),
+	(2, 1, 'Iphone  13 Pro Max', 300.00, 150.00, 1.00, 0.00, 0.00, 300.00, 1, 4.70, 1, 4.70, 1),
+	(3, 1, 'Iphone  13 Pro Max', 300.00, 150.00, 1.00, 0.00, 0.00, 300.00, 1, 4.70, 1, 4.70, 2),
+	(4, 1, 'Iphone  13 Pro Max', 300.00, 150.00, 1.00, 0.00, 0.00, 300.00, 1, 4.70, 1, 4.70, 3),
+	(5, 1, 'Iphone  13 Pro Max', 300.00, 150.00, 1.00, 0.00, 0.00, 300.00, 1, 4.70, 1, 4.70, 4);
 
 -- Copiando estrutura para tabela seletimportados.moedasconversao
 CREATE TABLE IF NOT EXISTS `moedasconversao` (
@@ -279,7 +293,7 @@ CREATE TABLE IF NOT EXISTS `moedasconversao` (
 -- Copiando dados para a tabela seletimportados.moedasconversao: ~2 rows (aproximadamente)
 DELETE FROM `moedasconversao`;
 INSERT INTO `moedasconversao` (`id_taxa`, `nome_da_moeda`, `taxa_de_conversao_real`, `simbolo`) VALUES
-	(1, 'DOLAR', 47.87, '$'),
+	(1, 'DOLAR', 4.70, '$'),
 	(5, 'REAL', 1.00, 'R$');
 
 -- Copiando estrutura para tabela seletimportados.pagamento_venda
@@ -291,18 +305,16 @@ CREATE TABLE IF NOT EXISTS `pagamento_venda` (
   `troco` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`idpagamento_venda`),
   KEY `fk_pagamento_venda_idx` (`id_venda`),
-  KEY `fk_pagamento_tipo_de_pagamento_idx` (`id_tipo_pagamento`),
-  CONSTRAINT `fk_pagamento_tipo_de_pagamento` FOREIGN KEY (`id_tipo_pagamento`) REFERENCES `tiposdepagamento` (`idtiposdepagamento`),
-  CONSTRAINT `fk_pagamento_venda` FOREIGN KEY (`id_venda`) REFERENCES `venda` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3;
+  KEY `fk_pagamento_tipo_de_pagamento_idx` (`id_tipo_pagamento`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela seletimportados.pagamento_venda: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela seletimportados.pagamento_venda: ~4 rows (aproximadamente)
 DELETE FROM `pagamento_venda`;
 INSERT INTO `pagamento_venda` (`idpagamento_venda`, `id_venda`, `id_tipo_pagamento`, `valorpago`, `troco`) VALUES
-	(11, 21, 3, 11493.75, NULL),
-	(12, 22, 3, 432442.43, NULL),
-	(13, 23, 3, 423424.42, NULL),
-	(14, 24, 3, 31313.13, NULL);
+	(1, 1, 3, 4534.53, NULL),
+	(2, 2, 3, 5453.55, NULL),
+	(3, 3, 3, 3423.44, NULL),
+	(4, 4, 3, 3423.44, NULL);
 
 -- Copiando estrutura para tabela seletimportados.produtos
 CREATE TABLE IF NOT EXISTS `produtos` (
@@ -321,16 +333,13 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   PRIMARY KEY (`id`),
   KEY `id_moesa_custo` (`id_moeda_custo`,`id_moeda_preco`),
   KEY `fk_products_suplier_idx` (`id_fornecedor`),
-  KEY `fk_preco_moeda_idx` (`id_moeda_preco`),
-  CONSTRAINT `fk_custo_moeda` FOREIGN KEY (`id_moeda_custo`) REFERENCES `moedasconversao` (`id_taxa`),
-  CONSTRAINT `fk_preco_moeda` FOREIGN KEY (`id_moeda_preco`) REFERENCES `moedasconversao` (`id_taxa`),
-  CONSTRAINT `fk_products_suplier` FOREIGN KEY (`id_fornecedor`) REFERENCES `fornecedor` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb3;
+  KEY `fk_preco_moeda_idx` (`id_moeda_preco`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
 -- Copiando dados para a tabela seletimportados.produtos: ~0 rows (aproximadamente)
 DELETE FROM `produtos`;
 INSERT INTO `produtos` (`id`, `nome`, `ean`, `preco`, `custo`, `id_fornecedor`, `id_moeda_custo`, `id_moeda_preco`, `ativo`, `data_de_cadastro`, `estoque`, `marca`) VALUES
-	(43, 'dasd', 'dada', 123.13, 0.00, 1, 1, 1, 1, '2023-08-21', 0, '');
+	(1, 'Iphone  13 Pro Max', '123456789', 300.00, 150.00, 1, 1, 1, 1, '2023-08-27', 0, '');
 
 -- Copiando estrutura para tabela seletimportados.system_config
 CREATE TABLE IF NOT EXISTS `system_config` (
@@ -427,17 +436,16 @@ CREATE TABLE IF NOT EXISTS `venda` (
   `totalcomdescontoeacrescimo` decimal(10,2) DEFAULT NULL,
   `tipo` enum('VENDA','ORCAMENTO') DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_cliente` (`id_cliente`),
-  CONSTRAINT `fk_venda_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb3;
+  KEY `id_cliente` (`id_cliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela seletimportados.venda: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela seletimportados.venda: ~4 rows (aproximadamente)
 DELETE FROM `venda`;
 INSERT INTO `venda` (`id`, `data`, `hora`, `totalvenda`, `situacao`, `id_usuario`, `id_cliente`, `desconto`, `acrescimo`, `subtotal`, `totalcomdescontoeacrescimo`, `tipo`) VALUES
-	(21, '2023-08-22', '23:06:26', 10344.38, 'FINALIZADA', 1, 1, 1149.38, 0.00, 11493.75, 10344.38, 'VENDA'),
-	(22, '2023-08-22', '23:07:33', 5894.23, 'FINALIZADA', 1, 1, 0.00, 0.00, 5894.23, 5894.23, 'VENDA'),
-	(23, '2023-08-22', '23:17:58', 5894.23, 'FINALIZADA', 1, 1, 0.00, 0.00, 5894.23, 5894.23, 'VENDA'),
-	(24, '2023-08-22', '23:29:52', 5894.23, 'FINALIZADA', 1, 1, 0.00, 0.00, 5894.23, 5894.23, 'VENDA');
+	(1, '2023-08-27', '10:23:16', 2820.00, 'FINALIZADA', 1, 1, 0.00, 0.00, 2820.00, 2820.00, 'VENDA'),
+	(2, '2023-08-27', '10:23:35', 1410.00, 'FINALIZADA', 1, 1, 0.00, 0.00, 1410.00, 1410.00, 'VENDA'),
+	(3, '2023-08-28', '00:46:02', 1410.00, 'FINALIZADA', 1, 1, 0.00, 0.00, 1410.00, 1410.00, 'VENDA'),
+	(4, '2023-08-28', '00:46:12', 1410.00, 'FINALIZADA', 1, 1, 0.00, 0.00, 1410.00, 1410.00, 'VENDA');
 
 -- Copiando estrutura para tabela seletimportados.vincular_imei
 CREATE TABLE IF NOT EXISTS `vincular_imei` (
@@ -445,8 +453,7 @@ CREATE TABLE IF NOT EXISTS `vincular_imei` (
   `id_itemvenda` int NOT NULL,
   `numeroimei` varchar(255) NOT NULL,
   PRIMARY KEY (`id_imei`),
-  UNIQUE KEY `id_itemvenda_UNIQUE` (`id_itemvenda`),
-  CONSTRAINT `fk_item_venda_mei` FOREIGN KEY (`id_itemvenda`) REFERENCES `items_venda` (`id_itens_venda`)
+  UNIQUE KEY `id_itemvenda_UNIQUE` (`id_itemvenda`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Copiando dados para a tabela seletimportados.vincular_imei: ~0 rows (aproximadamente)

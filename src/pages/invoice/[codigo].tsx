@@ -226,7 +226,7 @@ class NewInvoice extends React.PureComponent<ComponentToPrintProps> {
                 </PdfTitle>
                 <ClientInfoContainer>
                     <ClienteInfo>
-                        <h2><strong>BILL TO</strong></h2>
+                        <h2><strong>Endereço Fatura</strong></h2>
                         <h3>Cliente: {currVenda?.cliente?.nome}</h3>
                         <h3>Endereço: {currVenda?.cliente?.endereco}, {currVenda?.cliente?.numero} </h3>
                         <h3>CEP: {currVenda?.cliente?.cep}</h3>
@@ -234,7 +234,7 @@ class NewInvoice extends React.PureComponent<ComponentToPrintProps> {
                         <h3>CPF: {AppFormatters.formatCPF(currVenda?.cliente?.cpfcnpj ?? "00000000000")}</h3>
                     </ClienteInfo>
                     <ClienteInfo>
-                        <h2><strong>SHIP TO</strong></h2>
+                        <h2><strong>Endereço Envio</strong></h2>
                         <h3>Cliente: {currVenda?.cliente?.nome}</h3>
                         <h3>Endereço: {currVenda?.cliente?.endereco}, {currVenda?.cliente?.numero} </h3>
                         <h3>CEP: {currVenda?.cliente?.cep}</h3>
