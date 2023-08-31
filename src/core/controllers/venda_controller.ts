@@ -1,3 +1,4 @@
+import ProdutoModel from '../models/produtos_model';
 import VendaModel from '../models/venda_model';
 import sequelize from '../settings/database';
 import { QueryTypes } from "sequelize";
@@ -6,6 +7,10 @@ export interface DadosEstatisticos {
   total_receita: number;
   lucro: number;
   quantidade_vendas: number;
+  produto_mais_vendido: string;
+}
+
+export interface ProdutoEstatisticas {
   produto_mais_vendido: string;
 }
 
@@ -58,29 +63,53 @@ const VendaController = {
     return await VendaModel.create(venda);
   }, async obterDadosEstatisticos(dataInicial: string, dataFinal: string): Promise<DadosEstatisticos | null> {
     const result: DadosEstatisticos[] = await sequelize.query(`
-      SELECT 
-     SUM(iv.valortotal * iv.taxa_moeda_preco_produto) AS total_receita,
-    SUM((iv.valortotal * iv.taxa_moeda_preco_produto) - (iv.custo_produto * iv.taxa_moeda_custo_produto)) AS lucro,
-        COUNT(DISTINCT v.id) AS quantidade_vendas,
-        p.nome AS produto_mais_vendido
-      FROM 
-        venda v
-      INNER JOIN
-        items_venda iv ON v.id = iv.id_venda
-      INNER JOIN
-        produtos p ON iv.id_produto = p.id
+      SELECT
+      SUM(iv.valortotal * iv.taxa_moeda_preco_produto) AS total_receita,
+      SUM(((iv.valortotal * iv.taxa_moeda_preco_produto) - (iv.custo_produto * iv.taxa_moeda_custo_produto) + IFNULL(iv.acrescimo, 0) - IFNULL(iv.desconto, 0))) AS lucro,
+      COUNT(DISTINCT iv.id_venda) AS quantidade_vendas
+      FROM
+          items_venda AS iv
+          INNER JOIN venda AS v ON iv.id_venda = v.id
       WHERE
         v.data BETWEEN "${dataInicial}" AND "${dataFinal}" AND v.tipo = "VENDA"
-      GROUP BY
-        p.id, p.nome
-      ORDER BY
-        quantidade_vendas DESC
-      LIMIT 1;
+      ;  
+      
     `, {
       type: QueryTypes.SELECT,
     });
 
-    return result.length > 0 ? result[0] : null;
+
+    const produtoQuery: ProdutoEstatisticas[] = await sequelize.query(`
+    SELECT
+    p.nome AS produto_mais_vendido,
+    SUM(iv.quantidade) AS quantidade_mais_vendida
+      FROM
+          produtos AS p
+      INNER JOIN items_venda AS iv ON p.id = iv.id_produto
+      INNER JOIN venda AS v ON iv.id_venda = v.id
+      WHERE
+        v.data BETWEEN "${dataInicial}" AND "${dataFinal}" AND v.tipo = "VENDA"
+      GROUP BY
+          p.id, p.nome
+      ORDER BY
+          quantidade_mais_vendida DESC
+      LIMIT 1;
+      
+    `, {
+      type: QueryTypes.SELECT,
+    });
+
+
+    if (result.length == 0) {
+      return null;
+    }
+
+    var returnData: DadosEstatisticos = {
+      ...result[0],
+      produto_mais_vendido: produtoQuery.length > 0 ? produtoQuery[0].produto_mais_vendido : "Não foi possivel definir"
+    }
+
+    return returnData;
   },
 
   async updateVenda(vendaId: number, novosDados: {

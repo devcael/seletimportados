@@ -26,9 +26,6 @@ export default class ReqHttp {
 
             });
 
-            /*             clearTimeout(timeout); */
-
-
             const responseBody = await response.text();
 
             if (!response.ok) {
