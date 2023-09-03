@@ -122,7 +122,7 @@ function CompanyBody(props: { empresa: Empresa, update: (empresa: EmpresaProps) 
 
             <SessionRow>
                 <SimpleInput register={register("endereco")} inputType='text' label='Endereço' />
-                <SimpleInput register={register("endereco")} inputType='number' label='Número' />
+                <SimpleInput register={register("numero")} inputType='number' label='Número' />
             </SessionRow>
             <SessionRow>
                 <SimpleInput register={register("complemento")} inputType='text' label='Bairro' />
@@ -144,6 +144,8 @@ export default function Home() {
 
     const handleUpdateEmpresa = async (data: EmpresaProps) => {
         try {
+            console.log(data);
+
             await updateEmpresa(data);
             alert("Empresa alterada com sucesso!");
         } catch (error) {

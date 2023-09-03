@@ -18,7 +18,7 @@ export function useEmpresa() {
         }
     }, []);
 
-    const updateEmpresa = useCallback(async (empresa: {
+    const updateEmpresa = async (currEmpresa: {
         nome?: string;
         cpfcnpj?: string | null;
         telefone?: string | null;
@@ -34,12 +34,17 @@ export function useEmpresa() {
         crt?: string | null;
     }) => {
         try {
-            await EmpresaUseCase.updateEmpresa(empresa);
-            getEmpresa();
+
+            console.log("Updating empresa:", currEmpresa);
+
+            await EmpresaUseCase.updateEmpresa(currEmpresa);
+            //await getEmpresa();
         } catch (error) {
             console.error('Erro ao atualizar empresa:', error);
         }
-    }, [getEmpresa]);
+    };
+
+
 
     useEffect(() => {
         getEmpresa();

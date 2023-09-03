@@ -212,7 +212,8 @@ class NewInvoice extends React.PureComponent<ComponentToPrintProps> {
                 <PdfHeader>
                     <CompanyInfo>
                         <h2><strong>{currEmpresa?.nome}</strong></h2>
-                        <p><strong>{currEmpresa?.endereco}, {currEmpresa?.numero}, {currEmpresa?.estado}</strong></p>
+                        <p><strong>{currEmpresa?.cidade} - {currEmpresa?.estado}</strong></p>
+                        <p><strong>{currEmpresa?.endereco}, {currEmpresa?.numero}</strong></p>
                         <p><strong>CEP: {currEmpresa?.cep}</strong></p>
                         <p><strong>Telefone: {AppFormatters.formatPhoneNumber(currEmpresa?.telefone ?? "00000000000")}</strong></p>
                         <p><strong>CNPJ: {AppFormatters.formatCNPJ(currEmpresa?.cpfcnpj ?? "00000000000000")}</strong></p>
@@ -228,6 +229,7 @@ class NewInvoice extends React.PureComponent<ComponentToPrintProps> {
                     <ClienteInfo>
                         <h2><strong>Endereço Fatura</strong></h2>
                         <h3>Cliente: {currVenda?.cliente?.nome}</h3>
+                        <p><strong>{currVenda?.cliente?.cidade} - {currVenda?.cliente?.estado}</strong></p>
                         <h3>Endereço: {currVenda?.cliente?.endereco}, {currVenda?.cliente?.numero} </h3>
                         <h3>CEP: {currVenda?.cliente?.cep}</h3>
                         <h3>Telefone:  {AppFormatters.formatPhoneNumber(currVenda?.cliente?.telefone ?? "0000000000")}</h3>
@@ -236,6 +238,7 @@ class NewInvoice extends React.PureComponent<ComponentToPrintProps> {
                     <ClienteInfo>
                         <h2><strong>Endereço Envio</strong></h2>
                         <h3>Cliente: {currVenda?.cliente?.nome}</h3>
+                        <p><strong>{currVenda?.cliente?.cidade} - {currVenda?.cliente?.estado}</strong></p>
                         <h3>Endereço: {currVenda?.cliente?.endereco}, {currVenda?.cliente?.numero} </h3>
                         <h3>CEP: {currVenda?.cliente?.cep}</h3>
                         <h3>Telefone:  {AppFormatters.formatPhoneNumber(currVenda?.cliente?.telefone ?? "0000000000")}</h3>
