@@ -37,7 +37,10 @@ const VendaController = {
 
     let dataFilter: string = (dataInicial && dataFinal) ? `AND V.data BETWEEN "${dataInicial}" AND "${dataFinal}"` : '';
 
-    const vendas = await sequelize.query(`SELECT V.*, C.nome FROM venda AS V LEFT JOIN clientes AS C ON V.id_cliente = C.id WHERE C.nome LIKE "%${search}%" OR V.id LIKE "%${search}%" ${tipoFilter} ${dataFilter} ${situacaoFilter}  ORDER BY V.id DESC LIMIT ${pageSize} OFFSET ${offset};`, {
+    console.log("Data filter: ", dataFilter);
+
+
+    const vendas = await sequelize.query(`SELECT V.*, C.nome FROM venda AS V LEFT JOIN clientes AS C ON V.id_cliente = C.id WHERE ( C.nome LIKE "%${search}%" OR V.id LIKE "%${search}%" ) ${tipoFilter} ${dataFilter} ${situacaoFilter}  ORDER BY V.id DESC LIMIT ${pageSize} OFFSET ${offset};`, {
       model: VendaModel,
       mapToModel: true
     });
@@ -65,7 +68,7 @@ const VendaController = {
     const result: DadosEstatisticos[] = await sequelize.query(`
       SELECT
       SUM(iv.valortotal * iv.taxa_moeda_preco_produto) AS total_receita,
-      SUM(((iv.valortotal * iv.taxa_moeda_preco_produto) - (iv.custo_produto * iv.taxa_moeda_custo_produto) + IFNULL(iv.acrescimo, 0) - IFNULL(iv.desconto, 0))) AS lucro,
+      SUM(((iv.valortotal * iv.taxa_moeda_preco_produto) - ((iv.custo_produto * iv.quantidade) * iv.taxa_moeda_custo_produto))) AS lucro,
       COUNT(DISTINCT iv.id_venda) AS quantidade_vendas
       FROM
           items_venda AS iv
@@ -136,6 +139,10 @@ const VendaController = {
     const deletedRowsCount = await VendaModel.destroy({
       where: { id: vendaId },
     });
+
+    await sequelize.query(`DELETE FROM items_venda WHERE id_venda = ${vendaId};`);
+
+    await sequelize.query(`DELETE FROM pagamento_venda WHERE id_venda = ${vendaId};`);
 
     return deletedRowsCount > 0;
   }

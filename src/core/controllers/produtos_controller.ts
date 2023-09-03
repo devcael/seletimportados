@@ -16,11 +16,13 @@ const ProdutosController = {
 
     },
 
-    async buscarProdutosPaginados(currPage: number, pageSize: number, searchName: string): Promise<{ produtos: ProdutoModel[]; totalCount: number, currPage: number }> {
+    async buscarProdutosPaginados(currPage: number, pageSize: number, searchName: string, active: boolean): Promise<{ produtos: ProdutoModel[]; totalCount: number, currPage: number }> {
 
         let offset = currPage * pageSize;
 
-        const produtos = await sequelize.query(`SELECT * FROM produtos WHERE nome LIKE "%${searchName}%" LIMIT ${pageSize} OFFSET ${offset};`, {
+        let activeQuery = active ? `AND ativo = 1` : '';
+
+        const produtos = await sequelize.query(`SELECT * FROM produtos WHERE nome LIKE "%${searchName}%" ${activeQuery} LIMIT ${pageSize} OFFSET ${offset};`, {
             model: ProdutoModel,
             mapToModel: true // pass true here if you have any mapped fields
         });

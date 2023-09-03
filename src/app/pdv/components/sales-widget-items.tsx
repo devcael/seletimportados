@@ -145,7 +145,29 @@ export default function SalesWidgetItems() {
                 const currItem: ItemVenda = listaItems[index];
                 console.log("Criando item de venda", currItem)
 
+                let calcPorcentageRelativaAVenda: number = (currItem.getValorTotalConvertido() / subTotalVenda) * 100;
+
+                let calcValorDescontoItem: number = (desconto / 100) * calcPorcentageRelativaAVenda;
+
+                let calcValorAcrescimoItem: number = (acrescimo / 100) * calcPorcentageRelativaAVenda;
+
+                console.log("calcPorcentageRelativaAVenda", calcValorDescontoItem);
+
+
                 currItem.setIdVenda(newVenda.id);
+
+
+
+                if (currItem?.desconto != null) {
+                    currItem.desconto += calcValorDescontoItem;
+                }
+
+                if (currItem?.acrescimo != null) {
+                    currItem.acrescimo += calcValorAcrescimoItem;
+                }
+
+                currItem.valortotal += calcValorAcrescimoItem;
+                currItem.valortotal -= calcValorDescontoItem;
                 // currItem.valortotal = currItem.getValorTotalConvertido();
                 await ItemVendaUseCase.enviarItemVenda(currItem);
 

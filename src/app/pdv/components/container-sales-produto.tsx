@@ -77,7 +77,7 @@ export default function ContainerProduto() {
 
     const { adicionarItemVenda } = useGerenciadorVendaContext();
 
-    const { data, loading, fetchData, page, search, setPage, setSearch } = usePaginatedData(0, 100);
+    const { data, loading, fetchData, page, search, setPage, setSearch } = usePaginatedData(0, 100, true);
 
     const [total, setTotal] = useState<number>(0.0);
     const [totalDesconto, setTotalDesconto] = useState<number>(0.0);

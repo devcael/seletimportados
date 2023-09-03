@@ -14,7 +14,8 @@ interface PaginatedData {
 
 const usePaginatedData = <T extends {}>(
     initialPage: number,
-    limit: number
+    limit: number,
+    active: boolean = false
 ): PaginatedData => {
     const [data, setData] = useState<Produto[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -24,7 +25,7 @@ const usePaginatedData = <T extends {}>(
     const fetchData = async (newPage: number, limit: number, newSearch: string) => {
         setLoading(true);
         try {
-            const productList = await ProdutoUseCase.getAllProdutoPaginados(newPage, limit, newSearch);
+            const productList = await ProdutoUseCase.getAllProdutoPaginados(newPage, limit, newSearch, active);
             setData(productList);
             setPage(newPage);
             setSearch(newSearch);

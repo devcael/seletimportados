@@ -67,6 +67,15 @@ export default function ModalCadastroDeProdutos(props: ModalProps) {
   const [custo, setCusto] = useState<number>(props.produto?.custo ?? 0);
 
   useEffect(() => {
+
+    if (props.produto != null) {
+      setMoedaCusto(props.produto.moeda_custo);
+      setMoedaPreco(props.produto.moeda_preco);
+    }
+
+  }, [props.produto]);
+
+  useEffect(() => {
   }, [moedaCusto, moedaPreco, preco, custo]);
 
 
@@ -155,6 +164,17 @@ export default function ModalCadastroDeProdutos(props: ModalProps) {
     props.onRequestClose?.();
   }
 
+  function handleSelectedDropDown(value: string, id_moeda: number): boolean {
+    let idMoeda = parseInt(value);
+
+    if (id_moeda == idMoeda) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
 
 
   return (
@@ -195,7 +215,7 @@ export default function ModalCadastroDeProdutos(props: ModalProps) {
             />
             <SimpleDropdown
               label="Moeda Preço"
-
+              selectedId={(value: string) => handleSelectedDropDown(value, moedaPreco.id_taxa)}
               items={props.moedas.map((moeda) => { return { value: moeda.id_taxa.toString(), label: moeda.nome_da_moeda } })}
               onChange={(value: string) => {
 
@@ -218,6 +238,7 @@ export default function ModalCadastroDeProdutos(props: ModalProps) {
               onChange={(event) => setCusto(AppUtil.formatRealToDouble(event) ?? 0.00)}
             /><SimpleDropdown
               label="Moeda Custo"
+              selectedId={(value: string) => handleSelectedDropDown(value, moedaPreco.id_taxa)}
               items={props.moedas.map((moeda) => { return { value: moeda.id_taxa.toString(), label: moeda.nome_da_moeda } })}
               onChange={(value: string) => {
 

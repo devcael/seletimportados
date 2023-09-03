@@ -7,13 +7,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
-    const { page, pageSize, search } = req.query;
+    const { page, pageSize, search, active } = req.query;
 
     if (req.method === 'GET') {
 
+        let activeQuery = active == 'true' ? true : false;
 
 
-        let { produtos, totalCount, currPage } = await ProdutosController.buscarProdutosPaginados(Number(page), Number(pageSize), String(search));
+
+        let { produtos, totalCount, currPage } = await ProdutosController.buscarProdutosPaginados(Number(page), Number(pageSize), String(search), activeQuery);
 
         if (produtos != null) {
 

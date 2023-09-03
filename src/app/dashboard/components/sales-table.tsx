@@ -27,6 +27,8 @@ import ModalVisualizarVenda from "./modal-visualizar-venda";
 import ReqHttp from "@/domain/services/ReqHttp";
 import VendaUseCase from "@/domain/usecases/venda_usecase";
 import { useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 
 dayjs.extend(utc);
@@ -51,12 +53,16 @@ export default function SalesTable() {
                 <TableData >{venda.tipo}</TableData>
                 <TableData >{dayjs(new Date(venda.data)).add(1, 'd').format("DD/MM/YYYY")}</TableData>
                 <TableData><strong>{StrUtil.formatadorComSufixoComGarantiaDeDecimal(venda.totalvenda.toString())}</strong></TableData>
-                <TableData style={{ display: "flex", gap: "10px", justifyContent: "end" }} ><BtnAscent onClick={() => handleEditVenda(venda.id)}>Editar</BtnAscent><BtnAscent onClick={() => handleImprimirVenda(venda.id)}>Imprimir</BtnAscent>{venda.tipo == "ORCAMENTO" ? <BtnAscent style={{ background: "teal" }} onClick={() => handleConfimarVenda(venda.id)}>Confirmar</BtnAscent> : null}</TableData>
+                <TableData style={{ display: "flex", gap: "10px", justifyContent: "end" }} ><BtnAscent onClick={() => handleEditVenda(venda.id)}>Editar</BtnAscent><BtnAscent onClick={() => handleImprimirVenda(venda.id)}>Imprimir</BtnAscent>{venda.tipo == "ORCAMENTO" ? <BtnAscent style={{ background: "teal" }} onClick={() => handleConfimarVenda(venda.id)}>Confirmar</BtnAscent> : null} < BtnAscent onClick={() => handleDeleteVenda(venda.id)} style={{ background: "red" }}><FontAwesomeIcon icon={faTrash} /></BtnAscent></TableData>
             </TableRow>
         });
     }
 
-    const handleEditVenda = (id_venda: number) => {
+    const handleDeleteVenda = async (id_venda: number) => {
+        await vendaData.deleteVenda(id_venda);
+    }
+
+    const handleEditVenda = async (id_venda: number) => {
         setIdVenda(id_venda);
         openModal();
     }

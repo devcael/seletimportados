@@ -3,6 +3,7 @@ import { ChangeEvent, use, useEffect, useState } from "react";
 import { UseFormRegisterReturn, useForm, Controller } from "react-hook-form";
 import styled from "styled-components";
 import DropDown, { OptionProps } from "./simple-dropdown";
+import { valueType } from "antd/es/statistic/utils";
 
 type SimpleInputProps = {
     placeHolder?: string;
@@ -21,7 +22,7 @@ type SimpleInputProps = {
 type SimpleDropDownProps = {
     label?: string;
     items: OptionProps[]
-
+    selectedId?: (value: string) => boolean;
     style?: object;
     onChange?: (value: string) => void;
 }
@@ -134,7 +135,7 @@ function SimpleDropdown(props: SimpleDropDownProps) {
     return (
         <InputContainer>
             {props.label != null ? <p>{props.label ?? ""}</p> : ""}
-            <DropDown style={props.style ?? {}} items={props.items} onChange={handleInputChange} />
+            <DropDown selectedId={props.selectedId} style={props.style ?? {}} items={props.items} onChange={handleInputChange} />
         </InputContainer>
     );
 }

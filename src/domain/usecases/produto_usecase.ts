@@ -48,12 +48,13 @@ export default class ProdutoUseCase {
         }
     }
 
-    static async getAllProdutoPaginados(page: number, limit: number, search: string): Promise<Produto[]> {
+    static async getAllProdutoPaginados(page: number, limit: number, search: string, active: boolean): Promise<Produto[]> {
         try {
 
             let queryParams = {
                 page: page,
                 pageSize: limit,
+                active: active,
                 search: search
             }
 

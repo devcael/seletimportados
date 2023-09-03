@@ -16,13 +16,14 @@ const SimpleSelectionOp = styled.option`
 export type OptionProps = {
     value: string;
     label: string;
-
 }
 
 export default function DropDown(props: {
 
     style?: object
     items: OptionProps[]
+
+    selectedId?: (value: string) => boolean
     onChange?: (value: string) => void
 }) {
 
@@ -38,7 +39,15 @@ export default function DropDown(props: {
 
     return (<SimpleSelection style={props.style ?? {}} onChange={handleSelectChange} >
         {props.items.map((option: OptionProps, index) => {
-            return <SimpleSelectionOp key={index} value={option.value}>{option.label}</SimpleSelectionOp>
+
+            let selected: boolean = props.selectedId == null ? false : props.selectedId(option.value);
+            if (selected) {
+
+                return <SimpleSelectionOp key={index} selected value={option.value}>{option.label}</SimpleSelectionOp>
+            } else {
+
+                return <SimpleSelectionOp key={index} value={option.value}>{option.label}</SimpleSelectionOp>
+            }
         })}
     </SimpleSelection>)
 }

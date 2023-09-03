@@ -11,6 +11,7 @@ interface PaginatedData {
     loading: boolean;
     page: number;
     search: string;
+    deleteVenda: (id: number) => void;
     setPage: (page: number) => void;
     setSearch: (search: string) => void;
     fetchData: (newPage: number, limit: number, newSearch: string, queryParamsPag?: QueryParamsPagination) => void;
@@ -32,6 +33,16 @@ const usePaginatedDataVenda = (
     const defaultDates: [Date, Date] = [dayjs().startOf("month").toDate(), dayjs().endOf("month").toDate()];
     const { dadosEstatisticos, fetchEstatisticas } = useEstatisticas(dayjs(defaultDates[0]).format('YYYY-MM-DD'), dayjs(defaultDates[1]).format('YYYY-MM-DD'));
     // Defina a data padrão do componente
+    const deleteVenda = async (id: number) => {
+
+        try {
+            await VendaUseCase.deleteVenda(id);
+            fetchData(page, limit, search);
+        } catch (error) {
+            console.error(error);
+        }
+
+    };
 
 
     // Estado para armazenar a lista selecionada
@@ -46,6 +57,12 @@ const usePaginatedDataVenda = (
                 search: newSearch,
                 ...queryParamsPag ?? {}
             };
+
+            console.log("Query params: ", queryParams);
+
+
+            console.log("Search sales with dates: ", dayjs(selectedDates[0]).format('YYYY-MM-DD'), dayjs(selectedDates[1]).format('YYYY-MM-DD'));
+
 
             const cabecalhos: CabecalhoVenda[] = await VendaUseCase.getCabecalhosPaginados({ queryParams });
             fetchEstatisticas(dayjs(selectedDates[0]).format('YYYY-MM-DD'), dayjs(selectedDates[1]).format('YYYY-MM-DD'));
@@ -64,7 +81,7 @@ const usePaginatedDataVenda = (
 
     }, []);
 
-    return { dadosEstatisticos, fetchEstatisticas, defaultDates, data, loading, fetchData, page, search, setPage, setSearch, selectedDates, setSelectedDates };
+    return { dadosEstatisticos, deleteVenda: deleteVenda, fetchEstatisticas, defaultDates, data, loading, fetchData, page, search, setPage, setSearch, selectedDates, setSelectedDates };
 };
 
 export default usePaginatedDataVenda;
