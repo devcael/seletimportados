@@ -238,7 +238,7 @@ export default function ModalCadastroDeProdutos(props: ModalProps) {
               onChange={(event) => setCusto(AppUtil.formatRealToDouble(event) ?? 0.00)}
             /><SimpleDropdown
               label="Moeda Custo"
-              selectedId={(value: string) => handleSelectedDropDown(value, moedaPreco.id_taxa)}
+              selectedId={(value: string) => handleSelectedDropDown(value, moedaCusto.id_taxa)}
               items={props.moedas.map((moeda) => { return { value: moeda.id_taxa.toString(), label: moeda.nome_da_moeda } })}
               onChange={(value: string) => {
 
