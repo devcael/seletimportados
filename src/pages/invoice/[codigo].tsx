@@ -223,7 +223,7 @@ class NewInvoice extends React.PureComponent<ComponentToPrintProps> {
                     </div>
                 </PdfHeader>
                 <PdfTitle>
-                    <h1>{currVenda?.tipo == "VENDA" ? "INVOICE" : "BUDGET"}</h1>
+                    <h1>{currVenda?.tipo == "VENDA" ? "INVOICE" : "ORÇAMENTO"}</h1>
                 </PdfTitle>
                 <ClientInfoContainer>
                     <ClienteInfo>
